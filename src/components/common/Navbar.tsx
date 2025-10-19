@@ -3,22 +3,23 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '@/contexts/CartContext';
 
 const navLinks = [
-  { label: 'Exhibitions', href: '#exhibitions' },
-  { label: 'Artists', href: '#artists' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Shop', href: '#shop' },
-  { label: 'Visit', href: '#visit' },
-  { label: 'About', href: '#about' },
-  { label: 'Press', href: '#press' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Exhibitions', href: '/exhibitions' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Visit', href: '/visit' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { cartCount, openCart } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -26,99 +27,270 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-sm shadow-lg'
-          : 'bg-white/90 backdrop-blur-sm shadow-md'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo & Brand */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="relative w-16 h-16 rounded-full overflow-hidden">
-              <Image
-                src="/Assets/logo.png"
-                alt="TOACC Logo"
-                fill
-                className="object-cover"
-                priority
-                unoptimized
-              />
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-xl font-bold text-[#8B4513] leading-tight">
-                T<span className="text-[#C17C2E]">O</span>ACC
-              </p>
-              <p className="text-[22px] text-[#6B4423] leading-tight tracking-wide">
-                Tunde Odunlade 
-              </p>
-              <p className="text-[20px] text-[#6B4423] leading-tight tracking-wide">
-                Arts & Culture Connexions
-              </p>
-            </div>
-          </Link>
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-lg'
+            : 'bg-white/90 backdrop-blur-sm shadow-md'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-center h-20">
+            {/* Logo & Brand */}
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#D4AF37] group-hover:ring-4 transition-all duration-300">
+                <Image
+                  src="/Assets/logo.png"
+                  alt="TOACC Logo"
+                  fill
+                  className="object-cover"
+                  priority
+                  unoptimized
+                />
+              </div>
+              <div className="hidden sm:block">
+                <p className="text-xl font-bold text-[#8B4513] leading-tight group-hover:text-[#C17C2E] transition-colors">
+                  T<span className="text-[#C17C2E]">O</span>ACC
+                </p>
+                <p className="text-ml text-[#6B4423] leading-tight tracking-wide">
+                  Tunde Odunlade
+                </p>
+                <p className="text-ml text-[#6B4423] leading-tight tracking-wide">
+                  Arts & Culture Connexions
+                </p>
+              </div>
+            </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-6">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-[#6B4423] hover:text-[#C17C2E] transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-[#8B4513]"
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d={isMobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
-              />
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden pb-4 border-t border-[#D4A574]/30"
-          >
-            <div className="py-4 space-y-2">
-              {navLinks.map((link) => (
-                <Link
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center gap-8">
+              {navLinks.map((link, index) => (
+                <motion.div
                   key={link.href}
-                  href={link.href}
-                  className="block px-4 py-2 text-sm font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] rounded transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  {link.label}
-                </Link>
+                  <Link
+                    href={link.href}
+                    className="text-sm font-medium text-[#6B4423] hover:text-[#C17C2E] transition-colors duration-200 relative group"
+                  >
+                    {link.label}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#C17C2E] transition-all duration-300 group-hover:w-full" />
+                  </Link>
+                </motion.div>
               ))}
+
+              {/* Shopping Cart Icon */}
+              <motion.button
+                onClick={openCart}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 }}
+                className="relative p-2 text-[#8B4513] hover:text-[#C17C2E] transition-colors duration-200 group"
+                aria-label="Shopping cart"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                  />
+                </svg>
+                {/* Cart count badge */}
+                <AnimatePresence>
+                  {cartCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-[#C17C2E] text-white text-xs font-bold rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
+                    >
+                      {cartCount}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
             </div>
-          </motion.div>
+
+            {/* Mobile: Cart Icon + Menu Button */}
+            <div className="lg:hidden flex items-center gap-3">
+              {/* Mobile Cart Icon */}
+              <button
+                onClick={openCart}
+                className="relative p-2 text-[#8B4513] hover:bg-[#F5EFE7] rounded-lg transition-colors"
+                aria-label="Shopping cart"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                  />
+                </svg>
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#C17C2E] text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 text-[#8B4513] hover:bg-[#F5EFE7] rounded-lg transition-colors"
+                aria-label="Toggle menu"
+                aria-expanded={isMobileMenuOpen}
+              >
+                <motion.div
+                  animate={isMobileMenuOpen ? 'open' : 'closed'}
+                  className="relative w-6 h-6"
+                >
+                  <motion.span
+                    variants={{
+                      closed: { rotate: 0, y: 0 },
+                      open: { rotate: 45, y: 8 },
+                    }}
+                    className="absolute top-0 left-0 w-6 h-0.5 bg-current origin-center transition-all"
+                    style={{ transformOrigin: '3px 1px' }}
+                  />
+                  <motion.span
+                    variants={{
+                      closed: { opacity: 1 },
+                      open: { opacity: 0 },
+                    }}
+                    className="absolute top-2.5 left-0 w-6 h-0.5 bg-current"
+                  />
+                  <motion.span
+                    variants={{
+                      closed: { rotate: 0, y: 0 },
+                      open: { rotate: -45, y: -8 },
+                    }}
+                    className="absolute top-5 left-0 w-6 h-0.5 bg-current origin-center"
+                    style={{ transformOrigin: '3px 5px' }}
+                  />
+                </motion.div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Menu Panel */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto"
+            >
+              {/* Menu Header */}
+              <div className="p-6 border-b border-[#D4A574]/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                      <Image
+                        src="/Assets/logo.png"
+                        alt="TOACC Logo"
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-[#8B4513]">TOACC</p>
+                      <p className="text-xs text-[#6B4423]">Gallery</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="p-2 text-[#8B4513] hover:bg-[#F5EFE7] rounded-lg transition-colors"
+                    aria-label="Close menu"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Menu Links */}
+              <div className="p-6 space-y-2">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + index * 0.05 }}
+                  >
+                    <Link
+                      href={link.href}
+                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] rounded-lg transition-all duration-200"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Menu Footer - Contact Info */}
+              <div className="p-6 border-t border-[#D4A574]/30 bg-[#F5EFE7]">
+                <p className="text-sm font-semibold text-[#8B4513] mb-3">Visit Us</p>
+                <div className="space-y-2 text-sm text-[#6B4423]">
+                  <p>2, Ladoke Akintola Avenue</p>
+                  <p>Ibadan, Oyo State</p>
+                  <a 
+                    href="tel:+2348160082118" 
+                    className="block text-[#C17C2E] hover:text-[#8B4513] transition-colors mt-3"
+                  >
+                    📞 +234 816 008 2118
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
-      </div>
-    </nav>
+      </AnimatePresence>
+    </>
   );
 }

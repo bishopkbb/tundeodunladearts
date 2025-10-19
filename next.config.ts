@@ -1,37 +1,123 @@
-import type { NextConfig } from 'next';
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Enable React strict mode for better error detection
+  reactStrictMode: true,
 
-const nextConfig: NextConfig = {
+  // Image optimization configuration
   images: {
     formats: ['image/webp', 'image/avif'],
-    unoptimized: true, // Temporarily disable optimization for local images
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: '**.sanity.io', // For future CMS integration
       },
       {
-        protocol: 'http',
-        hostname: 'localhost',
+        protocol: 'https',
+        hostname: '**.cloudflare.com',
       },
     ],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  webpack: (config) => {
+
+  // Compiler options
+  compiler: {
+    // Remove console logs in production
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+
+  // Performance optimizations
+  swcMinify: true,
+  
+  // Experimental features
+  experimental: {
+    optimizePackageImports: ['framer-motion', '@react-three/fiber', '@react-three/drei'],
+  },
+
+  // Headers for security and performance
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+      {
+        source: '/Assets/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
+  },
+
+  // Redirects (add as needed)
+  async redirects() {
+    return [
+      // Example: redirect old URLs to new ones
+      // {
+      //   source: '/old-gallery',
+      //   destination: '/gallery',
+      //   permanent: true,
+      // },
+    ];
+  },
+
+  // Webpack configuration for Three.js
+  webpack: (config, { isServer }) => {
+    // Handle Three.js examples imports
     config.module.rules.push({
-      test: /\.(glb|gltf)$/,
-      type: 'asset/resource',
+      test: /\.(glsl|vs|fs|vert|frag)$/,
+      exclude: /node_modules/,
+      use: ['raw-loader'],
     });
+
+    // Audio files for future use
+    config.module.rules.push({
+      test: /\.(mp3|wav|ogg)$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          publicPath: '/_next/static/audio/',
+          outputPath: 'static/audio/',
+          name: '[name].[hash].[ext]',
+          esModule: false,
+        },
+      },
+    });
+
     return config;
   },
-  experimental: {
-    optimizePackageImports: ['@react-three/fiber', '@react-three/drei'],
-  },
-  typescript: {
-    tsconfigPath: './tsconfig.json',
-  },
-  eslint: {
-    dirs: ['src'],
+
+  // Environment variables exposed to the browser
+  env: {
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://toacc.com',
+    NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID, // Google Analytics (add later)
   },
 };
 

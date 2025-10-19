@@ -1,16 +1,27 @@
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
+import { CartProvider } from '@/contexts/CartContext';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-inter',
+  display: 'swap',
+});
+
 const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
   weight: ['400', '700', '900'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'Tunde Odunlade Arts & Culture Connexions | TOACC',
+  metadataBase: new URL('https://toacc.com'),
+  title: {
+    default: 'Tunde Odunlade Arts & Culture Connexions | TOACC',
+    template: '%s | TOACC',
+  },
   description:
     'Celebrating African heritage through the art of Prince Tunde Odunlade. Discover contemporary African art, exhibitions, and cultural programs in Ibadan, Nigeria.',
   keywords: [
@@ -20,15 +31,21 @@ export const metadata: Metadata = {
     'Gallery',
     'Ibadan Nigeria',
     'Cultural heritage',
+    'Buy African art',
+    'Art shop',
   ],
   openGraph: {
     title: 'Tunde Odunlade Arts & Culture Connexions',
     description: 'Celebrating African heritage through contemporary art',
     type: 'website',
     locale: 'en_NG',
+    url: 'https://toacc.com',
+    siteName: 'TOACC Gallery',
   },
-  robots: 'index, follow',
-  metadataBase: new URL('https://toacc.com'),
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
@@ -44,9 +61,11 @@ export default function RootLayout({
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
       </head>
       <body
-        className={`${inter.variable} ${playfair.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300`}
+        className={`${inter.variable} ${playfair.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300 antialiased`}
       >
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { useState } from 'react';
 
 const footerLinks = [
-  { label: 'Home', href: '#hero' },
-  { label: 'About', href: '#about' },
-  { label: 'Exhibitions', href: '#exhibitions' },
-  { label: 'Visit', href: '#visit' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
+  { label: 'Exhibitions', href: '/exhibitions' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Visit', href: '/visit' },
 ];
 
 const socialLinks = [
@@ -54,18 +54,67 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative bg-[#4A2810] text-[#F5EFE7] overflow-hidden">
-      {/* Subtle Pattern */}
-      <div
-        className="absolute inset-0 opacity-5"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37' fill-opacity='0.4'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3Ccircle cx='10' cy='10' r='1.5'/%3E%3Ccircle cx='50' cy='10' r='1.5'/%3E%3Ccircle cx='10' cy='50' r='1.5'/%3E%3Ccircle cx='50' cy='50' r='1.5'/%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundSize: '60px 60px',
-        }}
-      />
+    <footer className="relative text-[#3D2817] overflow-hidden border-t-4 border-[#D4AF37]">
+      {/* Layered African Textile Background - Same as Hero */}
+      <div className="absolute inset-0 z-0">
+        {/* Base gradient - Warm brown tones */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 25%, #8B6914 50%, #6B4423 75%, #4A2810 100%)',
+          }}
+        />
+
+        {/* Layer 1: Large Adire Pattern (Dark) */}
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A574' fill-opacity='0.35' fill-rule='evenodd'%3E%3Ccircle cx='100' cy='100' r='40'/%3E%3Ccircle cx='0' cy='0' r='40'/%3E%3Ccircle cx='200' cy='0' r='40'/%3E%3Ccircle cx='0' cy='200' r='40'/%3E%3Ccircle cx='200' cy='200' r='40'/%3E%3Cpath d='M50 100 Q 75 50, 100 100 T 150 100' stroke='%23C9A97A' stroke-width='3' fill='none'/%3E%3Cpath d='M100 50 Q 50 75, 100 100 T 100 150' stroke='%23C9A97A' stroke-width='3' fill='none'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '200px 200px',
+          }}
+        />
+
+        {/* Layer 2: Tribal Geometric Pattern */}
+        <div
+          className="absolute inset-0 opacity-45"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23E8B882' stroke-width='2.5' stroke-opacity='0.4'%3E%3Cpath d='M0 30 L15 15 L30 30 L45 15 L60 30 L75 15 L90 30 L105 15 L120 30'/%3E%3Cpath d='M0 60 L15 45 L30 60 L45 45 L60 60 L75 45 L90 60 L105 45 L120 60'/%3E%3Cpath d='M0 90 L15 75 L30 90 L45 75 L60 90 L75 75 L90 90 L105 75 L120 90'/%3E%3Cpath d='M30 0 L15 15 L30 30 L15 45 L30 60 L15 75 L30 90 L15 105 L30 120'/%3E%3Cpath d='M60 0 L45 15 L60 30 L45 45 L60 60 L45 75 L60 90 L45 105 L60 120'/%3E%3Cpath d='M90 0 L75 15 L90 30 L75 45 L90 60 L75 75 L90 90 L75 105 L90 120'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '120px 120px',
+          }}
+        />
+
+        {/* Layer 3: Ankara/Batik Detailed Pattern */}
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A574' fill-opacity='0.5'%3E%3Ccircle cx='20' cy='20' r='8'/%3E%3Ccircle cx='60' cy='20' r='6'/%3E%3Ccircle cx='100' cy='20' r='8'/%3E%3Ccircle cx='140' cy='20' r='6'/%3E%3Ccircle cx='40' cy='50' r='5'/%3E%3Ccircle cx='80' cy='50' r='7'/%3E%3Ccircle cx='120' cy='50' r='5'/%3E%3Ccircle cx='20' cy='80' r='7'/%3E%3Ccircle cx='60' cy='80' r='5'/%3E%3Ccircle cx='100' cy='80' r='7'/%3E%3Ccircle cx='140' cy='80' r='5'/%3E%3Ccircle cx='40' cy='110' r='6'/%3E%3Ccircle cx='80' cy='110' r='8'/%3E%3Ccircle cx='120' cy='110' r='6'/%3E%3Ccircle cx='20' cy='140' r='5'/%3E%3Ccircle cx='60' cy='140' r='7'/%3E%3Ccircle cx='100' cy='140' r='5'/%3E%3Ccircle cx='140' cy='140' r='7'/%3E%3C/g%3E%3Cg fill='none' stroke='%23C9A97A' stroke-width='2' stroke-opacity='0.3'%3E%3Cpath d='M0,40 Q40,20 80,40 T160,40'/%3E%3Cpath d='M0,80 Q40,60 80,80 T160,80'/%3E%3Cpath d='M0,120 Q40,100 80,120 T160,120'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '160px 160px',
+          }}
+        />
+
+        {/* Layer 4: Fine Texture Overlay */}
+        <div
+          className="absolute inset-0 opacity-30"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23F5CBA7' fill-opacity='0.25'%3E%3Ccircle cx='10' cy='10' r='2'/%3E%3Ccircle cx='30' cy='10' r='1.5'/%3E%3Ccircle cx='50' cy='10' r='2'/%3E%3Ccircle cx='70' cy='10' r='1.5'/%3E%3Ccircle cx='20' cy='30' r='1.5'/%3E%3Ccircle cx='40' cy='30' r='2'/%3E%3Ccircle cx='60' cy='30' r='1.5'/%3E%3Ccircle cx='10' cy='50' r='2'/%3E%3Ccircle cx='30' cy='50' r='1.5'/%3E%3Ccircle cx='50' cy='50' r='2'/%3E%3Ccircle cx='70' cy='50' r='1.5'/%3E%3Ccircle cx='20' cy='70' r='1.5'/%3E%3Ccircle cx='40' cy='70' r='2'/%3E%3Ccircle cx='60' cy='70' r='1.5'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundSize: '80px 80px',
+          }}
+        />
+
+        {/* Top fade from transparent to pattern */}
+        <div 
+          className="absolute top-0 left-0 right-0 h-32"
+          style={{
+            background: 'linear-gradient(to top, transparent 0%, rgba(139, 69, 19, 0.3) 100%)',
+          }}
+        />
+
+        {/* Light overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40" />
+      </div>
 
       {/* Newsletter Section */}
-      <div className="relative z-10 border-b border-[#D4AF37]/20">
+      <div className="relative z-10 border-b border-[#D4AF37]/50">
         <div className="max-w-7xl mx-auto px-6 py-12 md:py-16">
           <motion.div
             className="max-w-3xl mx-auto text-center"
@@ -74,10 +123,10 @@ export default function Footer() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl md:text-3xl font-bold mb-3 font-serif text-[#D4AF37]">
+            <h3 className="text-2xl md:text-3xl font-bold mb-3 font-serif text-[#F5EFE7]">
               Stay Connected to Art & Culture
             </h3>
-            <p className="text-sm md:text-base text-[#F5EFE7]/80 mb-6">
+            <p className="text-sm md:text-base text-[#E8DCC8] mb-6">
               Join the TOACC Circle — updates, exhibitions, and artist stories delivered to you.
             </p>
 
@@ -88,13 +137,13 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
                 required
-                className="w-full sm:w-96 px-6 py-3 rounded-lg bg-[#F5EFE7]/10 border border-[#D4AF37]/30 focus:border-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 transition-all duration-300 text-[#F5EFE7] placeholder:text-[#F5EFE7]/40"
+                className="w-full sm:w-96 px-6 py-3 rounded-lg bg-white/95 border-2 border-[#D4AF37] focus:border-[#FFD700] focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/30 transition-all duration-300 text-[#3D2817] placeholder:text-[#6B4423]/60"
               />
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full sm:w-auto px-8 py-3 bg-[#D4AF37] hover:bg-[#C17C2E] text-[#3D2817] font-bold rounded-lg transition-all duration-300 shadow-lg"
+                className="w-full sm:w-auto px-8 py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-[#ffffff] font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 Subscribe
               </motion.button>
@@ -109,35 +158,38 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             {/* Column 1: Logo & Quote */}
             <div className="text-center md:text-left">
-              <Link href="/" className="inline-flex items-center gap-2 mb-4">
-                <div className="relative w-12 h-12">
+              <Link href="/" className="inline-flex items-center gap-3 mb-4 group">
+                <div className="relative w-14 h-14 ring-2 ring-[#D4AF37] rounded-full overflow-hidden group-hover:ring-4 transition-all">
                   <Image
                     src="/Assets/logo.png"
                     alt="TOACC Logo"
                     fill
-                    className="object-cover rounded-full"
+                    className="object-cover"
                     unoptimized
                   />
                 </div>
-                <span className="text-lg font-bold text-[#D4AF37]">TOACC</span>
+                <span className="text-xl font-bold text-[#F5EFE7] group-hover:text-[#D4AF37] transition-colors">
+                  TOACC
+                </span>
               </Link>
-              <p className="text-xs md:text-sm italic text-[#F5EFE7]/70 leading-relaxed font-serif mb-2">
+              <p className="text-xs md:text-sm italic text-[#E8DCC8] leading-relaxed font-serif mb-2 max-w-xs mx-auto md:mx-0">
                 "Art is the bridge between tradition and tomorrow, where every stroke tells our story."
               </p>
-              <p className="text-xs text-[#D4AF37]">— Prince Tunde Odunlade</p>
+              <p className="text-xs text-[#D4AF37] font-semibold">— Prince Tunde Odunlade</p>
             </div>
 
             {/* Column 2: Quick Links */}
             <div className="text-center">
-              <h4 className="text-lg font-bold text-[#D4AF37] mb-4">Quick Links</h4>
+              <h4 className="text-lg font-bold text-[#F5EFE7] mb-4 font-serif">Quick Links</h4>
               <ul className="space-y-2">
                 {footerLinks.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-[#F5EFE7]/80 hover:text-[#D4AF37] transition-colors duration-300"
+                      className="text-sm text-[#E8DCC8] hover:text-[#D4AF37] transition-colors duration-300 inline-block relative group"
                     >
                       {link.label}
+                      <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
                     </Link>
                   </li>
                 ))}
@@ -146,23 +198,29 @@ export default function Footer() {
 
             {/* Column 3: Contact & Social */}
             <div className="text-center md:text-right">
-              <h4 className="text-lg font-bold text-[#D4AF37] mb-4">Connect With Us</h4>
-              <p className="text-sm text-[#F5EFE7]/80 mb-4">
+              <h4 className="text-lg font-bold text-[#F5EFE7] mb-4 font-serif">Connect With Us</h4>
+              <p className="text-sm text-[#E8DCC8] mb-4 leading-relaxed">
                 2, Ladoke Akintola Avenue<br />
                 Off Aare, New Bodija<br />
                 Ibadan, Oyo State<br />
                 Nigeria
               </p>
-              <div className="flex justify-center md:justify-end gap-4">
+              <a 
+                href="tel:+2348160082118" 
+                className="text-sm text-[#D4AF37] hover:text-[#FFD700] transition-colors block mb-4"
+              >
+                📞 +234 816 008 2118
+              </a>
+              <div className="flex justify-center md:justify-end gap-3">
                 {socialLinks.map((social) => (
                   <motion.a
                     key={social.name}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    whileHover={{ scale: 1.2, y: -2 }}
+                    whileHover={{ scale: 1.15, y: -3 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 rounded-full bg-[#D4AF37]/20 hover:bg-[#D4AF37] text-[#F5EFE7] hover:text-[#3D2817] flex items-center justify-center transition-all duration-300"
+                    className="w-10 h-10 rounded-full bg-[#D4AF37]/20 hover:bg-[#D4AF37] text-[#F5EFE7] hover:text-[#3D2817] flex items-center justify-center transition-all duration-300 shadow-md hover:shadow-lg backdrop-blur-sm"
                     aria-label={`Follow us on ${social.name}`}
                   >
                     {social.icon}
@@ -173,12 +231,12 @@ export default function Footer() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-[#D4AF37]/20 pt-8 text-center">
-            <p className="text-xs md:text-sm text-[#F5EFE7]/60">
-              © {new Date().getFullYear()} Tunde Odunlade Art & Culture Gallery. All Rights Reserved.
+          <div className="border-t border-[#D4AF37]/40 pt-8 text-center">
+            <p className="text-xs md:text-sm text-[#E8DCC8] mb-2">
+              © {new Date().getFullYear()} Tunde Odunlade Arts & Culture Connexions. All Rights Reserved.
             </p>
-            <p className="text-xs text-[#F5EFE7]/40 mt-2">
-              Designed with passion for African heritage
+            <p className="text-xs text-[#C17C2E] italic">
+              Designed with passion for African heritage 🎨
             </p>
           </div>
         </div>

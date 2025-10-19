@@ -4,8 +4,10 @@ import HeroSection from '@/components/hero/HeroSection';
 import FeaturedExhibitions from '@/components/sections/FeaturedExhibitions';
 import AboutSection from '@/components/sections/AboutSection';
 import GalleryHighlights from '@/components/sections/GalleryHighlights';
+import ShopPreview from '@/components/sections/ShopPreview';
 import VisitUs from '@/components/sections/VisitUs';
 import Footer from '@/components/common/Footer';
+import CartSidebar from '@/components/cart/CartSidebar';
 
 export const metadata: Metadata = {
   title: 'Tunde Odunlade Arts & Culture Connexions | Home',
@@ -19,6 +21,8 @@ export const metadata: Metadata = {
     'Ibadan Nigeria',
     'cultural heritage',
     'TOACC',
+    'buy African art',
+    'art shop',
   ],
 };
 
@@ -72,7 +76,7 @@ export default function Home() {
           }}
         />
 
-        {/* Cream Overlay - Covers entire page softly */}
+        {/* Cream Overlay */}
         <div className="absolute inset-0 bg-[#F5EFE7]/50" />
       </div>
 
@@ -93,12 +97,17 @@ export default function Home() {
         {/* Gallery Highlights */}
         <GalleryHighlights />
 
+        {/* Shop Preview */}
+        <ShopPreview />
+
         {/* Visit Us */}
         <VisitUs />
 
         {/* Footer */}
         <Footer />
 
+        {/* Shopping Cart Sidebar */}
+        <CartSidebar />
       </main>
     </>
   );
