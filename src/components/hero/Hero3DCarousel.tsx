@@ -149,8 +149,9 @@ function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
       </mesh>
 
       {/* Vertical Silver Support Poles (2 per frame) */}
-      <mesh position={[0, -FRAME_HEIGHT / 2 - FRAME_THICKNESS - 0.5, 0]}>
-        <cylinderGeometry args={[0.04, 0.04, 1, 16]} />
+      {/* Bottom pole - connects frame to bottom ring */}
+      <mesh position={[0, -FRAME_HEIGHT / 2 - FRAME_THICKNESS - 0.25, 0]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.5, 16]} />
         <meshStandardMaterial 
           color="#C0C0C0"
           metalness={0.9}
@@ -158,8 +159,9 @@ function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
         />
       </mesh>
 
-      <mesh position={[0, FRAME_HEIGHT / 2 + FRAME_THICKNESS + 0.5, 0]}>
-        <cylinderGeometry args={[0.04, 0.04, 1, 16]} />
+      {/* Top pole - connects frame to top ring (REDUCED) */}
+      <mesh position={[0, FRAME_HEIGHT / 2 + FRAME_THICKNESS + 0.25, 0]}>
+        <cylinderGeometry args={[0.04, 0.04, 0.5, 16]} />
         <meshStandardMaterial 
           color="#C0C0C0"
           metalness={0.9}
@@ -416,7 +418,6 @@ export default function Hero3DCarousel() {
           toneMappingExposure: 1.2,
         }}
         shadows
-        className="relative z-10"
       >
         <Lights />
         <CarouselGroup />
