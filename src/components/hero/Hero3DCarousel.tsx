@@ -3,15 +3,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useTexture } from '@react-three/drei';
+import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
 const heroImages = [
-  '/Assets/hero1.jpg',
-  '/Assets/hero2.jpg',
-  '/Assets/hero3.jpg',
-  '/Assets/hero5.jpg',
-  '/Assets/hero7.jpg',
-  '/Assets/hero9.jpg',
+  { src: '/Assets/hero1.jpg', title: 'Cultural Heritage' },
+  { src: '/Assets/hero2.jpg', title: 'Urban Rhythms' },
+  { src: '/Assets/hero3.jpg', title: 'Sacred Geometry' },
+  { src: '/Assets/hero5.jpg', title: 'Traditional Wisdom' },
+  { src: '/Assets/hero7.jpg', title: 'Contemporary Expression' },
+  { src: '/Assets/hero9.jpg', title: 'African Identity' },
 ];
 
 const ORBIT_RADIUS = 5.5;
@@ -26,10 +27,13 @@ interface FrameProps {
   position: [number, number, number];
   rotation: [number, number, number];
   imagePath: string;
+  title: string;
   index: number;
+  onClick: () => void;
+  isPaused: boolean;
 }
 
-function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
+function ElegantFrame({ position, rotation, imagePath, title, index, onClick, isPaused }: FrameProps) {
   const texture = useTexture(imagePath, (loadedTexture) => {
     loadedTexture.colorSpace = THREE.SRGBColorSpace;
     loadedTexture.minFilter = THREE.LinearFilter;
@@ -38,6 +42,8 @@ function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
     loadedTexture.generateMipmaps = true;
   });
 
+  const meshRef = useRef<THREE.Mesh>(null);
+
   if (!texture || !texture.image) {
     return null;
   }
@@ -45,7 +51,20 @@ function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
   return (
     <group position={position} rotation={rotation}>
       {/* Main Artwork - Front Side */}
-      <mesh position={[0, 0, FRAME_DEPTH / 2]}>
+      <mesh 
+        ref={meshRef}
+        position={[0, 0, FRAME_DEPTH / 2]}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}
+        onPointerOver={() => {
+          if (!isPaused) document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = 'auto';
+        }}
+      >
         <planeGeometry args={[FRAME_WIDTH, FRAME_HEIGHT]} />
         <meshStandardMaterial 
           map={texture} 
@@ -148,8 +167,7 @@ function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
         />
       </mesh>
 
-      {/* Vertical Silver Support Poles (2 per frame) */}
-      {/* Bottom pole - connects frame to bottom ring */}
+      {/* Vertical Silver Support Poles */}
       <mesh position={[0, -FRAME_HEIGHT / 2 - FRAME_THICKNESS - 0.25, 0]}>
         <cylinderGeometry args={[0.04, 0.04, 0.5, 16]} />
         <meshStandardMaterial 
@@ -159,7 +177,6 @@ function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
         />
       </mesh>
 
-      {/* Top pole - connects frame to top ring (REDUCED) */}
       <mesh position={[0, FRAME_HEIGHT / 2 + FRAME_THICKNESS + 0.25, 0]}>
         <cylinderGeometry args={[0.04, 0.04, 0.5, 16]} />
         <meshStandardMaterial 
@@ -172,7 +189,12 @@ function ElegantFrame({ position, rotation, imagePath, index }: FrameProps) {
   );
 }
 
-function CarouselGroup() {
+interface CarouselGroupProps {
+  isPaused: boolean;
+  onFrameClick: (index: number) => void;
+}
+
+function CarouselGroup({ isPaused, onFrameClick }: CarouselGroupProps) {
   const groupRef = useRef<THREE.Group>(null);
   const [isRotating, setIsRotating] = useState(true);
   const isTabActive = useRef(true);
@@ -186,7 +208,7 @@ function CarouselGroup() {
   }, []);
 
   useFrame(() => {
-    if (groupRef.current && isRotating && isTabActive.current) {
+    if (groupRef.current && isRotating && isTabActive.current && !isPaused) {
       groupRef.current.rotation.y += ROTATION_SPEED * 0.016;
     }
   });
@@ -197,7 +219,7 @@ function CarouselGroup() {
       onPointerEnter={() => setIsRotating(false)}
       onPointerLeave={() => isTabActive.current && setIsRotating(true)}
     >
-      {/* Top Silver Ring (Halo) */}
+      {/* Top Silver Ring */}
       <mesh position={[0, STAND_HEIGHT / 2 + 0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[ORBIT_RADIUS, 0.08, 16, 64]} />
         <meshStandardMaterial
@@ -207,7 +229,7 @@ function CarouselGroup() {
         />
       </mesh>
 
-      {/* Bottom Silver Ring (Base Circle) */}
+      {/* Bottom Silver Ring */}
       <mesh position={[0, -STAND_HEIGHT / 2 - 0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[ORBIT_RADIUS, 0.08, 16, 64]} />
         <meshStandardMaterial
@@ -217,8 +239,8 @@ function CarouselGroup() {
         />
       </mesh>
 
-      {/* Artwork Frames Mounted on Stands */}
-      {heroImages.map((imgPath, i) => {
+      {/* Artwork Frames */}
+      {heroImages.map((img, i) => {
         const angle = (i / heroImages.length) * Math.PI * 2;
         const x = Math.cos(angle) * ORBIT_RADIUS;
         const z = Math.sin(angle) * ORBIT_RADIUS;
@@ -229,13 +251,16 @@ function CarouselGroup() {
             key={i}
             position={[x, 0, z]}
             rotation={[0, rotationY, 0]}
-            imagePath={imgPath}
+            imagePath={img.src}
+            title={img.title}
             index={i}
+            onClick={() => onFrameClick(i)}
+            isPaused={isPaused}
           />
         );
       })}
 
-      {/* Reflective Floor Platform */}
+      {/* Reflective Floor */}
       <mesh position={[0, -STAND_HEIGHT / 2 - 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <circleGeometry args={[ORBIT_RADIUS * 1.8, 64]} />
         <meshStandardMaterial
@@ -246,7 +271,7 @@ function CarouselGroup() {
         />
       </mesh>
 
-      {/* Floor Shadow Catcher (Subtle) */}
+      {/* Floor Shadow */}
       <mesh position={[0, -STAND_HEIGHT / 2 - 0.48, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <circleGeometry args={[ORBIT_RADIUS * 1.85, 64]} />
         <meshStandardMaterial
@@ -264,10 +289,7 @@ function CarouselGroup() {
 function Lights() {
   return (
     <>
-      {/* Main ambient light */}
       <ambientLight intensity={1.2} color="#FFF8E7" />
-      
-      {/* Gallery spotlight from above */}
       <spotLight
         position={[0, 12, 0]}
         angle={0.6}
@@ -278,27 +300,19 @@ function Lights() {
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
       />
-      
-      {/* Front key light */}
       <directionalLight
         position={[0, 8, 15]}
         intensity={1.8}
         color="#FFF8DC"
         castShadow
       />
-      
-      {/* Back rim light */}
       <directionalLight
         position={[0, 6, -12]}
         intensity={1}
         color="#FFE5B4"
       />
-      
-      {/* Side fill lights */}
       <pointLight position={[15, 6, 0]} intensity={1.2} color="#FFEFD5" />
       <pointLight position={[-15, 6, 0]} intensity={1.2} color="#FFEFD5" />
-      
-      {/* Subtle floor reflection light */}
       <pointLight position={[0, -2, 0]} intensity={0.6} color="#FFFFFF" />
     </>
   );
@@ -307,16 +321,17 @@ function Lights() {
 export default function Hero3DCarousel() {
   const [isMounted, setIsMounted] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
     
     const checkImages = async () => {
       try {
-        const checks = heroImages.map(async (src) => {
-          const response = await fetch(src, { method: 'HEAD' });
+        const checks = heroImages.map(async (img) => {
+          const response = await fetch(img.src, { method: 'HEAD' });
           if (!response.ok) {
-            console.error(`❌ Image not found: ${src}`);
+            console.error(`❌ Image not found: ${img.src}`);
           }
         });
         await Promise.all(checks);
@@ -344,17 +359,14 @@ export default function Hero3DCarousel() {
 
   return (
     <div className="w-full h-full relative">
-      {/* Layered Background - Matching Reference Image */}
+      {/* Layered Background */}
       <div className="absolute inset-0 z-0">
-        {/* Base gradient - Warm brown tones */}
         <div 
           className="absolute inset-0"
           style={{
             background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 25%, #8B6914 50%, #6B4423 75%, #4A2810 100%)',
           }}
         />
-
-        {/* Layer 1: Large Adire Pattern (Dark) */}
         <div
           className="absolute inset-0 opacity-60"
           style={{
@@ -362,43 +374,33 @@ export default function Hero3DCarousel() {
             backgroundSize: '200px 200px',
           }}
         />
-
-        {/* Layer 2: Tribal Geometric Pattern */}
         <div
           className="absolute inset-0 opacity-45"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23E8B882' stroke-width='2.5' stroke-opacity='0.4'%3E%3Cpath d='M0 30 L15 15 L30 30 L45 15 L60 30 L75 15 L90 30 L105 15 L120 30'/%3E%3Cpath d='M0 60 L15 45 L30 60 L45 45 L60 60 L75 45 L90 60 L105 45 L120 60'/%3E%3Cpath d='M0 90 L15 75 L30 90 L45 75 L60 90 L75 75 L90 90 L105 75 L120 90'/%3E%3Cpath d='M30 0 L15 15 L30 30 L15 45 L30 60 L15 75 L30 90 L15 105 L30 120'/%3E%3Cpath d='M60 0 L45 15 L60 30 L45 45 L60 60 L45 75 L60 90 L45 105 L60 120'/%3E%3Cpath d='M90 0 L75 15 L90 30 L75 45 L90 60 L75 75 L90 90 L75 105 L90 120'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23E8B882' stroke-width='2.5' stroke-opacity='0.4'%3E%3Cpath d='M0 30 L15 15 L30 30 L45 15 L60 30 L75 15 L90 30 L105 15 L120 30'/%3E%3Cpath d='M0 60 L15 45 L30 60 L45 45 L60 60 L75 45 L90 60 L105 45 L120 60'/%3E%3Cpath d='M0 90 L15 75 L30 90 L45 75 L60 90 L75 75 L90 90 L105 75 L120 90'/%3E%3C/g%3E%3C/svg%3E")`,
             backgroundSize: '120px 120px',
           }}
         />
-
-        {/* Layer 3: Ankara/Batik Detailed Pattern */}
         <div
           className="absolute inset-0 opacity-40"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A574' fill-opacity='0.5'%3E%3Ccircle cx='20' cy='20' r='8'/%3E%3Ccircle cx='60' cy='20' r='6'/%3E%3Ccircle cx='100' cy='20' r='8'/%3E%3Ccircle cx='140' cy='20' r='6'/%3E%3Ccircle cx='40' cy='50' r='5'/%3E%3Ccircle cx='80' cy='50' r='7'/%3E%3Ccircle cx='120' cy='50' r='5'/%3E%3Ccircle cx='20' cy='80' r='7'/%3E%3Ccircle cx='60' cy='80' r='5'/%3E%3Ccircle cx='100' cy='80' r='7'/%3E%3Ccircle cx='140' cy='80' r='5'/%3E%3Ccircle cx='40' cy='110' r='6'/%3E%3Ccircle cx='80' cy='110' r='8'/%3E%3Ccircle cx='120' cy='110' r='6'/%3E%3Ccircle cx='20' cy='140' r='5'/%3E%3Ccircle cx='60' cy='140' r='7'/%3E%3Ccircle cx='100' cy='140' r='5'/%3E%3Ccircle cx='140' cy='140' r='7'/%3E%3C/g%3E%3Cg fill='none' stroke='%23C9A97A' stroke-width='2' stroke-opacity='0.3'%3E%3Cpath d='M0,40 Q40,20 80,40 T160,40'/%3E%3Cpath d='M0,80 Q40,60 80,80 T160,80'/%3E%3Cpath d='M0,120 Q40,100 80,120 T160,120'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A574' fill-opacity='0.5'%3E%3Ccircle cx='20' cy='20' r='8'/%3E%3Ccircle cx='60' cy='20' r='6'/%3E%3Ccircle cx='100' cy='20' r='8'/%3E%3Ccircle cx='140' cy='20' r='6'/%3E%3C/g%3E%3C/svg%3E")`,
             backgroundSize: '160px 160px',
           }}
         />
-
-        {/* Layer 4: Fine Texture Overlay */}
         <div
           className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23F5CBA7' fill-opacity='0.25'%3E%3Ccircle cx='10' cy='10' r='2'/%3E%3Ccircle cx='30' cy='10' r='1.5'/%3E%3Ccircle cx='50' cy='10' r='2'/%3E%3Ccircle cx='70' cy='10' r='1.5'/%3E%3Ccircle cx='20' cy='30' r='1.5'/%3E%3Ccircle cx='40' cy='30' r='2'/%3E%3Ccircle cx='60' cy='30' r='1.5'/%3E%3Ccircle cx='10' cy='50' r='2'/%3E%3Ccircle cx='30' cy='50' r='1.5'/%3E%3Ccircle cx='50' cy='50' r='2'/%3E%3Ccircle cx='70' cy='50' r='1.5'/%3E%3Ccircle cx='20' cy='70' r='1.5'/%3E%3Ccircle cx='40' cy='70' r='2'/%3E%3Ccircle cx='60' cy='70' r='1.5'/%3E%3C/g%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23F5CBA7' fill-opacity='0.25'%3E%3Ccircle cx='10' cy='10' r='2'/%3E%3Ccircle cx='30' cy='10' r='1.5'/%3E%3C/g%3E%3C/svg%3E")`,
             backgroundSize: '80px 80px',
           }}
         />
-
-        {/* Vignette effect - darker edges */}
         <div 
           className="absolute inset-0"
           style={{
             background: 'radial-gradient(ellipse at center, transparent 0%, rgba(75, 40, 16, 0.3) 100%)',
           }}
         />
-
-        {/* Bottom fade to lighter cream */}
         <div 
           className="absolute bottom-0 left-0 right-0 h-1/3"
           style={{
@@ -418,10 +420,13 @@ export default function Hero3DCarousel() {
           toneMappingExposure: 1.2,
         }}
         shadows
+        className={`relative z-10 transition-opacity duration-500 ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
+        style={{ pointerEvents: selectedImage !== null ? 'none' : 'auto' }}
       >
         <Lights />
-        <CarouselGroup />
+        <CarouselGroup isPaused={selectedImage !== null} onFrameClick={setSelectedImage} />
         <OrbitControls
+          enabled={selectedImage === null}
           enableZoom={true}
           enablePan={false}
           minDistance={10}
@@ -434,6 +439,64 @@ export default function Hero3DCarousel() {
         />
         <fog attach="fog" args={['#8B4513', 28, 45]} />
       </Canvas>
+
+      {/* Lightbox Overlay */}
+      <AnimatePresence>
+        {selectedImage !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="relative w-full h-full max-w-[95vw] max-h-[95vh] flex items-center justify-center p-4 md:p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <motion.button
+                onClick={() => setSelectedImage(null)}
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                className="absolute top-4 right-4 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border-2 border-white/30 text-white flex items-center justify-center transition-colors shadow-2xl"
+              >
+                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </motion.button>
+
+              {/* Image Container */}
+              <div className="relative w-full h-full flex flex-col items-center justify-center">
+                <motion.img
+                  src={heroImages[selectedImage].src}
+                  alt={heroImages[selectedImage].title}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1, type: 'spring', damping: 20 }}
+                  className="max-w-full max-h-[75vh] md:max-h-[80vh] w-auto h-auto object-contain rounded-xl shadow-2xl border-4 border-[#D4AF37]"
+                />
+
+                {/* Title */}
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-6 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border-2 border-white/30"
+                >
+                  <h3 className="text-xl md:text-3xl font-bold text-white font-serif">
+                    {heroImages[selectedImage].title}
+                  </h3>
+                </motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

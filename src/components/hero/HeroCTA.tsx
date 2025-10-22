@@ -17,7 +17,7 @@ export default function HeroCTA() {
         whileTap={{ scale: 0.98 }}
       >
         <Link
-          href="#gallery"
+          href="/gallery"
           className="inline-block px-10 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-2xl hover:shadow-xl"
         >
           Explore the Collection
@@ -30,7 +30,7 @@ export default function HeroCTA() {
         whileTap={{ scale: 0.98 }}
       >
         <Link
-          href="#visit"
+          href="/contact"
           className="inline-block px-10 py-4 bg-[#3D2817] hover:bg-[#2C1810] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-2xl hover:shadow-xl"
         >
           Visit the gallery

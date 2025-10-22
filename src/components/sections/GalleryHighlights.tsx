@@ -240,7 +240,7 @@ export default function GalleryHighlights() {
               whileTap={{ scale: 0.98 }}
             >
               <a
-                href="#gallery"
+                href="/gallery"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 Explore Full Gallery

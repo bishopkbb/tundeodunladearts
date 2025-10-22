@@ -122,7 +122,7 @@ export default function FeaturedExhibitions() {
           viewport={{ once: true, margin: '-100px' }}
         >
           <Link
-            href="#gallery"
+            href="/exhibitions"
             className="inline-block px-10 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl text-lg"
           >
             View All Artworks

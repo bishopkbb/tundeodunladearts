@@ -32,13 +32,13 @@ export default function HeroStatic() {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <Link
-            href="#gallery"
+            href="/exhibitions"
             className="inline-block px-8 py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Explore the Collection
           </Link>
           <Link
-            href="#visit"
+            href="/gallery"
             className="inline-block px-8 py-3 bg-[#3D2817] hover:bg-[#2C1810] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Visit the gallery

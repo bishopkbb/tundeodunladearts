@@ -17,14 +17,14 @@ const featuredArtworks = [
     id: '2',
     title: 'Rhythms of Ibadan',
     artist: 'Prince Tunde Odunlade',
-    price: 380000,
+    price: 15000000,
     image: '/Assets/hero2.jpg',
   },
   {
     id: '3',
     title: 'Adire Dreams',
     artist: 'Prince Tunde Odunlade',
-    price: 520000,
+    price: 10500000,
     image: '/Assets/hero3.jpg',
   },
 ];
