@@ -1,7 +1,7 @@
 Tunde Odunlade Arts & Culture Connexions Website
 
 An immersive, fully responsive web experience built for Tunde Odunlade Art Gallery (Ibadan, Nigeria).
-This site celebrates African creativity through exhibitions, artist profiles, and shop collections — blending art, culture, and technology.
+This site celebrates African creativity through exhibitions, artist profiles, and shop collections blending art, culture, and technology.
 
 
 ---
@@ -90,5 +90,5 @@ Zoho Mail – For domain-based email communication
 Author
 
 Ajibade Tosin (@bishopkbb)
-Frontend Developer | React • Next.js • Sanity • Tailwind • Supabase
+Fullstack Developer | React • Next.js • Sanity • Tailwind • Supabase
 LinkedIn
