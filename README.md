@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Tunde Odunlade Arts & Culture Connexions Website
 
-## Getting Started
+An immersive, fully responsive web experience built for Tunde Odunlade Art Gallery (Ibadan, Nigeria).
+This site celebrates African creativity through exhibitions, artist profiles, and shop collections — blending art, culture, and technology.
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+---
+
+Overview
+
+This project showcases:
+
+Dynamic Exhibitions Page with category filters, animations, and modals.
+
+3D-enhanced hero section & interactive transitions using Framer Motion.
+
+Planned integration with Sanity CMS for exhibitions, events, and press updates.
+
+Future backend powered by Supabase for shop data and order handling.
+
+
+
+---
+
+Tech Stack
+
+Layer	Technologies
+
+Frontend	Next.js 14, React, TypeScript, Tailwind CSS, Framer Motion
+Backend (planned)	Supabase (PostgreSQL), Sanity CMS
+Tools & Infra	Docker, GitHub Actions (CI/CD), Vercel (hosting), Figma
+
+
+
+---
+
+Key Features
+
+3D rotating carousel
+
+Smooth, scroll-based animations and modal previews
+
+Exhibition filtering (current, upcoming, past)
+
+High-resolution image optimization with Next/Image
+
+Fully responsive across devices
+
+🧩 Modular component architecture (Navbar, Footer, CartSidebar, etc.)
+
+
+
+---
+
+⚙ Installation
+
+git clone https://github.com/bishopkbb/tundeodunladearts.git
+cd tundeodunladearts
+pnpm install
 pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+Folder Structure
 
-To learn more about Next.js, take a look at the following resources:
+src/
+ ┣ components/      # Reusable UI components (Navbar, Footer, etc.)
+ ┣ pages/           # Core pages (Home, Exhibitions, Artists, etc.)
+ ┣ styles/          # Tailwind & global styles
+ ┣ assets/          # Gallery images, icons, and fonts
+ ┗ utils/           # Helper functions and constants
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+Upcoming Integrations
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Sanity CMS – For managing artworks, exhibitions, and press posts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Supabase – For shop inventory and user interaction data
+
+Zoho Mail – For domain-based email communication
+
+
+
+---
+Author
+
+Ajibade Tosin (@bishopkbb)
+Frontend Developer | React • Next.js • Sanity • Tailwind • Supabase
+LinkedIn
