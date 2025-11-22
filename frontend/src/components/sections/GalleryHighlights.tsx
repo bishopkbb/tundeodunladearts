@@ -156,9 +156,10 @@ export default function GalleryHighlights() {
                     src={galleryImages[imageIndex].src}
                     alt={galleryImages[imageIndex].title}
                     fill
-                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 80vw"
+                    quality={90}
                     priority
-                    unoptimized
+                    className="object-cover"
                   />
 
                   {/* Always visible subtle caption overlay */}

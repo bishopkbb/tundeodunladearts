@@ -30,8 +30,9 @@ export default function NotFound() {
               src="/Assets/logo.png"
               alt="TOACC Logo"
               fill
+              sizes="(max-width: 640px) 200px, 300px"
+              quality={90}
               className="object-cover"
-              unoptimized
             />
           </div>
         </motion.div>

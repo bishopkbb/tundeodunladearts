@@ -257,8 +257,9 @@ export default function ExhibitionsPage() {
                         src={exhibition.image}
                         alt={exhibition.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        quality={90}
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        unoptimized
                       />
                       {/* Status Badge */}
                       <div className={`absolute top-4 right-4 px-4 py-2 rounded-full text-white text-xs font-bold ${getStatusColor(exhibition.status)} shadow-lg`}>
@@ -357,8 +358,9 @@ export default function ExhibitionsPage() {
                     src={selectedExhibition.image}
                     alt={selectedExhibition.title}
                     fill
+                    sizes="(max-width: 768px) 100vw, 80vw"
+                    quality={90}
                     className="object-cover"
-                    unoptimized
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <div className={`absolute top-6 right-6 px-6 py-3 rounded-full text-white text-sm font-bold ${getStatusColor(selectedExhibition.status)} shadow-lg`}>

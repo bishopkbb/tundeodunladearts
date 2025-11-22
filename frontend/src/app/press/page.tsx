@@ -219,8 +219,9 @@ export default function PressPage() {
                         src={article.image}
                         alt={article.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        quality={90}
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        unoptimized
                       />
                       <div className="absolute top-4 left-4">
                         <span className="px-3 py-1 bg-[#D4AF37] text-white text-xs font-bold rounded-full">
@@ -300,8 +301,9 @@ export default function PressPage() {
                         src={article.image}
                         alt={article.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        quality={90}
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        unoptimized
                       />
                     </div>
                     <div className="p-5">
@@ -356,8 +358,9 @@ export default function PressPage() {
                   src={selectedArticle.image}
                   alt={selectedArticle.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 80vw"
+                  quality={90}
                   className="object-cover"
-                  unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute bottom-6 left-6">

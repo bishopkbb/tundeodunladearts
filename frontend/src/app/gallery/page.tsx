@@ -347,8 +347,9 @@ export default function GalleryPage() {
                         alt={artwork.title}
                         width={600}
                         height={viewMode === 'grid' ? 400 : 800}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        quality={90}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        unoptimized
                       />
                       {!artwork.available && (
                         <div className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-full">
@@ -423,8 +424,9 @@ export default function GalleryPage() {
                       src={selectedArtwork.image}
                       alt={selectedArtwork.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, 80vw"
+                      quality={90}
                       className="object-cover"
-                      unoptimized
                     />
                   </div>
 

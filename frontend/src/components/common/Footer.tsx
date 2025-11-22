@@ -88,8 +88,9 @@ export default function Footer() {
                     src="/Assets/logo.png"
                     alt="TOACC Logo"
                     fill
+                    sizes="(max-width: 640px) 120px, 150px"
+                    quality={90}
                     className="object-cover"
-                    unoptimized
                   />
                 </div>
                 <span className="text-xl font-bold text-[#F5EFE7]">TOACC</span>

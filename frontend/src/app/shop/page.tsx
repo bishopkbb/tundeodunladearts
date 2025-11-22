@@ -457,8 +457,9 @@ export default function ShopPage() {
                             src={artwork.image}
                             alt={artwork.title}
                             fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            quality={90}
                             className="object-cover group-hover:scale-110 transition-transform duration-500"
-                            unoptimized
                           />
                           {/* Badges */}
                           <div className="absolute top-3 left-3 flex flex-col gap-2">
@@ -581,8 +582,9 @@ export default function ShopPage() {
                       src={selectedArtwork.image}
                       alt={selectedArtwork.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, 80vw"
+                      quality={90}
                       className="object-cover"
-                      unoptimized
                     />
                   </div>
 

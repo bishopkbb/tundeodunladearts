@@ -57,9 +57,10 @@ export default function Navbar() {
                   src="/Assets/logo.png"
                   alt="TOACC Logo"
                   fill
-                  className="object-cover"
+                  sizes="(max-width: 640px) 120px, 150px"
+                  quality={90}
                   priority
-                  unoptimized
+                  className="object-cover"
                 />
               </div>
               <div className="hidden sm:block">
@@ -232,8 +233,9 @@ export default function Navbar() {
                         src="/Assets/logo.png"
                         alt="TOACC Logo"
                         fill
+                        sizes="(max-width: 640px) 120px, 150px"
+                        quality={90}
                         className="object-cover"
-                        unoptimized
                       />
                     </div>
                     <div>

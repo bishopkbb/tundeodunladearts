@@ -55,8 +55,9 @@ export default function OrderSummary({ items, total, itemCount, currentStep }: O
                 src={item.image}
                 alt={item.title}
                 fill
+                sizes="120px"
+                quality={90}
                 className="object-cover"
-                unoptimized
               />
             </div>
             <div className="flex-1 min-w-0">

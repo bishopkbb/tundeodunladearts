@@ -96,8 +96,9 @@ export default function ContactPage() {
                 src="/Assets/cover2.jpg"
                 alt="TOACC Gallery Interior"
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                quality={90}
                 className="object-cover"
-                unoptimized
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
                 <div className="p-8 text-white">

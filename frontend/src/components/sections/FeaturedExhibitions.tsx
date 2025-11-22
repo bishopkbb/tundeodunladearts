@@ -59,7 +59,7 @@ const exhibitions: Exhibition[] = [
     venue: 'Nicon Luxury Abuja',
     address: 'Abuja, Nigeria',
     description: 'Creative Arts Promotion Icon Award honoring Prince Tunde Odunlade for his outstanding contributions to African arts and culture.',
-    image: '/Assets/abuja.jpg',
+    image: '/Assets/abuja .jpg',
   },
   {
     id: 4,
@@ -160,8 +160,9 @@ export default function FeaturedExhibitions() {
                       src={exhibit.image}
                       alt={exhibit.title}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      quality={90}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      unoptimized
                     />
                     {/* Type Badge */}
                     <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${badge.bg} ${badge.textColor} shadow-lg`}>
