@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/node_modules/
+**/node_modules/
+**/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -9,6 +12,9 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+frontend/node_modules/
+backend/node_modules/
+cms/node_modules/
 
 # testing
 /coverage

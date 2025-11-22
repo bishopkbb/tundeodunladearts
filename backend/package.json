@@ -1,0 +1,26 @@
+{
+  "name": "toacc-backend",
+  "version": "1.0.0",
+  "description": "Backend API for TOACC Gallery - Supabase + Serverless Functions",
+  "private": true,
+  "scripts": {
+    "dev": "supabase start",
+    "build": "tsc",
+    "migrate": "supabase db push",
+    "generate": "supabase gen types typescript --local > types/database.types.ts",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "@supabase/auth-helpers-nextjs": "^0.8.7",
+    "dotenv": "^16.3.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "supabase": "^1.123.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
+

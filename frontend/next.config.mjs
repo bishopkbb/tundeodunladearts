@@ -24,19 +24,12 @@ const nextConfig = {
     ],
   },
 
-  // Compiler options
-  compiler: {
-    // Remove console logs in production
-    removeConsole: process.env.NODE_ENV === 'production' ? {
-      exclude: ['error', 'warn'],
-    } : false,
-  },
-
   // Performance optimizations
   swcMinify: true,
   
   // Compiler optimizations for faster builds
   compiler: {
+    // Remove console logs in production
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
@@ -45,21 +38,7 @@ const nextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['framer-motion', '@react-three/fiber', '@react-three/drei'],
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
-  
-  // Output configuration for optimization
-  output: 'standalone',
-  
-  // Compression
-  compress: true,
   
   // PoweredBy header removal for security and performance
   poweredByHeader: false,
