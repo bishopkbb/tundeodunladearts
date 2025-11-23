@@ -2,40 +2,41 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
-
-type ExhibitionStatus = 'current' | 'upcoming' | 'past';
+import { calculateExhibitionStatus, getStatusText, getStatusColor, type ExhibitionStatus } from '@/lib/exhibitionUtils';
 
 interface Exhibition {
   id: number;
   title: string;
   artist: string;
-  status: ExhibitionStatus;
   startDate: string;
-  endDate: string;
+  endDate?: string;
   description: string;
   longDescription: string;
   image: string;
   category: string;
   location: string;
   artworks: number;
+  type?: 'exhibition' | 'festival' | 'awards' | 'event';
+  openingTime?: string;
+  address?: string;
+  subtitle?: string;
 }
 
-const exhibitions: Exhibition[] = [
+const exhibitionsData: Exhibition[] = [
   {
     id: 1,
     title: 'Chain of Souls (ASOPO OKAN)',
     artist: 'Taofeek Olalekan',
-    status: 'upcoming',
     startDate: '2025-12-16',
     endDate: '2026-01-10',
     description: 'An art exhibition of mixed media, fiber/textile art, beadworks, & oil on canvas. A new talent born to celebrate Arewa Odunlade\'s birthday.',
     longDescription: 'Chain of Souls (ASOPO OKAN) presents a powerful exploration of connection, heritage, and artistic expression through diverse mediums. This groundbreaking exhibition features works by emerging talent Taofeek Olalekan, showcasing innovative approaches to mixed media, fiber/textile art, beadworks, and traditional oil on canvas. The exhibition serves as both a celebration of new artistic voices and a tribute to Arewa Odunlade\'s birthday. Visitors will experience a dynamic interplay between traditional African craft techniques and contemporary artistic practices, with each piece telling a story of cultural continuity and creative evolution. The opening reception promises an intimate encounter with the artist, allowing visitors to meet Taofeek Olalekan live and experience his creative process firsthand.',
-    image: '/Assets/hero1.jpg',
-    category: 'Mixed Media, Fiber/Textile Art, Beadworks & Oil on Canvas',
+    image: '/Assets/chain of souls.png',
+    category: 'Fiber/Textile Art',
     location: 'Femi Osofisan Amphitheater, Tunde Odunlade Arts and Culture Gallery, No 2, Ladoke Akintola, Off Aare Avenue, New Bodija',
     artworks: 30,
   },
@@ -43,12 +44,11 @@ const exhibitions: Exhibition[] = [
     id: 2,
     title: '6TH ORÍKÌ YORÙBÁ FESTIVAL',
     artist: 'Prince Tunde Odunlade',
-    status: 'upcoming',
     startDate: '2025-12-13',
     endDate: '2025-12-13',
     description: 'A celebration of Yoruba culture and heritage featuring guest speaker Prince Tunde Odunlade, an accomplished print and textile artist with extensive background in exhibiting, teaching, lecturing, and studying.',
     longDescription: 'The 6TH ORÍKÌ YORÙBÁ FESTIVAL brings together cultural enthusiasts, artists, and scholars for a day-long celebration of Yoruba heritage and oral traditions. This year\'s festival features Prince Tunde Odunlade as the guest speaker, a highly accomplished print and textile artist whose work bridges traditional African art forms with contemporary expression. Prince Tunde Odunlade brings decades of experience from his studies in Anthropology at Iowa State University and Stillman College in Tuscaloosa, Alabama, where he served as an artist-in-residence in 1986 and 1989. His extensive travels throughout Nigeria, Africa, North America, and Europe have enriched his understanding of global artistic practices while maintaining deep roots in Yoruba cultural traditions. The festival promises engaging discussions, cultural performances, and insights into the preservation and evolution of Yoruba artistic heritage.',
-    image: '/Assets/hero2.jpg',
+    image: '/Assets/oriki.jpg',
     category: 'Cultural Festival',
     location: 'Iyaniwura Palace, Iba town Osun State, Nigeria',
     artworks: 0,
@@ -57,12 +57,11 @@ const exhibitions: Exhibition[] = [
     id: 3,
     title: 'Abuja 2025 African Descent Creative Industry Awards & Honours',
     artist: 'Prince Tunde Odunlade',
-    status: 'upcoming',
     startDate: '2025-12-11',
     endDate: '2025-12-11',
     description: 'Creative Arts Promotion Icon Award honoring Prince Tunde Odunlade for his outstanding contributions to African arts and culture.',
     longDescription: 'The Abuja 2025 African Descent Creative Industry Awards & Honours recognizes exceptional individuals who have made significant contributions to the creative arts across the African diaspora. Prince Tunde Odunlade is being honored as the Creative Arts Promotion Icon for his decades of dedication to advancing African artistic expression, cultural preservation, and creative education. This prestigious award acknowledges his role as a bridge between traditional African art forms and contemporary global artistic practices. The ceremony at Nicon Luxury Abuja brings together leaders from across the African creative industry to celebrate excellence, innovation, and cultural impact. Prince Tunde Odunlade\'s recognition highlights the importance of artistic advocacy and the power of creative expression in shaping cultural identity and global understanding.',
-    image: '/Assets/hero3.jpg',
+    image: '/Assets/abuja .jpg',
     category: 'Awards Ceremony',
     location: 'Nicon Luxury Abuja, Nigeria',
     artworks: 0,
@@ -71,12 +70,11 @@ const exhibitions: Exhibition[] = [
     id: 4,
     title: 'ARIYA GENGE 2025',
     artist: 'Iyaniwura Alarinjo Troupe',
-    status: 'upcoming',
     startDate: '2025-12-15',
     endDate: '2025-12-15',
     description: 'Presented by Iyaniwura Alarinjo Troupe in collaboration with Tunde Odunlade Arts Gallery. A vibrant celebration of traditional Nigerian performing arts and culture.',
     longDescription: 'ARIYA GENGE 2025 is a spectacular showcase of traditional Nigerian performing arts, presented by the renowned Iyaniwura Alarinjo Troupe in collaboration with Tunde Odunlade Arts Gallery. This vibrant cultural event brings together music, dance, storytelling, and theatrical performances that celebrate the rich heritage of Nigerian and Yoruba traditions. The event transforms the gallery space into a dynamic stage where ancient artistic practices meet contemporary presentation, creating an immersive experience for audiences of all ages. ARIYA GENGE 2025 offers a unique opportunity to witness living cultural traditions and the ongoing evolution of African performing arts, all within the inspiring setting of Tunde Odunlade Arts Gallery.',
-    image: '/Assets/featured1.jpg',
+    image: '/Assets/Ariya.jpg',
     category: 'Cultural Event',
     location: 'Tunde Odunlade Arts Gallery, No 2, Ladoke Akintola, Off Aare Avenue, New Bodija',
     artworks: 0,
@@ -85,12 +83,11 @@ const exhibitions: Exhibition[] = [
     id: 5,
     title: 'Ancestral Threads',
     artist: 'Prince Tunde Odunlade',
-    status: 'current',
     startDate: '2025-01-15',
     endDate: '2025-03-30',
     description: 'A breathtaking exploration of Yoruba heritage through contemporary batik art, weaving stories of tradition into modern textile masterpieces.',
     longDescription: 'Ancestral Threads is a profound journey through the rich tapestry of Yoruba culture, where Prince Tunde Odunlade\'s innovative floatography technique brings centuries-old stories to life. This exhibition features over 30 original batik works that bridge the gap between traditional Nigerian art forms and contemporary expression. Each piece is a meditation on identity, heritage, and the enduring power of cultural memory. Through vibrant indigo dyes and intricate patterns, visitors will discover how ancestral wisdom continues to shape modern African artistry.',
-    image: '/Assets/hero1.jpg',
+    image: '/Assets/ancestral thread.jpg',
     category: 'Textile Art',
     location: 'Main Gallery',
     artworks: 32,
@@ -99,35 +96,29 @@ const exhibitions: Exhibition[] = [
     id: 6,
     title: 'Metamorphosis',
     artist: 'Various Artists',
-    status: 'past',
     startDate: '2024-09-01',
     endDate: '2024-12-15',
     description: 'A transformative journey through change, growth, and evolution depicted through sculpture, painting, and performance art.',
     longDescription: 'Metamorphosis explored the universal themes of transformation and personal evolution through diverse artistic mediums. Artists examined how individuals, communities, and cultures adapt and transform in response to social change, environmental pressures, and technological advancement. The exhibition featured powerful sculptural works that literally transformed as viewers interacted with them, alongside paintings that documented personal journeys of growth and change. Performance art pieces conducted throughout the exhibition period added a temporal dimension, reminding visitors that transformation is an ongoing process rather than a destination.',
-    image: '/Assets/featured2.jpg',
+    image: '/Assets/metamorphosis.jpg',
     category: 'Sculpture & Performance',
     location: 'Main Gallery',
     artworks: 28,
   },
-  {
-    id: 7,
-    title: 'Urban Stories',
-    artist: 'Street Art Collective',
-    status: 'past',
-    startDate: '2024-06-15',
-    endDate: '2024-08-30',
-    description: 'Bold street art and graffiti pieces brought indoors, celebrating the raw energy and social commentary of urban artistic expression.',
-    longDescription: 'Urban Stories challenged traditional gallery boundaries by bringing the rebellious spirit of street art into the formal exhibition space. This groundbreaking show featured works by some of Nigeria\'s most celebrated street artists, whose murals typically grace city walls and highway underpasses. By placing these works in dialogue with contemporary fine art, the exhibition sparked important conversations about accessibility, public space, and who gets to define what counts as "serious" art. The show proved enormously popular with younger audiences and helped bridge the gap between gallery culture and street culture.',
-    image: '/Assets/hero5.jpg',
-    category: 'Street Art',
-    location: 'Urban Space',
-    artworks: 25,
-  },
+  
 ];
 
 export default function ExhibitionsPage() {
   const [filter, setFilter] = useState<ExhibitionStatus | 'all'>('all');
-  const [selectedExhibition, setSelectedExhibition] = useState<Exhibition | null>(null);
+  const [selectedExhibition, setSelectedExhibition] = useState<Exhibition & { status: ExhibitionStatus } | null>(null);
+
+  // Calculate status dynamically for all exhibitions
+  const exhibitions = useMemo(() => {
+    return exhibitionsData.map(ex => ({
+      ...ex,
+      status: calculateExhibitionStatus(ex.startDate, ex.endDate),
+    }));
+  }, []); // Empty dependency array since dates don't change during component lifecycle
 
   const filteredExhibitions = filter === 'all' 
     ? exhibitions 
@@ -139,22 +130,6 @@ export default function ExhibitionsPage() {
       day: 'numeric',
       year: 'numeric',
     });
-  };
-
-  const getStatusColor = (status: ExhibitionStatus) => {
-    switch(status) {
-      case 'current': return 'bg-green-500';
-      case 'upcoming': return 'bg-[#FFD700]';
-      case 'past': return 'bg-gray-400';
-    }
-  };
-
-  const getStatusText = (status: ExhibitionStatus) => {
-    switch(status) {
-      case 'current': return 'Now Showing';
-      case 'upcoming': return 'Coming Soon';
-      case 'past': return 'Past Exhibition';
-    }
   };
 
   return (
