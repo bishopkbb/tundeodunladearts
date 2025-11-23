@@ -1,7 +1,5 @@
 # Supabase Local Development Configuration
-
-[project]
-name = "toacc-gallery"
+project_id = "ohuhloadfzntoyblftwr"
 
 [api]
 enabled = true
@@ -28,7 +26,6 @@ file_size_limit = "50MiB"
 
 [realtime]
 enabled = true
-port = 4000
 
 [studio]
 enabled = true
@@ -37,8 +34,3 @@ port = 54323
 [inbucket]
 enabled = true
 port = 54324
-
-[functions]
-enabled = true
-verify_jwt = false
-

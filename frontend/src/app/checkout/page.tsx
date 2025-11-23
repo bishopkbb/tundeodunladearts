@@ -42,6 +42,27 @@ export default function CheckoutPage() {
   const [orderId, setOrderId] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check for order ID in URL (from Flutterwave redirect)
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderParam = urlParams.get('order');
+    const status = urlParams.get('status');
+    const tx_ref = urlParams.get('tx_ref');
+    
+    if (orderParam && status === 'successful') {
+      // Payment was successful via redirect
+      setOrderId(orderParam);
+      setCurrentStep('confirmation');
+    } else if (orderParam && tx_ref) {
+      // Check if order exists in session storage
+      const savedOrder = sessionStorage.getItem(`toacc-order-${orderParam}`);
+      if (savedOrder) {
+        setOrderId(orderParam);
+        setCurrentStep('confirmation');
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     // Redirect if cart is empty
     if (cartItems.length === 0 && currentStep !== 'confirmation') {
       router.push('/shop');

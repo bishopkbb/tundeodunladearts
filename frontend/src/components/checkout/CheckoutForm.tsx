@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { useCart } from '@/contexts/CartContext';
 
@@ -41,6 +41,9 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentInitiated, setPaymentInitiated] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [notificationType, setNotificationType] = useState<'success' | 'error' | 'info'>('info');
 
   const {
     register,
@@ -116,14 +119,23 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
       // Generate unique order ID
       const orderId = `TOACC-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
+      // Check if Flutterwave key is configured
+      const flwKey = process.env.NEXT_PUBLIC_FLW_PUBLIC_KEY;
+      if (!flwKey || flwKey.trim() === '') {
+        setError('Payment system is not configured. Please contact support.');
+        setIsSubmitting(false);
+        setPaymentInitiated(false);
+        return;
+      }
+
       // Prepare payment payload for Flutterwave
       const paymentData = {
-        public_key: process.env.NEXT_PUBLIC_FLW_PUBLIC_KEY || '',
+        public_key: flwKey,
         tx_ref: orderId,
         amount: finalTotal,
         currency: 'NGN',
-        payment_options: 'card,mobilemoney,ussd,account,banktransfer',
-        redirect_url: `${window.location.origin}/checkout?order=${orderId}`,
+        payment_options: 'card,mobilemoney,ussd,account,banktransfer,barter',
+        redirect_url: `${window.location.origin}/checkout?order=${orderId}&status=successful`,
         customer: {
           email: finalCustomerData.email,
           phone_number: finalCustomerData.phone,
@@ -172,9 +184,27 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
 
       // Initialize Flutterwave checkout
       if (window.FlutterwaveCheckout) {
-        window.FlutterwaveCheckout({
-          ...paymentData,
-          callback: async (response: any) => {
+        // Set payment initiated state before opening
+        setPaymentInitiated(true);
+        setError(null);
+        
+        // Add timeout to detect if Flutterwave doesn't open (popup blocker or error)
+        const checkIfOpened = setTimeout(() => {
+          // If still showing "redirecting" after 5 seconds, Flutterwave likely didn't open
+          setPaymentInitiated(false);
+          setIsSubmitting(false);
+          setError('Payment window did not open. Please check if pop-ups are blocked and try again.');
+          setNotificationMessage('Payment window did not open. Please allow pop-ups or check your browser settings.');
+          setNotificationType('error');
+          setShowNotification(true);
+        }, 5000);
+        
+        try {
+          // Open Flutterwave checkout
+          window.FlutterwaveCheckout({
+            ...paymentData,
+            callback: async (response: any) => {
+              clearTimeout(checkIfOpened);
             if (response.status === 'successful') {
               try {
                 // Save order to database
@@ -266,16 +296,38 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
                 onNext(orderId);
               }
             } else {
+              clearTimeout(checkIfOpened);
               setError('Payment was not successful. Please try again.');
               setIsSubmitting(false);
               setPaymentInitiated(false);
+              setNotificationMessage('Payment was not successful. Please try again.');
+              setNotificationType('error');
+              setShowNotification(true);
             }
           },
           onclose: () => {
+            clearTimeout(checkIfOpened);
+            // User closed payment modal
+            console.log('Payment window closed by user');
             setIsSubmitting(false);
             setPaymentInitiated(false);
+            setError('Payment was cancelled. You can try again.');
+            setNotificationMessage('Payment was cancelled. You can try again.');
+            setNotificationType('info');
+            setShowNotification(true);
           },
-        });
+          modal: {
+            closeButton: true,
+            displayKey: false,
+          },
+          });
+        } catch (fwError: any) {
+          clearTimeout(checkIfOpened);
+          console.error('Flutterwave checkout error:', fwError);
+          setError('Failed to open payment window. Please try again.');
+          setIsSubmitting(false);
+          setPaymentInitiated(false);
+        }
       } else {
         // Fallback: simulate payment for development
         console.warn('Flutterwave not loaded. Using fallback payment simulation.');
@@ -328,6 +380,35 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
 
   if (isPaymentStep) {
     return (
+      <>
+        {/* Notification Toast */}
+        <AnimatePresence>
+          {showNotification && (
+            <motion.div
+              initial={{ opacity: 0, y: -50, x: '-50%' }}
+              animate={{ opacity: 1, y: 0, x: '-50%' }}
+              exit={{ opacity: 0, y: -50, x: '-50%' }}
+              className={`fixed top-24 left-1/2 z-[1000] p-4 rounded-lg shadow-2xl text-white max-w-md ${
+                notificationType === 'success' 
+                  ? 'bg-green-500' 
+                  : notificationType === 'error' 
+                  ? 'bg-red-500' 
+                  : 'bg-blue-500'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-4">
+                <p className="font-semibold">{notificationMessage}</p>
+                <button 
+                  onClick={() => setShowNotification(false)}
+                  className="font-bold text-white hover:text-gray-200 transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -445,13 +526,54 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
             />
             <p className="text-lg text-[#3D2817] font-semibold">Redirecting to payment...</p>
             <p className="text-sm text-[#6B4423] mt-2">Please wait while we process your payment</p>
+            {error && (
+              <p className="text-sm text-red-600 mt-4 font-semibold">{error}</p>
+            )}
+            <button
+              onClick={() => {
+                setPaymentInitiated(false);
+                setIsSubmitting(false);
+                setError(null);
+              }}
+              className="mt-6 px-6 py-2 bg-gray-200 hover:bg-gray-300 text-[#6B4423] font-semibold rounded-lg transition-colors"
+            >
+              Cancel & Try Again
+            </button>
           </motion.div>
         )}
       </motion.div>
+      </>
     );
   }
 
   return (
+    <>
+      {/* Notification Toast */}
+      {showNotification && (
+        <motion.div
+          initial={{ opacity: 0, y: -50, x: '-50%' }}
+          animate={{ opacity: 1, y: 0, x: '-50%' }}
+          exit={{ opacity: 0, y: -50, x: '-50%' }}
+          className={`fixed top-24 left-1/2 z-[1000] p-4 rounded-lg shadow-2xl text-white max-w-md ${
+            notificationType === 'success' 
+              ? 'bg-green-500' 
+              : notificationType === 'error' 
+              ? 'bg-red-500' 
+              : 'bg-blue-500'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-4">
+            <p className="font-semibold">{notificationMessage}</p>
+            <button 
+              onClick={() => setShowNotification(false)}
+              className="font-bold text-white hover:text-gray-200 transition-colors"
+            >
+              ✕
+            </button>
+          </div>
+        </motion.div>
+      )}
+      
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -709,6 +831,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
         </motion.button>
       </form>
     </motion.div>
+    </>
   );
 }
 

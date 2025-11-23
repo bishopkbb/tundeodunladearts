@@ -7,17 +7,27 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01';
 const token = process.env.SANITY_API_TOKEN || '';
 
-if (!projectId) {
-  console.warn('Missing Sanity project ID. CMS features will not work.');
-}
+// Create a dummy client if project ID is missing to prevent errors
+const createSafeClient = () => {
+  if (!projectId || projectId.trim() === '') {
+    // Return a mock client that will fail gracefully
+    return {
+      fetch: async () => {
+        throw new Error('Sanity project ID not configured');
+      },
+    } as any;
+  }
+  
+  return createClient({
+    projectId,
+    dataset,
+    apiVersion,
+    useCdn: true, // Use CDN for faster, cached responses
+  });
+};
 
 // Sanity client for reading data (public)
-export const sanityClient = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true, // Use CDN for faster, cached responses
-});
+export const sanityClient = createSafeClient();
 
 // Sanity client for writing data (requires token)
 export const sanityWriteClient = token

@@ -38,25 +38,48 @@ export default function ShopPage() {
 
   // Fetch artworks from CMS on mount
   useEffect(() => {
+    let cancelled = false;
+    
     async function loadArtworks() {
       try {
         setIsLoading(true);
         const fetchedArtworks = await fetchArtworks(false);
-        setArtworks(fetchedArtworks);
-        // Update price range if needed
-        const newMax = Math.max(...fetchedArtworks.map(a => a.price));
-        if (newMax > maxPrice) {
-          setPriceRange([0, newMax]);
+        
+        // Check if component is still mounted
+        if (cancelled) return;
+        
+        // Ensure we have artworks
+        if (fetchedArtworks && fetchedArtworks.length > 0) {
+          setArtworks(fetchedArtworks);
+          // Update price range if needed
+          const newMax = Math.max(...fetchedArtworks.map(a => a.price));
+          if (newMax > maxPrice && !isNaN(newMax)) {
+            setPriceRange([0, newMax]);
+          }
+        } else {
+          // Fallback if empty array
+          setArtworks(staticArtworks);
         }
       } catch (error) {
-        console.error('Failed to load artworks from CMS:', error);
-        setArtworks(staticArtworks);
+        // Always fallback to static data on error
+        if (!cancelled) {
+          console.error('Failed to load artworks from CMS:', error);
+          setArtworks(staticArtworks);
+        }
       } finally {
-        setIsLoading(false);
+        if (!cancelled) {
+          setIsLoading(false);
+        }
       }
     }
+    
     loadArtworks();
-  }, []);
+    
+    // Cleanup function
+    return () => {
+      cancelled = true;
+    };
+  }, []); // Empty deps - only run once on mount
 
   // Generate categories and artists dynamically from artworks
   const categories = useMemo(() => {

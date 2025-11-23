@@ -11,6 +11,8 @@ const nextConfig = {
     minimumCacheTTL: 60,
     // High quality setting (default is 75, max is 100)
     quality: 90,
+    // Required for Next.js 16 - define allowed quality values
+    qualities: [75, 90, 100],
     // Enable high quality optimization
     unoptimized: false,
     dangerouslyAllowSVG: true,
