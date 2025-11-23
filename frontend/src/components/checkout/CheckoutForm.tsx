@@ -176,26 +176,95 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
           ...paymentData,
           callback: async (response: any) => {
             if (response.status === 'successful') {
-              // Save order to session storage
-              const orderData = {
-                orderId,
-                customerData: finalCustomerData,
-                cartItems,
-                paymentResponse: response,
-                total: finalTotal,
-                shippingCost,
-                tax,
-                timestamp: new Date().toISOString(),
-              };
-              
-              sessionStorage.setItem(`toacc-order-${orderId}`, JSON.stringify(orderData));
-              sessionStorage.removeItem('toacc-checkout-details');
-              
-              // Clear cart
-              clearCart();
-              
-              // Redirect to confirmation
-              onNext(orderId);
+              try {
+                // Save order to database
+                const orderPayload = {
+                  orderId,
+                  customerEmail: finalCustomerData.email,
+                  customerName: `${finalCustomerData.firstName} ${finalCustomerData.lastName}`,
+                  customerPhone: finalCustomerData.phone,
+                  shippingAddress: {
+                    address: finalCustomerData.address,
+                    city: finalCustomerData.city,
+                    state: finalCustomerData.state,
+                    zipCode: finalCustomerData.zipCode,
+                    country: finalCustomerData.country,
+                  },
+                  billingAddress: finalCustomerData.useSameBilling
+                    ? undefined
+                    : {
+                        address: finalCustomerData.billingAddress || finalCustomerData.address,
+                        city: finalCustomerData.billingCity || finalCustomerData.city,
+                        state: finalCustomerData.billingState || finalCustomerData.state,
+                        zipCode: finalCustomerData.billingZipCode || finalCustomerData.zipCode,
+                        country: finalCustomerData.billingCountry || finalCustomerData.country,
+                      },
+                  cartItems: cartItems.map((item) => ({
+                    id: item.id,
+                    title: item.title,
+                    artist: item.artist,
+                    price: item.price,
+                    quantity: item.quantity,
+                    image: item.image,
+                  })),
+                  subtotal: cartTotal,
+                  shippingCost,
+                  tax,
+                  total: finalTotal,
+                  paymentTransactionId: response.transaction_id || response.tx_ref,
+                  paymentProvider: 'flutterwave',
+                };
+
+                const orderResponse = await fetch('/api/orders/create-order', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(orderPayload),
+                });
+
+                if (!orderResponse.ok) {
+                  console.error('Failed to save order to database');
+                  // Still proceed with order but log the error
+                }
+
+                // Also save to session storage as backup
+                const orderData = {
+                  orderId,
+                  customerData: finalCustomerData,
+                  cartItems,
+                  paymentResponse: response,
+                  total: finalTotal,
+                  shippingCost,
+                  tax,
+                  timestamp: new Date().toISOString(),
+                };
+                
+                sessionStorage.setItem(`toacc-order-${orderId}`, JSON.stringify(orderData));
+                sessionStorage.removeItem('toacc-checkout-details');
+                
+                // Clear cart
+                clearCart();
+                
+                // Redirect to confirmation
+                onNext(orderId);
+              } catch (dbError) {
+                console.error('Error saving order:', dbError);
+                // Still proceed with order completion
+                sessionStorage.setItem(`toacc-order-${orderId}`, JSON.stringify({
+                  orderId,
+                  customerData: finalCustomerData,
+                  cartItems,
+                  paymentResponse: response,
+                  total: finalTotal,
+                  shippingCost,
+                  tax,
+                  timestamp: new Date().toISOString(),
+                }));
+                sessionStorage.removeItem('toacc-checkout-details');
+                clearCart();
+                onNext(orderId);
+              }
             } else {
               setError('Payment was not successful. Please try again.');
               setIsSubmitting(false);

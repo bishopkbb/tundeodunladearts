@@ -2,144 +2,17 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
 import { useCart } from '@/contexts/CartContext';
+import { allArtworks, type Artwork } from '@/lib/artworksData';
+import { fetchArtworks } from '@/lib/cmsData';
 
-interface Artwork {
-  id: string;
-  title: string;
-  artist: string;
-  year: number;
-  medium: string;
-  dimensions: string;
-  price: number;
-  category: string;
-  image: string;
-  description: string;
-  available: boolean;
-  featured: boolean;
-}
+// Static fallback artworks
+const staticArtworks: Artwork[] = allArtworks;
 
-const artworks: Artwork[] = [
-  {
-    id: '1',
-    title: 'Ancestral Echoes',
-    artist: 'Prince Tunde Odunlade',
-    year: 2024,
-    medium: 'Batik on Textile',
-    dimensions: '48" x 60"',
-    price: 580000,
-    category: 'Batik',
-    image: '/Assets/hero1.jpg',
-    description: 'A powerful meditation on Yoruba heritage, depicting ancestral spirits through intricate indigo patterns and gold accents.',
-    available: true,
-    featured: true,
-  },
-  {
-    id: '2',
-    title: 'Urban Rhythms',
-    artist: 'Prince Tunde Odunlade',
-    year: 2024,
-    medium: 'Floatography',
-    dimensions: '36" x 48"',
-    price: 420000,
-    category: 'Floatography',
-    image: '/Assets/hero2.jpg',
-    description: 'Capturing the vibrant pulse of Ibadan city life through innovative floatography technique.',
-    available: true,
-    featured: true,
-  },
-  {
-    id: '3',
-    title: 'Sacred Geometry',
-    artist: 'Prince Tunde Odunlade',
-    year: 2023,
-    medium: 'Mixed Media',
-    dimensions: '40" x 52"',
-    price: 495000,
-    category: 'Mixed Media',
-    image: '/Assets/hero3.jpg',
-    description: 'Traditional Yoruba symbols reimagined through contemporary lens.',
-    available: true,
-    featured: false,
-  },
-  {
-    id: '4',
-    title: 'Textile Dreams',
-    artist: 'Emerging Artist',
-    year: 2024,
-    medium: 'Oil on Canvas',
-    dimensions: '30" x 40"',
-    price: 285000,
-    category: 'Painting',
-    image: '/Assets/featured2.jpg',
-    description: 'Vivid portrayal of daily life in Nigerian markets.',
-    available: true,
-    featured: false,
-  },
-  {
-    id: '5',
-    title: 'Market Stories',
-    artist: 'Adire Master',
-    year: 2024,
-    medium: 'Adire Textile',
-    dimensions: '36" x 36"',
-    price: 340000,
-    category: 'Textile',
-    image: '/Assets/featured1.jpg',
-    description: 'Traditional resist-dye patterns celebrating fertility.',
-    available: false,
-    featured: false,
-  },
-  {
-    id: '6',
-    title: 'Heritage Tapestry',
-    artist: 'Prince Tunde Odunlade',
-    year: 2023,
-    medium: 'Batik on Canvas',
-    dimensions: '52" x 68"',
-    price: 650000,
-    category: 'Batik',
-    image: '/Assets/hero5.jpg',
-    description: 'Monumental work depicting the journey from traditional to modern.',
-    available: true,
-    featured: true,
-  },
-  {
-    id: '7',
-    title: 'Dance of Colors',
-    artist: 'Contemporary Artist',
-    year: 2024,
-    medium: 'Acrylic on Canvas',
-    dimensions: '24" x 32"',
-    price: 225000,
-    category: 'Painting',
-    image: '/Assets/hero7.jpg',
-    description: 'Abstract celebration of African festivals.',
-    available: true,
-    featured: false,
-  },
-  {
-    id: '8',
-    title: 'Cultural Fusion',
-    artist: 'Prince Tunde Odunlade',
-    year: 2024,
-    medium: 'Floatography',
-    dimensions: '44" x 56"',
-    price: 520000,
-    category: 'Floatography',
-    image: '/Assets/hero8.jpg',
-    description: 'Innovative technique merging traditional batik with photography.',
-    available: true,
-    featured: false,
-  },
-];
-
-const categories = ['All', 'Batik', 'Floatography', 'Painting', 'Textile', 'Mixed Media'];
-const artists = ['All Artists', 'Prince Tunde Odunlade', 'Emerging Artist', 'Adire Master', 'Contemporary Artist'];
 const sortOptions = [
   { label: 'Featured First', value: 'featured' },
   { label: 'Price: Low to High', value: 'price-asc' },
@@ -149,15 +22,52 @@ const sortOptions = [
 ];
 
 export default function ShopPage() {
+  const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedArtist, setSelectedArtist] = useState('All Artists');
-  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const maxPrice = useMemo(() => Math.max(...artworks.map(a => a.price)), [artworks]);
+  const [priceRange, setPriceRange] = useState(() => {
+    const max = Math.max(...staticArtworks.map(a => a.price));
+    return [0, max];
+  });
   const [sortBy, setSortBy] = useState('featured');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const { addToCart } = useCart();
 
-  const maxPrice = Math.max(...artworks.map(a => a.price));
+  // Fetch artworks from CMS on mount
+  useEffect(() => {
+    async function loadArtworks() {
+      try {
+        setIsLoading(true);
+        const fetchedArtworks = await fetchArtworks(false);
+        setArtworks(fetchedArtworks);
+        // Update price range if needed
+        const newMax = Math.max(...fetchedArtworks.map(a => a.price));
+        if (newMax > maxPrice) {
+          setPriceRange([0, newMax]);
+        }
+      } catch (error) {
+        console.error('Failed to load artworks from CMS:', error);
+        setArtworks(staticArtworks);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadArtworks();
+  }, []);
+
+  // Generate categories and artists dynamically from artworks
+  const categories = useMemo(() => {
+    const cats = new Set(artworks.map(a => a.category));
+    return ['All', ...Array.from(cats).sort()];
+  }, [artworks]);
+
+  const artists = useMemo(() => {
+    const arts = new Set(artworks.map(a => a.artist));
+    return ['All Artists', ...Array.from(arts).sort()];
+  }, [artworks]);
 
   // Filter and sort artworks
   const filteredArtworks = useMemo(() => {

@@ -45,3 +45,39 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# documentation and setup guides (not needed in repo)
+SUPABASE_SETUP_GUIDE.md
+PRODUCTION_READY_SUMMARY.md
+**/PRODUCTION_SETUP.md
+**/UPDATE_*.md
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build outputs
+frontend/.next/
+frontend/out/
+frontend/build/
+backend/dist/
+cms/dist/
+
+# Cache
+.cache/
+.parcel-cache/
+.eslintcache
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+pnpm-debug.log*
+
+# OS files
+Thumbs.db
+Desktop.ini

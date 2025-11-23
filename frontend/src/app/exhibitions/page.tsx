@@ -2,11 +2,12 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
 import { calculateExhibitionStatus, getStatusText, getStatusColor, type ExhibitionStatus } from '@/lib/exhibitionUtils';
+import { fetchExhibitions } from '@/lib/cmsData';
 
 interface Exhibition {
   id: number;
@@ -111,18 +112,57 @@ const exhibitionsData: Exhibition[] = [
 export default function ExhibitionsPage() {
   const [filter, setFilter] = useState<ExhibitionStatus | 'all'>('all');
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition & { status: ExhibitionStatus } | null>(null);
+  const [exhibitions, setExhibitions] = useState<Exhibition[]>(exhibitionsData);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch exhibitions from CMS on mount
+  useEffect(() => {
+    async function loadExhibitions() {
+      try {
+        setIsLoading(true);
+        const fetchedExhibitions = await fetchExhibitions(false);
+        if (fetchedExhibitions && fetchedExhibitions.length > 0) {
+          // Transform CMS exhibitions to match our interface
+          const transformed = fetchedExhibitions.map(ex => ({
+            id: parseInt(ex.id) || Math.random(),
+            title: ex.title,
+            subtitle: ex.subtitle,
+            artist: ex.artist,
+            startDate: ex.startDate,
+            endDate: ex.endDate,
+            description: ex.description,
+            longDescription: ex.longDescription,
+            image: ex.image,
+            category: ex.category,
+            location: ex.location,
+            artworks: ex.artworks,
+            type: ex.type,
+            openingTime: ex.openingTime,
+            address: ex.address,
+          }));
+          setExhibitions(transformed);
+        }
+      } catch (error) {
+        console.error('Failed to load exhibitions from CMS:', error);
+        setExhibitions(exhibitionsData);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadExhibitions();
+  }, []);
 
   // Calculate status dynamically for all exhibitions
-  const exhibitions = useMemo(() => {
-    return exhibitionsData.map(ex => ({
+  const exhibitionsWithStatus = useMemo(() => {
+    return exhibitions.map(ex => ({
       ...ex,
       status: calculateExhibitionStatus(ex.startDate, ex.endDate),
     }));
-  }, []); // Empty dependency array since dates don't change during component lifecycle
+  }, [exhibitions]);
 
   const filteredExhibitions = filter === 'all' 
-    ? exhibitions 
-    : exhibitions.filter(ex => ex.status === filter);
+    ? exhibitionsWithStatus 
+    : exhibitionsWithStatus.filter(ex => ex.status === filter);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('en-US', {

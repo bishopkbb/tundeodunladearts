@@ -26,12 +26,42 @@ const itemVariants = {
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Newsletter subscription email:', email);
-    alert(`Thank you for subscribing with: ${email}`);
-    setEmail('');
+    setIsSubmitting(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          source: 'website',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setMessage({ type: 'success', text: data.message || 'Successfully subscribed!' });
+        setEmail('');
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Failed to subscribe. Please try again.' });
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      setMessage({ type: 'error', text: 'An error occurred. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
+      // Clear message after 5 seconds
+      setTimeout(() => setMessage(null), 5000);
+    }
   };
 
   return (
@@ -97,17 +127,35 @@ export default function NewsletterSection() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
-            className="w-full sm:w-96 px-6 py-4 rounded-lg border-2 border-[#D4AF37]/30 focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all duration-300 text-[#3D2817] placeholder:text-[#6B4423]/50"
+            disabled={isSubmitting}
+            className="w-full sm:w-96 px-6 py-4 rounded-lg border-2 border-[#D4AF37]/30 focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all duration-300 text-[#3D2817] placeholder:text-[#6B4423]/50 disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <motion.button
             type="submit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full sm:w-auto px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+            disabled={isSubmitting}
+            whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
+            whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+            className="w-full sm:w-auto px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Subscribe
+            {isSubmitting ? 'Subscribing...' : 'Subscribe'}
           </motion.button>
         </motion.form>
+
+        {/* Message Display */}
+        {message && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className={`text-center px-4 py-2 rounded-lg ${
+              message.type === 'success'
+                ? 'bg-green-100 text-green-800'
+                : 'bg-red-100 text-red-800'
+            }`}
+          >
+            {message.text}
+          </motion.div>
+        )}
 
         {/* Social Media Icons */}
         <motion.div variants={itemVariants}>
