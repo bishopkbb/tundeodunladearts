@@ -8,24 +8,24 @@ import Link from 'next/link';
 const featuredArtworks = [
   {
     id: '1',
-    title: 'Cultural Heritage',
+    title: 'Cavalcade of Stars',
     artist: 'Prince Tunde Odunlade',
-    price: 450000,
-    image: '/Assets/featured1.jpg',
+    price: 12500000,
+    image: '/Assets/Cavalcade of Stars.jpg',
   },
   {
     id: '2',
-    title: 'Rhythms of Ibadan',
-    artist: 'Prince Tunde Odunlade',
-    price: 15000000,
-    image: '/Assets/hero2.jpg',
+    title: 'Close to My Heart',
+    artist: 'Eugene Ugoji',
+    price: 850000,
+    image: '/Assets/close to my heart.jpg',
   },
   {
     id: '3',
-    title: 'Adire Dreams',
-    artist: 'Prince Tunde Odunlade',
-    price: 10500000,
-    image: '/Assets/hero3.jpg',
+    title: 'Searching for Knowledge',
+    artist: 'Toh-mie',
+    price: 400000,
+    image: '/Assets/searching for knowledge.jpg',
   },
 ];
 

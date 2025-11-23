@@ -201,7 +201,7 @@ export default function AboutPage() {
                   <h2 className="text-2xl md:text-3xl font-bold text-[#8B4513] font-serif">Our Vision</h2>
                 </div>
                 <p className="text-[#6B4423] leading-relaxed">
-                  To become a hub for creative minds—a melting point for all art and a meeting place for lovers of every artistic expression. We envision TOACC as the cultural heartbeat of Ibadan, where traditional Yoruba heritage dances with contemporary innovation, and where every visitor—from practitioners to collectors, young to old—finds inspiration, connection, and transformation.
+                  To become a hub for creative minds, a melting point for all art and a meeting place for lovers of every artistic expression. We envision TOACC as the cultural heartbeat of Ibadan, where traditional Yoruba heritage dances with contemporary innovation, and where every visitor from practitioners to collectors, young to old finds inspiration, connection, and transformation.
                 </p>
               </motion.div>
 
@@ -222,7 +222,7 @@ export default function AboutPage() {
                   <h2 className="text-2xl md:text-3xl font-bold text-[#8B4513] font-serif">Our Mission</h2>
                 </div>
                 <p className="text-[#6B4423] leading-relaxed">
-                  To celebrate the rich tapestry of African arts and culture by providing a welcoming home where creative minds connect, share ideas, and grow together. We champion accessibility—admission is free—because we believe art should unite communities, inspire healing, and liberate minds. Through exhibitions, workshops, performances, and cultural programs, we nurture the next generation of artists while honoring our heritage.
+                  To celebrate the rich tapestry of African arts and culture by providing a welcoming home where creative minds connect, share ideas, and grow together. We champion accessibility because we believe art should unite communities, inspire healing, and liberate minds. Through exhibitions, workshops, performances, and cultural programs, we nurture the next generation of artists while honoring our heritage.
                 </p>
               </motion.div>
             </div>

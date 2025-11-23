@@ -8,11 +8,11 @@ import * as THREE from 'three';
 
 const heroImages = [
   { src: '/Assets/hero1.jpg', title: 'Cultural Heritage' },
-  { src: '/Assets/hero2.jpg', title: 'Urban Rhythms' },
-  { src: '/Assets/hero3.jpg', title: 'Sacred Geometry' },
+  { src: '/Assets/hero2.jpg', title: 'Happy Mother and Child' },
+  { src: '/Assets/hero3.jpg', title: 'Head' },
   { src: '/Assets/hero5.jpg', title: 'Traditional Wisdom' },
-  { src: '/Assets/hero7.jpg', title: 'Contemporary Expression' },
-  { src: '/Assets/hero9.jpg', title: 'African Identity' },
+  { src: '/Assets/hero 4.jpg', title: 'The Missing Link' },
+  { src: '/Assets/hero10.jpg', title: 'The Melody Maker' },
 ];
 
 const ORBIT_RADIUS = 5.5;
