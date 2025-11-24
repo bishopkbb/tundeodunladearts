@@ -9,9 +9,8 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60,
-    // High quality setting (default is 75, max is 100)
-    quality: 90,
-    // Required for Next.js 16 - define allowed quality values
+    // Required for Next.js 15+ - define allowed quality values
+    // Quality is set per-image via the `quality` prop (defaults to 90 in our components)
     qualities: [75, 90, 100],
     // Enable high quality optimization
     unoptimized: false,
@@ -29,9 +28,6 @@ const nextConfig = {
       },
     ],
   },
-
-  // Performance optimizations
-  swcMinify: true,
   
   // Compiler optimizations for faster builds
   compiler: {
