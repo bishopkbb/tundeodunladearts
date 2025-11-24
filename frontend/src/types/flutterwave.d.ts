@@ -21,6 +21,7 @@ export interface FlutterwaveCheckoutOptions {
     description?: string;
     logo?: string;
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?: Record<string, any>;
   callback: (response: FlutterwavePaymentResponse) => void;
   onclose?: () => void;
@@ -30,6 +31,7 @@ export interface FlutterwavePaymentResponse {
   status: 'successful' | 'cancelled' | 'failed';
   transaction_id?: string;
   tx_ref?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 

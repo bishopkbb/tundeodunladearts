@@ -97,7 +97,7 @@ export default function ContactPage() {
               </h1>
               <div className="w-32 h-1 bg-[#D4AF37] mx-auto mb-8 rounded-full" />
               <p className="text-lg md:text-xl text-[#6B4423] max-w-3xl mx-auto leading-relaxed">
-                Experience art in the heart of Ibadan. We'd love to hear from you!
+                Experience art in the heart of Ibadan. We&apos;d love to hear from you!
               </p>
             </motion.div>
           </div>

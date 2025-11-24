@@ -49,7 +49,6 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
   const {
     register,
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
   } = useForm<CheckoutFormData>({
