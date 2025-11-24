@@ -1,16 +1,19 @@
 # TOACC Gallery Backend
 
-Backend API and database setup using Supabase for TOACC Gallery.
+Database migrations and Supabase configuration for TOACC Gallery.
+
+**Note**: API routes are located in `frontend/src/app/api/` (Next.js API Routes). This backend folder is primarily for Supabase database migrations and configuration.
 
 ## Features
 
-- Order management and tracking
-- Payment processing webhooks (Flutterwave)
-- Event RSVP system
-- Newsletter subscriptions
-- Contact form submissions
-- Artwork request system
+- Database schema and migrations
 - Row Level Security (RLS) policies
+- Database tables:
+  - Orders management and tracking
+  - Event RSVP system
+  - Newsletter subscriptions
+  - Contact form submissions
+  - Artwork request system
 
 ## Setup
 
