@@ -448,13 +448,13 @@ export default function Hero3DCarousel() {
       {/* Canvas with 3D Carousel */}
       <Canvas
         camera={{ position: [0, 2, cameraDistance], fov: cameraFOV }}
+        dpr={isMobile ? Math.min(window.devicePixelRatio, 1.5) : undefined} // Limit pixel ratio on mobile
         gl={{
           antialias: !isMobile, // Disable antialiasing on mobile for performance
           alpha: true,
           powerPreference: isMobile ? 'default' : 'high-performance',
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.2,
-          dpr: isMobile ? Math.min(window.devicePixelRatio, 1.5) : undefined, // Limit pixel ratio on mobile
         }}
         shadows={!isMobile} // Disable shadows on mobile for performance
         className={`relative z-10 transition-opacity duration-500 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
