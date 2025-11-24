@@ -8,6 +8,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '475px',
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1536px',
+        // Custom breakpoints for better responsive design
+        'tablet': '768px',
+        'laptop': '1024px',
+        'desktop': '1280px',
+      },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         serif: ['var(--font-playfair)', 'Georgia', 'serif'],

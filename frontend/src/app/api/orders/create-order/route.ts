@@ -27,9 +27,20 @@ const orderSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      console.error('❌ Supabase admin client not initialized!');
+      return NextResponse.json(
+        { error: 'Server configuration error', details: 'Supabase service role key not configured' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const validatedData = orderSchema.parse(body);
 
+    // Note: Schema has order_status and payment_status as ENUMs
+    // The values should match: 'pending', 'processing', 'confirmed', 'shipped', 'delivered', 'cancelled'
+    // and: 'pending', 'processing', 'completed', 'failed', 'refunded'
     const { data, error } = await supabaseAdmin
       .from('orders')
       .insert({
@@ -44,10 +55,11 @@ export async function POST(request: NextRequest) {
         shipping_cost: validatedData.shippingCost,
         tax: validatedData.tax,
         total: validatedData.total,
-        payment_transaction_id: validatedData.paymentTransactionId,
-        payment_provider: validatedData.paymentProvider,
+        payment_transaction_id: validatedData.paymentTransactionId || null,
+        payment_provider: validatedData.paymentProvider || 'flutterwave',
         payment_status: validatedData.paymentTransactionId ? 'completed' : 'pending',
         order_status: validatedData.paymentTransactionId ? 'confirmed' : 'pending',
+        shipping_status: 'not_shipped', // Default value from schema
         notes: validatedData.notes,
       })
       .select()

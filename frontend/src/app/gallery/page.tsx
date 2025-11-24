@@ -14,28 +14,45 @@ import { fetchArtworks } from '@/lib/cmsData';
 const staticArtworks: Artwork[] = allArtworks;
 
 export default function GalleryPage() {
+  // Use static artworks initially to prevent hydration mismatch
   const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Start as false to prevent hydration mismatch
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'masonry'>('masonry');
   const { addToCart } = useCart();
 
-  // Fetch artworks from CMS on mount
+  // Fetch artworks from CMS on mount (after initial render to prevent hydration mismatch)
   useEffect(() => {
+    let isMounted = true;
+    
     async function loadArtworks() {
       try {
         setIsLoading(true);
         const fetchedArtworks = await fetchArtworks(false);
-        setArtworks(fetchedArtworks);
+        // Only update if component is still mounted
+        if (isMounted) {
+          setArtworks(fetchedArtworks);
+        }
       } catch (error) {
         console.error('Failed to load artworks from CMS:', error);
-        setArtworks(staticArtworks);
+        // Keep static artworks if fetch fails
+        if (isMounted) {
+          setArtworks(staticArtworks);
+        }
       } finally {
-        setIsLoading(false);
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
     }
+    
+    // Load artworks after initial render
     loadArtworks();
+    
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Generate categories dynamically from artworks
@@ -48,12 +65,19 @@ export default function GalleryPage() {
     ? artworks
     : artworks.filter(art => art.category === selectedCategory);
 
-  const formatPrice = (price: number) => {
+  // Memoize formatPrice to ensure consistent formatting and prevent hydration mismatch
+  // Create a stable formatter instance that won't change between renders
+  const formatter = useMemo(() => {
     return new Intl.NumberFormat('en-NG', {
       style: 'currency',
       currency: 'NGN',
       minimumFractionDigits: 0,
-    }).format(price);
+      maximumFractionDigits: 0,
+    });
+  }, []);
+
+  const formatPrice = (price: number) => {
+    return formatter.format(price);
   };
 
   const handleAddToCart = (artwork: Artwork) => {
@@ -204,6 +228,7 @@ export default function GalleryPage() {
                         height={viewMode === 'grid' ? 400 : 800}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         quality={90}
+                        priority={index === 0 && artwork.image.includes('bits_and_pieces')}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       {!artwork.available && (

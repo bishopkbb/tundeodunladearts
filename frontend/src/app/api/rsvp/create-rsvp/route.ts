@@ -15,6 +15,14 @@ const rsvpSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    if (!supabaseAdmin) {
+      console.error('❌ Supabase admin client not initialized!');
+      return NextResponse.json(
+        { error: 'Server configuration error', details: 'Supabase service role key not configured' },
+        { status: 500 }
+      );
+    }
+
     const body = await request.json();
     const validatedData = rsvpSchema.parse(body);
 
@@ -26,10 +34,10 @@ export async function POST(request: NextRequest) {
         name: validatedData.name,
         email: validatedData.email,
         phone: validatedData.phone,
-        guest_count: validatedData.guestCount,
-        dietary_requirements: validatedData.dietaryRequirements,
-        special_requests: validatedData.specialRequests,
-        status: 'confirmed',
+        guest_count: validatedData.guestCount || 1,
+        dietary_requirements: validatedData.dietaryRequirements || null,
+        special_requests: validatedData.specialRequests || null,
+        status: 'pending', // Schema default is 'pending', not 'confirmed'
       })
       .select()
       .single();

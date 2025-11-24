@@ -28,7 +28,7 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative w-full h-screen overflow-hidden"
+      className="relative w-full h-screen min-h-[500px] sm:min-h-[600px] md:min-h-screen overflow-hidden"
     >
       {prefersReducedMotion ? (
         <HeroStatic />

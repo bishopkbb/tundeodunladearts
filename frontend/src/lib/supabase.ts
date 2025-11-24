@@ -16,14 +16,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 });
 
 // Server-side admin client for API routes
-export const supabaseAdmin = createClient(
-  supabaseUrl,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-);
+const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+if (!serviceRoleKey && typeof window === 'undefined') {
+  console.error('❌ SUPABASE_SERVICE_ROLE_KEY is missing! API routes will not work.');
+  console.error('   Please add SUPABASE_SERVICE_ROLE_KEY to your .env.local file');
+}
+
+export const supabaseAdmin = serviceRoleKey && supabaseUrl
+  ? createClient(supabaseUrl, serviceRoleKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    })
+  : null;
 

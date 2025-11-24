@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 
 const containerVariants = {
@@ -28,6 +28,8 @@ export default function NewsletterSection() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [subscribedEmail, setSubscribedEmail] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,12 +49,25 @@ export default function NewsletterSection() {
       });
 
       const data = await response.json();
+      console.log('Newsletter API response:', { status: response.status, data });
 
       if (response.ok) {
-        setMessage({ type: 'success', text: data.message || 'Successfully subscribed!' });
+        // Save the email before clearing the input
+        setSubscribedEmail(email);
         setEmail('');
+        setShowSuccessModal(true);
+        console.log('✅ Newsletter subscription successful, showing modal');
+        // Keep message for inline display too
+        setMessage({ type: 'success', text: data.message || 'Successfully subscribed!' });
       } else {
-        setMessage({ type: 'error', text: data.error || 'Failed to subscribe. Please try again.' });
+        console.error('❌ Newsletter subscription failed:', data);
+        const errorMessage = data.details || data.error || 'Failed to subscribe. Please try again.';
+        setMessage({ type: 'error', text: errorMessage });
+        
+        // If it's a config error, show helpful message
+        if (data.code === 'MISSING_CONFIG') {
+          console.error('⚠️ Supabase configuration is missing!');
+        }
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);
@@ -65,9 +80,10 @@ export default function NewsletterSection() {
   };
 
   return (
+    <>
     <section
       id="newsletter"
-      className="relative py-16 px-6 lg:px-24 bg-[#F5F0E8]/90 backdrop-blur-sm overflow-hidden"
+      className="relative py-16 px-6 lg:px-24 bg-[#F5F0E8]/90 backdrop-blur-sm"
     >
       {/* Subtle Background Pattern */}
       <div
@@ -224,5 +240,90 @@ export default function NewsletterSection() {
         </motion.div>
       </motion.div>
     </section>
+
+      {/* Success Modal - Render outside section for proper z-index */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <div className="fixed inset-0 z-[9999] pointer-events-none">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSuccessModal(false)}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm pointer-events-auto"
+            />
+            
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', duration: 0.5 }}
+              className="fixed inset-0 flex items-center justify-center p-4 pointer-events-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div 
+                className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 relative pointer-events-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Close Button */}
+                <button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors z-10"
+                  aria-label="Close modal"
+                >
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                {/* Success Icon */}
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                  className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </motion.div>
+
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-[#3D2817] text-center mb-4 font-serif">
+                  Thank You!
+                </h3>
+
+                {/* Message */}
+                <div className="text-center text-[#6B4423] mb-6 leading-relaxed">
+                  <p className="mb-2">
+                    You've successfully subscribed to our newsletter.
+                  </p>
+                  {subscribedEmail && (
+                    <p className="text-sm font-medium text-[#8B4513] mb-2">
+                      Confirmation sent to: <span className="font-bold">{subscribedEmail}</span>
+                    </p>
+                  )}
+                  <p className="text-sm">
+                    You'll receive updates about our latest exhibitions, events, and artist stories.
+                  </p>
+                </div>
+
+                {/* Action Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowSuccessModal(false)}
+                  className="w-full py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg"
+                >
+                  Continue Browsing
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

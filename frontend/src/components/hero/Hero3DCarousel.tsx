@@ -31,9 +31,15 @@ interface FrameProps {
   index: number;
   onClick: () => void;
   isPaused: boolean;
+  mobileScale?: number;
 }
 
-function ElegantFrame({ position, rotation, imagePath, title, index, onClick, isPaused }: FrameProps) {
+function ElegantFrame({ position, rotation, imagePath, title, index, onClick, isPaused, mobileScale = 1 }: FrameProps) {
+  // Scale frame dimensions for mobile
+  const scaledFrameWidth = FRAME_WIDTH * mobileScale;
+  const scaledFrameHeight = FRAME_HEIGHT * mobileScale;
+  const scaledFrameDepth = FRAME_DEPTH * mobileScale;
+  const scaledFrameThickness = FRAME_THICKNESS * mobileScale;
   const texture = useTexture(imagePath, (loadedTexture) => {
     loadedTexture.colorSpace = THREE.SRGBColorSpace;
     loadedTexture.minFilter = THREE.LinearFilter;
@@ -53,19 +59,19 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       {/* Main Artwork - Front Side */}
       <mesh 
         ref={meshRef}
-        position={[0, 0, FRAME_DEPTH / 2]}
+        position={[0, 0, scaledFrameDepth / 2]}
         onClick={(e) => {
           e.stopPropagation();
           onClick();
         }}
         onPointerOver={() => {
-          if (!isPaused) document.body.style.cursor = 'pointer';
+          if (!isPaused && mobileScale >= 1) document.body.style.cursor = 'pointer';
         }}
         onPointerOut={() => {
           document.body.style.cursor = 'auto';
         }}
       >
-        <planeGeometry args={[FRAME_WIDTH, FRAME_HEIGHT]} />
+        <planeGeometry args={[scaledFrameWidth, scaledFrameHeight]} />
         <meshStandardMaterial 
           map={texture} 
           side={THREE.FrontSide}
@@ -76,8 +82,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Main Artwork - Back Side */}
-      <mesh position={[0, 0, -FRAME_DEPTH / 2]} rotation={[0, Math.PI, 0]}>
-        <planeGeometry args={[FRAME_WIDTH, FRAME_HEIGHT]} />
+      <mesh position={[0, 0, -scaledFrameDepth / 2]} rotation={[0, Math.PI, 0]}>
+        <planeGeometry args={[scaledFrameWidth, scaledFrameHeight]} />
         <meshStandardMaterial 
           map={texture} 
           side={THREE.FrontSide}
@@ -88,8 +94,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Gold Frame - Top */}
-      <mesh position={[0, FRAME_HEIGHT / 2 + FRAME_THICKNESS / 2, 0]}>
-        <boxGeometry args={[FRAME_WIDTH + FRAME_THICKNESS * 2, FRAME_THICKNESS, FRAME_DEPTH]} />
+      <mesh position={[0, scaledFrameHeight / 2 + scaledFrameThickness / 2, 0]}>
+        <boxGeometry args={[scaledFrameWidth + scaledFrameThickness * 2, scaledFrameThickness, scaledFrameDepth]} />
         <meshStandardMaterial 
           color="#D4AF37"
           metalness={0.7}
@@ -98,8 +104,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Gold Frame - Bottom */}
-      <mesh position={[0, -FRAME_HEIGHT / 2 - FRAME_THICKNESS / 2, 0]}>
-        <boxGeometry args={[FRAME_WIDTH + FRAME_THICKNESS * 2, FRAME_THICKNESS, FRAME_DEPTH]} />
+      <mesh position={[0, -scaledFrameHeight / 2 - scaledFrameThickness / 2, 0]}>
+        <boxGeometry args={[scaledFrameWidth + scaledFrameThickness * 2, scaledFrameThickness, scaledFrameDepth]} />
         <meshStandardMaterial 
           color="#D4AF37"
           metalness={0.7}
@@ -108,8 +114,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Gold Frame - Left */}
-      <mesh position={[-FRAME_WIDTH / 2 - FRAME_THICKNESS / 2, 0, 0]}>
-        <boxGeometry args={[FRAME_THICKNESS, FRAME_HEIGHT + FRAME_THICKNESS * 2, FRAME_DEPTH]} />
+      <mesh position={[-scaledFrameWidth / 2 - scaledFrameThickness / 2, 0, 0]}>
+        <boxGeometry args={[scaledFrameThickness, scaledFrameHeight + scaledFrameThickness * 2, scaledFrameDepth]} />
         <meshStandardMaterial 
           color="#D4AF37"
           metalness={0.7}
@@ -118,8 +124,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Gold Frame - Right */}
-      <mesh position={[FRAME_WIDTH / 2 + FRAME_THICKNESS / 2, 0, 0]}>
-        <boxGeometry args={[FRAME_THICKNESS, FRAME_HEIGHT + FRAME_THICKNESS * 2, FRAME_DEPTH]} />
+      <mesh position={[scaledFrameWidth / 2 + scaledFrameThickness / 2, 0, 0]}>
+        <boxGeometry args={[scaledFrameThickness, scaledFrameHeight + scaledFrameThickness * 2, scaledFrameDepth]} />
         <meshStandardMaterial 
           color="#D4AF37"
           metalness={0.7}
@@ -128,8 +134,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Inner Cream Mat - Top */}
-      <mesh position={[0, FRAME_HEIGHT / 2 + FRAME_THICKNESS / 4, FRAME_DEPTH / 4]}>
-        <boxGeometry args={[FRAME_WIDTH, FRAME_THICKNESS / 2, FRAME_DEPTH / 2]} />
+      <mesh position={[0, scaledFrameHeight / 2 + scaledFrameThickness / 4, scaledFrameDepth / 4]}>
+        <boxGeometry args={[scaledFrameWidth, scaledFrameThickness / 2, scaledFrameDepth / 2]} />
         <meshStandardMaterial 
           color="#F5EFE7"
           metalness={0.1}
@@ -138,8 +144,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Inner Cream Mat - Bottom */}
-      <mesh position={[0, -FRAME_HEIGHT / 2 - FRAME_THICKNESS / 4, FRAME_DEPTH / 4]}>
-        <boxGeometry args={[FRAME_WIDTH, FRAME_THICKNESS / 2, FRAME_DEPTH / 2]} />
+      <mesh position={[0, -scaledFrameHeight / 2 - scaledFrameThickness / 4, scaledFrameDepth / 4]}>
+        <boxGeometry args={[scaledFrameWidth, scaledFrameThickness / 2, scaledFrameDepth / 2]} />
         <meshStandardMaterial 
           color="#F5EFE7"
           metalness={0.1}
@@ -148,8 +154,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Inner Cream Mat - Left */}
-      <mesh position={[-FRAME_WIDTH / 2 - FRAME_THICKNESS / 4, 0, FRAME_DEPTH / 4]}>
-        <boxGeometry args={[FRAME_THICKNESS / 2, FRAME_HEIGHT, FRAME_DEPTH / 2]} />
+      <mesh position={[-scaledFrameWidth / 2 - scaledFrameThickness / 4, 0, scaledFrameDepth / 4]}>
+        <boxGeometry args={[scaledFrameThickness / 2, scaledFrameHeight, scaledFrameDepth / 2]} />
         <meshStandardMaterial 
           color="#F5EFE7"
           metalness={0.1}
@@ -158,8 +164,8 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
       </mesh>
 
       {/* Inner Cream Mat - Right */}
-      <mesh position={[FRAME_WIDTH / 2 + FRAME_THICKNESS / 4, 0, FRAME_DEPTH / 4]}>
-        <boxGeometry args={[FRAME_THICKNESS / 2, FRAME_HEIGHT, FRAME_DEPTH / 2]} />
+      <mesh position={[scaledFrameWidth / 2 + scaledFrameThickness / 4, 0, scaledFrameDepth / 4]}>
+        <boxGeometry args={[scaledFrameThickness / 2, scaledFrameHeight, scaledFrameDepth / 2]} />
         <meshStandardMaterial 
           color="#F5EFE7"
           metalness={0.1}
@@ -167,24 +173,28 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
         />
       </mesh>
 
-      {/* Vertical Silver Support Poles */}
-      <mesh position={[0, -FRAME_HEIGHT / 2 - FRAME_THICKNESS - 0.25, 0]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.5, 16]} />
-        <meshStandardMaterial 
-          color="#C0C0C0"
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
+      {/* Vertical Silver Support Poles - Only show on larger screens */}
+      {mobileScale >= 0.8 && (
+        <>
+          <mesh position={[0, -scaledFrameHeight / 2 - scaledFrameThickness - 0.25 * mobileScale, 0]}>
+            <cylinderGeometry args={[0.04 * mobileScale, 0.04 * mobileScale, 0.5 * mobileScale, 16]} />
+            <meshStandardMaterial 
+              color="#C0C0C0"
+              metalness={0.9}
+              roughness={0.1}
+            />
+          </mesh>
 
-      <mesh position={[0, FRAME_HEIGHT / 2 + FRAME_THICKNESS + 0.25, 0]}>
-        <cylinderGeometry args={[0.04, 0.04, 0.5, 16]} />
-        <meshStandardMaterial 
-          color="#C0C0C0"
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
+          <mesh position={[0, scaledFrameHeight / 2 + scaledFrameThickness + 0.25 * mobileScale, 0]}>
+            <cylinderGeometry args={[0.04 * mobileScale, 0.04 * mobileScale, 0.5 * mobileScale, 16]} />
+            <meshStandardMaterial 
+              color="#C0C0C0"
+              metalness={0.9}
+              roughness={0.1}
+            />
+          </mesh>
+        </>
+      )}
     </group>
   );
 }
@@ -192,12 +202,19 @@ function ElegantFrame({ position, rotation, imagePath, title, index, onClick, is
 interface CarouselGroupProps {
   isPaused: boolean;
   onFrameClick: (index: number) => void;
+  mobileScale?: number;
 }
 
-function CarouselGroup({ isPaused, onFrameClick }: CarouselGroupProps) {
+function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGroupProps) {
   const groupRef = useRef<THREE.Group>(null);
   const [isRotating, setIsRotating] = useState(true);
   const isTabActive = useRef(true);
+  
+  // Scale values for mobile
+  const scaledOrbitRadius = ORBIT_RADIUS * mobileScale;
+  const scaledFrameWidth = FRAME_WIDTH * mobileScale;
+  const scaledFrameHeight = FRAME_HEIGHT * mobileScale;
+  const scaledStandHeight = STAND_HEIGHT * mobileScale;
 
   useEffect(() => {
     const handleVisibility = () => {
@@ -220,8 +237,8 @@ function CarouselGroup({ isPaused, onFrameClick }: CarouselGroupProps) {
       onPointerLeave={() => isTabActive.current && setIsRotating(true)}
     >
       {/* Top Silver Ring */}
-      <mesh position={[0, STAND_HEIGHT / 2 + 0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[ORBIT_RADIUS, 0.08, 16, 64]} />
+      <mesh position={[0, scaledStandHeight / 2 + 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[scaledOrbitRadius, 0.08 * mobileScale, 16, mobileScale < 1 ? 32 : 64]} />
         <meshStandardMaterial
           color="#E8E8E8"
           metalness={0.95}
@@ -230,8 +247,8 @@ function CarouselGroup({ isPaused, onFrameClick }: CarouselGroupProps) {
       </mesh>
 
       {/* Bottom Silver Ring */}
-      <mesh position={[0, -STAND_HEIGHT / 2 - 0.3, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[ORBIT_RADIUS, 0.08, 16, 64]} />
+      <mesh position={[0, -scaledStandHeight / 2 - 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[scaledOrbitRadius, 0.08 * mobileScale, 16, mobileScale < 1 ? 32 : 64]} />
         <meshStandardMaterial
           color="#E8E8E8"
           metalness={0.95}
@@ -242,8 +259,8 @@ function CarouselGroup({ isPaused, onFrameClick }: CarouselGroupProps) {
       {/* Artwork Frames */}
       {heroImages.map((img, i) => {
         const angle = (i / heroImages.length) * Math.PI * 2;
-        const x = Math.cos(angle) * ORBIT_RADIUS;
-        const z = Math.sin(angle) * ORBIT_RADIUS;
+        const x = Math.cos(angle) * scaledOrbitRadius;
+        const z = Math.sin(angle) * scaledOrbitRadius;
         const rotationY = -angle + Math.PI / 2;
 
         return (
@@ -256,13 +273,14 @@ function CarouselGroup({ isPaused, onFrameClick }: CarouselGroupProps) {
             index={i}
             onClick={() => onFrameClick(i)}
             isPaused={isPaused}
+            mobileScale={mobileScale}
           />
         );
       })}
 
       {/* Reflective Floor */}
-      <mesh position={[0, -STAND_HEIGHT / 2 - 0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <circleGeometry args={[ORBIT_RADIUS * 1.8, 64]} />
+      <mesh position={[0, -scaledStandHeight / 2 - 0.5 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={mobileScale >= 1}>
+        <circleGeometry args={[scaledOrbitRadius * 1.8, mobileScale < 1 ? 32 : 64]} />
         <meshStandardMaterial
           color="#F5F5F5"
           metalness={0.7}
@@ -272,8 +290,8 @@ function CarouselGroup({ isPaused, onFrameClick }: CarouselGroupProps) {
       </mesh>
 
       {/* Floor Shadow */}
-      <mesh position={[0, -STAND_HEIGHT / 2 - 0.48, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <circleGeometry args={[ORBIT_RADIUS * 1.85, 64]} />
+      <mesh position={[0, -scaledStandHeight / 2 - 0.48 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={mobileScale >= 1}>
+        <circleGeometry args={[scaledOrbitRadius * 1.85, mobileScale < 1 ? 32 : 64]} />
         <meshStandardMaterial
           color="#E8E8E8"
           metalness={0.3}
@@ -322,9 +340,18 @@ export default function Hero3DCarousel() {
   const [isMounted, setIsMounted] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
+    
+    // Check screen size for responsive adjustments
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     
     const checkImages = async () => {
       try {
@@ -342,6 +369,10 @@ export default function Hero3DCarousel() {
     };
     
     checkImages();
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   if (!isMounted) return null;
@@ -357,8 +388,13 @@ export default function Hero3DCarousel() {
     );
   }
 
+  // Responsive scaling for mobile
+  const mobileScale = isMobile ? 0.6 : 1;
+  const cameraDistance = isMobile ? 12 : 14;
+  const cameraFOV = isMobile ? 55 : 45;
+
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative min-h-[500px] sm:min-h-[600px] md:min-h-screen">
       {/* Layered Background */}
       <div className="absolute inset-0 z-0">
         <div 
@@ -411,33 +447,38 @@ export default function Hero3DCarousel() {
 
       {/* Canvas with 3D Carousel */}
       <Canvas
-        camera={{ position: [0, 2, 14], fov: 45 }}
+        camera={{ position: [0, 2, cameraDistance], fov: cameraFOV }}
         gl={{
-          antialias: true,
+          antialias: !isMobile, // Disable antialiasing on mobile for performance
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: isMobile ? 'default' : 'high-performance',
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.2,
+          dpr: isMobile ? Math.min(window.devicePixelRatio, 1.5) : undefined, // Limit pixel ratio on mobile
         }}
-        shadows
-        className={`relative z-10 transition-opacity duration-500 ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
-        style={{ pointerEvents: selectedImage !== null ? 'none' : 'auto' }}
+        shadows={!isMobile} // Disable shadows on mobile for performance
+        className={`relative z-10 transition-opacity duration-500 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
+        style={{ 
+          pointerEvents: selectedImage !== null ? 'none' : 'auto',
+          touchAction: 'pan-y', // Allow vertical scrolling
+        }}
       >
         <Lights />
-        <CarouselGroup isPaused={selectedImage !== null} onFrameClick={setSelectedImage} />
+        <CarouselGroup isPaused={selectedImage !== null} onFrameClick={setSelectedImage} mobileScale={mobileScale} />
         <OrbitControls
-          enabled={selectedImage === null}
-          enableZoom={true}
+          enabled={selectedImage === null && !isMobile} // Disable orbit controls on mobile
+          enableZoom={!isMobile}
           enablePan={false}
-          minDistance={10}
-          maxDistance={25}
+          minDistance={isMobile ? 8 : 10}
+          maxDistance={isMobile ? 20 : 25}
           maxPolarAngle={Math.PI / 2.2}
           minPolarAngle={Math.PI / 6}
           dampingFactor={0.05}
           rotateSpeed={0.4}
           autoRotate={false}
+          touchAction="none" // Prevent default touch actions
         />
-        <fog attach="fog" args={['#8B4513', 28, 45]} />
+        <fog attach="fog" args={['#8B4513', isMobile ? 24 : 28, isMobile ? 40 : 45]} />
       </Canvas>
 
       {/* Lightbox Overlay */}
@@ -447,7 +488,7 @@ export default function Hero3DCarousel() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md"
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-md p-2 sm:p-4"
             onClick={() => setSelectedImage(null)}
           >
             <motion.div
@@ -455,7 +496,7 @@ export default function Hero3DCarousel() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative w-full h-full max-w-[95vw] max-h-[95vh] flex items-center justify-center p-4 md:p-8"
+              className="relative w-full h-full max-w-full sm:max-w-[95vw] max-h-full sm:max-h-[95vh] flex flex-col items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
@@ -463,22 +504,24 @@ export default function Hero3DCarousel() {
                 onClick={() => setSelectedImage(null)}
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                className="absolute top-4 right-4 z-10 w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border-2 border-white/30 text-white flex items-center justify-center transition-colors shadow-2xl"
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border-2 border-white/30 text-white flex items-center justify-center transition-colors shadow-2xl"
+                aria-label="Close lightbox"
               >
-                <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </motion.button>
 
               {/* Image Container */}
-              <div className="relative w-full h-full flex flex-col items-center justify-center">
+              <div className="relative w-full h-full flex flex-col items-center justify-center overflow-auto">
                 <motion.img
                   src={heroImages[selectedImage].src}
                   alt={heroImages[selectedImage].title}
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.1, type: 'spring', damping: 20 }}
-                  className="max-w-full max-h-[75vh] md:max-h-[80vh] w-auto h-auto object-contain rounded-xl shadow-2xl border-4 border-[#D4AF37]"
+                  className="max-w-full max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh] w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl border-2 sm:border-4 border-[#D4AF37]"
+                  loading="lazy"
                 />
 
                 {/* Title */}
@@ -486,9 +529,9 @@ export default function Hero3DCarousel() {
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="mt-6 px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border-2 border-white/30"
+                  className="mt-3 sm:mt-6 px-4 py-2 sm:px-6 sm:py-3 bg-white/10 backdrop-blur-md rounded-full border-2 border-white/30 text-center"
                 >
-                  <h3 className="text-xl md:text-3xl font-bold text-white font-serif">
+                  <h3 className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-white font-serif">
                     {heroImages[selectedImage].title}
                   </h3>
                 </motion.div>

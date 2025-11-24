@@ -122,12 +122,18 @@ export default function ShopPage() {
     return filtered;
   }, [selectedCategory, selectedArtist, priceRange, sortBy]);
 
-  const formatPrice = (price: number) => {
+  // Memoize formatter to prevent hydration mismatches
+  const formatter = useMemo(() => {
     return new Intl.NumberFormat('en-NG', {
       style: 'currency',
       currency: 'NGN',
       minimumFractionDigits: 0,
-    }).format(price);
+      maximumFractionDigits: 0,
+    });
+  }, []);
+
+  const formatPrice = (price: number) => {
+    return formatter.format(price);
   };
 
   const handleAddToCart = (artwork: Artwork) => {

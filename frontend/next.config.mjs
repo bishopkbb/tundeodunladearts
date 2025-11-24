@@ -44,7 +44,15 @@ const nextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['framer-motion', '@react-three/fiber', '@react-three/drei'],
+    // Optimize for slow networks
+    optimizeCss: true,
   },
+  
+  // Compression for better performance on slow networks
+  compress: true,
+  
+  // Optimize production builds
+  productionBrowserSourceMaps: false,
   
   // PoweredBy header removal for security and performance
   poweredByHeader: false,
@@ -71,6 +79,11 @@ const nextConfig = {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
           },
+          // Performance headers for slow networks
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, stale-while-revalidate=86400',
+          },
         ],
       },
       {
@@ -79,6 +92,24 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=60, stale-while-revalidate=300',
           },
         ],
       },

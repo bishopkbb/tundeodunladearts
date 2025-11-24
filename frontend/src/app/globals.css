@@ -40,6 +40,67 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  /* Performance optimizations */
+  text-rendering: optimizeLegibility;
+  -webkit-font-feature-settings: 'kern' 1;
+  font-feature-settings: 'kern' 1;
+}
+
+/* Responsive image base styles */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Responsive video */
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive iframe */
+iframe {
+  max-width: 100%;
+}
+
+/* Ensure all containers are responsive */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
 }
 
 /* Adire Pattern Background */
