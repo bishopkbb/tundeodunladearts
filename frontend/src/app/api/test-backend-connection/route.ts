@@ -6,6 +6,52 @@ import { NextResponse } from 'next/server';
  */
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+interface TableInfo {
+  exists: boolean;
+  accessible: boolean;
+  recordCount: number;
+  error: {
+    code?: string;
+    message?: string;
+    hint?: string;
+  } | null;
+}
+
+interface DatabaseInfo {
+  connected: boolean;
+  tables: Record<string, TableInfo>;
+  errors: string[];
+}
+
+interface Results {
+  timestamp: string;
+  environment: {
+    supabaseUrl: boolean;
+    supabaseAnonKey: boolean;
+    supabaseServiceRoleKey: boolean;
+  };
+  supabaseClient: {
+    initialized: boolean;
+  };
+  database: DatabaseInfo;
+  apiRoutes: {
+    newsletter: string;
+    orders: {
+      create: string;
+      get: string;
+    };
+    rsvp: string;
+    contact: string;
+    artworks: string;
+    exhibitions: string;
+  };
+  summary?: {
+    status: string;
+    message: string;
+    recommendations: string[];
+  };
+}
+
 export async function GET() {
   // Declare supabaseAdmin in outer scope so it's accessible in catch block
   let supabaseAdmin: SupabaseClient | null = null;
@@ -31,7 +77,7 @@ export async function GET() {
       );
     }
 
-    const results: Record<string, unknown> = {
+    const results: Results = {
       timestamp: new Date().toISOString(),
       environment: {
         supabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -43,8 +89,8 @@ export async function GET() {
       },
       database: {
         connected: false,
-        tables: {} as Record<string, unknown>,
-        errors: [] as string[],
+        tables: {},
+        errors: [],
       },
       apiRoutes: {
         newsletter: '/api/newsletter/subscribe',
@@ -129,10 +175,7 @@ export async function GET() {
     }
 
     const missingTables = Object.entries(results.database.tables)
-      .filter(([, info]) => {
-        const tableInfo = info as { exists?: boolean };
-        return !tableInfo.exists;
-      })
+      .filter(([, info]) => !info.exists)
       .map(([table]) => table);
 
     if (missingTables.length > 0) {
@@ -143,7 +186,7 @@ export async function GET() {
 
     // Always return 200, errors are in the response
     return NextResponse.json(results, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     // Catch any unexpected errors
     console.error('❌ Unexpected error in test-backend-connection:', error);
     
