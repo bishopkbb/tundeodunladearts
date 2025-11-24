@@ -23,6 +23,10 @@ export interface FlutterwaveCheckoutOptions {
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   meta?: Record<string, any>;
+  modal?: {
+    closeButton?: boolean;
+    displayKey?: boolean;
+  };
   callback: (response: FlutterwavePaymentResponse) => void;
   onclose?: () => void;
 }
