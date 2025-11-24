@@ -39,7 +39,7 @@ git push origin main --force-with-lease
 - **Select `frontend`** from dropdown
 - **This is critical!** Your Next.js app is in the `frontend` folder
 
-#### 4.2 Framework Settings (Auto-detected)
+#### 3.2 Framework Settings (Auto-detected)
 - **Framework Preset**: Next.js
 - **Build Command**: `npm run build` (leave as is)
 - **Output Directory**: `.next` (leave as is)
@@ -47,7 +47,7 @@ git push origin main --force-with-lease
 
 ---
 
-### Step 5: Add Environment Variables ⚠️ **CRITICAL**
+### Step 4: Add Environment Variables ⚠️ **CRITICAL**
 
 **BEFORE clicking "Deploy":**
 
@@ -82,7 +82,7 @@ git push origin main --force-with-lease
 
 ---
 
-### Step 6: Deploy! 🎉
+### Step 5: Deploy! 🎉
 
 1. **Review all settings**:
    - ✅ Root Directory: `frontend`
@@ -100,13 +100,39 @@ git push origin main --force-with-lease
 
 ---
 
-### Step 7: Get Your Live URL
+### Step 6: Get Your Live URL
 
 Once deployment completes:
 
 1. **You'll see**: "Deployment Successful!"
 2. **Your live URL**: `https://your-project-name.vercel.app`
 3. **Click the URL** to visit your site!
+
+---
+
+### Step 7: Connect Your Namecheap Domain (Optional)
+
+**After Vercel deployment:**
+
+1. **In Vercel Dashboard**:
+   - Go to Project → Settings → Domains
+   - Click "Add Domain"
+   - Enter your Namecheap domain (e.g., `www.toacc.com`)
+   - Vercel will show DNS instructions
+
+2. **In Namecheap Dashboard**:
+   - Go to Domain List → Manage → Advanced DNS
+   - Add DNS record as shown by Vercel:
+     - **Type**: CNAME (or A record)
+     - **Host**: `www` (or `@` for root domain)
+     - **Value**: Vercel's CNAME/IP (shown in Vercel)
+   - Save changes
+
+3. **Wait for DNS Propagation**: 24-48 hours (can be faster)
+
+4. **Result**: Your domain now points to your Vercel deployment!
+
+**Note**: The domain only changes the URL - your site is still the same `frontend/` deployment.
 
 ---
 
