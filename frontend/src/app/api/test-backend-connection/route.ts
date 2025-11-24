@@ -149,13 +149,16 @@ export async function GET() {
           results.database.errors.push(`Table '${table}': ${error.message}`);
         }
       } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         results.database.tables[table] = {
           exists: false,
           accessible: false,
           recordCount: 0,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: {
+            message: errorMessage,
+          },
         };
-        results.database.errors.push(`Error accessing '${table}': ${error instanceof Error ? error.message : 'Unknown'}`);
+        results.database.errors.push(`Error accessing '${table}': ${errorMessage}`);
       }
     }
 
