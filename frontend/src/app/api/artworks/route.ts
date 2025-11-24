@@ -39,9 +39,11 @@ function transformSanityArtwork(sanityArtwork: SanityArtwork) {
 }
 
 export async function GET(request: NextRequest) {
+  // Extract featured parameter outside try block so it's accessible in catch
+  const { searchParams } = new URL(request.url);
+  const featured = searchParams.get('featured') === 'true';
+  
   try {
-    const { searchParams } = new URL(request.url);
-    const featured = searchParams.get('featured') === 'true';
 
     // Try to fetch from Sanity CMS first (only if project ID is configured)
     const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
