@@ -67,7 +67,7 @@ export async function fetchArtworks(featured = false): Promise<CMSArtwork[]> {
       ...artwork,
       source: data.source || 'static',
     }));
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching artworks:', error);
     // Fallback to static data - always return something
     const artworks = featured
@@ -114,7 +114,7 @@ export async function fetchExhibitions(featured = false): Promise<CMSExhibition[
       ...exhibition,
       source: data.source || 'static',
     }));
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching exhibitions:', error);
     // Return empty array if CMS fails - exhibitions page has its own static data
     return [];

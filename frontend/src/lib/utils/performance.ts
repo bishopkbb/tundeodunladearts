@@ -96,9 +96,9 @@ export async function networkAwareFetch(
     });
     clearTimeout(timeoutId);
     return response;
-  } catch (error) {
+  } catch (error: unknown) {
     clearTimeout(timeoutId);
-    if (retries > 0 && (error as Error).name === 'AbortError') {
+    if (retries > 0 && error instanceof Error && error.name === 'AbortError') {
       // Retry with longer timeout
       return networkAwareFetch(url, options, timeout * 1.5, retries - 1);
     }

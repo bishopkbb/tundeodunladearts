@@ -34,7 +34,7 @@ export default function GalleryPage() {
         if (isMounted) {
           setArtworks(fetchedArtworks);
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Failed to load artworks from CMS:', error);
         // Keep static artworks if fetch fails
         if (isMounted) {

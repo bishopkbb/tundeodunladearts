@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       { message: 'Thank you for your message! We will get back to you soon.', submission: data },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Validation error', details: error.errors },

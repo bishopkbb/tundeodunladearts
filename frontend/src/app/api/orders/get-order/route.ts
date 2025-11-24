@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ order: data }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Unexpected error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

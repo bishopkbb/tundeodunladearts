@@ -1,4 +1,4 @@
-type ExhibitionStatus = 'current' | 'upcoming' | 'past';
+export type ExhibitionStatus = 'current' | 'upcoming' | 'past';
 
 /**
  * Calculates exhibition status based on current date and event dates

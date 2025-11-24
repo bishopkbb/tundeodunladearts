@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       { message: 'RSVP confirmed', rsvp: data },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Validation error', details: error.errors },

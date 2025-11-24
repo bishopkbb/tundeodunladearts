@@ -17,18 +17,6 @@
       "static/chunks/_pages-dir-browser_node_modules_pnpm_next_15_5_5_react-dom_19_1_0_react_19_1_0__react_19_1_0_-148dad.js"
     ]
   },
-  "app\\checkout\\page.tsx -> @/components/checkout/CheckoutForm": {
-    "id": "app\\checkout\\page.tsx -> @/components/checkout/CheckoutForm",
-    "files": [
-      "static/chunks/_app-pages-browser_src_components_checkout_CheckoutForm_tsx.js"
-    ]
-  },
-  "app\\checkout\\page.tsx -> @/components/checkout/OrderSummary": {
-    "id": "app\\checkout\\page.tsx -> @/components/checkout/OrderSummary",
-    "files": [
-      "static/chunks/_app-pages-browser_src_components_checkout_OrderSummary_tsx.js"
-    ]
-  },
   "components\\hero\\HeroSection.tsx -> ./Hero3DCarousel": {
     "id": "components\\hero\\HeroSection.tsx -> ./Hero3DCarousel",
     "files": [

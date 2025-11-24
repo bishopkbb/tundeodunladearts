@@ -69,7 +69,7 @@ export default function NewsletterSection() {
           console.error('⚠️ Supabase configuration is missing!');
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Newsletter subscription error:', error);
       setMessage({ type: 'error', text: 'An error occurred. Please try again later.' });
     } finally {

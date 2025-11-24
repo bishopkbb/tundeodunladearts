@@ -142,7 +142,7 @@ export default function ExhibitionsPage() {
           }));
           setExhibitions(transformed);
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Failed to load exhibitions from CMS:', error);
         setExhibitions(exhibitionsData);
       } finally {

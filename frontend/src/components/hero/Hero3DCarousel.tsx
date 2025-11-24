@@ -362,7 +362,7 @@ export default function Hero3DCarousel() {
           }
         });
         await Promise.all(checks);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Error checking images:', error);
         setLoadError(true);
       }

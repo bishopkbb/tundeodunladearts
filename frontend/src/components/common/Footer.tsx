@@ -77,7 +77,7 @@ export default function Footer() {
         console.error('Newsletter subscription failed:', data);
         alert(data.details || data.error || 'Failed to subscribe. Please try again.');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Newsletter subscription error:', error);
       alert('An error occurred. Please try again later.');
     } finally {

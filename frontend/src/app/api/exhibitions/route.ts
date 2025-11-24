@@ -72,13 +72,14 @@ export async function GET(request: NextRequest) {
         const transformed = sanityExhibitions.map(transformSanityExhibition);
         return NextResponse.json({ exhibitions: transformed, source: 'cms' }, { status: 200 });
       }
-    } catch (sanityError) {
-      console.warn('Sanity CMS fetch failed, using fallback data:', sanityError);
+    } catch (sanityError: unknown) {
+      const errorMessage = sanityError instanceof Error ? sanityError.message : 'Unknown error';
+      console.warn('Sanity CMS fetch failed, using fallback data:', errorMessage);
     }
 
     // Fallback to static data if CMS is not available
     return NextResponse.json({ exhibitions: [], source: 'static' }, { status: 200 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching exhibitions:', error);
     return NextResponse.json({ exhibitions: [], source: 'static' }, { status: 200 });
   }

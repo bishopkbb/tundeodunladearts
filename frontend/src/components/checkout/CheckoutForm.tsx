@@ -95,7 +95,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
       if (savedDetails) {
         try {
           finalCustomerData = JSON.parse(savedDetails);
-        } catch (error) {
+        } catch (error: unknown) {
           console.error('Error loading customer data:', error);
           setError('Unable to load customer details. Please try again.');
           setIsSubmitting(false);
@@ -350,7 +350,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
         clearCart();
         onNext(orderId);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Payment error:', error);
       setError(error instanceof Error ? error.message : 'An error occurred during payment. Please try again.');
       setIsSubmitting(false);
@@ -371,7 +371,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               setValue(key as keyof CheckoutFormData, details[key]);
             }
           });
-        } catch (error) {
+        } catch (error: unknown) {
           console.error('Error loading saved details:', error);
         }
       }

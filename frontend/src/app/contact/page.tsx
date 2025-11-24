@@ -44,7 +44,7 @@ export default function ContactPage() {
         console.error('Contact form submission failed:', data);
         setTimeout(() => setSubmitStatus('idle'), 5000);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Contact form submission error:', error);
       setSubmitStatus('error');
       setTimeout(() => setSubmitStatus('idle'), 5000);

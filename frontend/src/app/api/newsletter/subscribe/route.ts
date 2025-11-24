@@ -237,7 +237,7 @@ export async function POST(request: NextRequest) {
       { message: 'Successfully subscribed! Thank you for joining us.', subscribed: true },
       { status: 201 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
       console.error('Validation error:', error.errors);
       return NextResponse.json(

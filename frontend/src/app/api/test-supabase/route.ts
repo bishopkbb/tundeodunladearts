@@ -47,7 +47,7 @@ export async function GET() {
       databaseConnected: true,
       message: 'Supabase is properly configured and connected',
     });
-  } catch (error) {
+  } catch (error: unknown) {
     return NextResponse.json(
       {
         configured: false,

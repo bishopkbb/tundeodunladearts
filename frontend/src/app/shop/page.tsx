@@ -60,7 +60,7 @@ export default function ShopPage() {
           // Fallback if empty array
           setArtworks(staticArtworks);
         }
-      } catch (error) {
+      } catch (error: unknown) {
         // Always fallback to static data on error
         if (!cancelled) {
           console.error('Failed to load artworks from CMS:', error);
