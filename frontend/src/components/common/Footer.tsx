@@ -265,7 +265,7 @@ export default function Footer() {
                 {/* Message */}
                 <div className="text-center text-[#6B4423] mb-6 leading-relaxed">
                   <p className="mb-2">
-                    You've successfully subscribed to our newsletter.
+                    You&apos;ve successfully subscribed to our newsletter.
                   </p>
                   {subscribedEmail && (
                     <p className="text-sm font-medium text-[#8B4513] mb-2">
@@ -273,7 +273,7 @@ export default function Footer() {
                     </p>
                   )}
                   <p className="text-sm">
-                    You'll receive updates about our latest exhibitions, events, and artist stories.
+                    You&apos;ll receive updates about our latest exhibitions, events, and artist stories.
                   </p>
                 </div>
 

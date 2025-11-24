@@ -50,7 +50,7 @@ export default function NotFound() {
             Artwork Not Found
           </h2>
           <p className="text-lg text-white/80 mb-8 max-w-md mx-auto">
-            This page seems to have wandered off the gallery walls. Let's get you back to the exhibition.
+            This page seems to have wandered off the gallery walls. Let&apos;s get you back to the exhibition.
           </p>
         </motion.div>
 

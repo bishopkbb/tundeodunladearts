@@ -4,9 +4,11 @@ import { NextRequest, NextResponse } from 'next/server';
  * Comprehensive backend connection test endpoint
  * Tests Supabase connection, database access, and all tables
  */
-export async function GET(request: NextRequest) {
+import type { SupabaseClient } from '@supabase/supabase-js';
+
+export async function GET() {
   // Declare supabaseAdmin in outer scope so it's accessible in catch block
-  let supabaseAdmin: any = null;
+  let supabaseAdmin: SupabaseClient | null = null;
   
   try {
     // Import supabaseAdmin inside try-catch to handle import errors
@@ -29,7 +31,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const results: Record<string, any> = {
+    const results: Record<string, unknown> = {
       timestamp: new Date().toISOString(),
       environment: {
         supabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -41,7 +43,7 @@ export async function GET(request: NextRequest) {
       },
       database: {
         connected: false,
-        tables: {} as Record<string, any>,
+        tables: {} as Record<string, unknown>,
         errors: [] as string[],
       },
       apiRoutes: {
@@ -79,7 +81,7 @@ export async function GET(request: NextRequest) {
 
     for (const table of tables) {
       try {
-        const { data, error, count } = await supabaseAdmin
+        const { error, count } = await supabaseAdmin
           .from(table)
           .select('*', { count: 'exact', head: true })
           .limit(1);
@@ -127,7 +129,10 @@ export async function GET(request: NextRequest) {
     }
 
     const missingTables = Object.entries(results.database.tables)
-      .filter(([_, info]) => !info.exists)
+      .filter(([, info]) => {
+        const tableInfo = info as { exists?: boolean };
+        return !tableInfo.exists;
+      })
       .map(([table]) => table);
 
     if (missingTables.length > 0) {

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { useCart } from '@/contexts/CartContext';
+import type { FlutterwavePaymentResponse } from '@/types/flutterwave';
 
 interface CheckoutFormData {
   // Customer Information
@@ -58,7 +59,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
     },
   });
 
-  const useSameBilling = watch('useSameBilling');
+  // const useSameBilling = watch('useSameBilling'); // Not used in payment step
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-NG', {
@@ -203,7 +204,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
           // Open Flutterwave checkout
           window.FlutterwaveCheckout({
             ...paymentData,
-            callback: async (response: any) => {
+            callback: async (response: FlutterwavePaymentResponse) => {
               clearTimeout(checkIfOpened);
             if (response.status === 'successful') {
               try {
@@ -321,7 +322,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
             displayKey: false,
           },
           });
-        } catch (fwError: any) {
+        } catch (fwError: unknown) {
           clearTimeout(checkIfOpened);
           console.error('Flutterwave checkout error:', fwError);
           setError('Failed to open payment window. Please try again.');
@@ -509,7 +510,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
             </motion.button>
 
             <p className="text-xs text-center text-[#6B4423]">
-              By clicking "Pay", you will be redirected to Flutterwave's secure payment page
+              By clicking &quot;Pay&quot;, you will be redirected to Flutterwave&apos;s secure payment page
             </p>
           </form>
         ) : (

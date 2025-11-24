@@ -113,7 +113,7 @@ export default function ExhibitionsPage() {
   const [filter, setFilter] = useState<ExhibitionStatus | 'all'>('all');
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition & { status: ExhibitionStatus } | null>(null);
   const [exhibitions, setExhibitions] = useState<Exhibition[]>(exhibitionsData);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
 
   // Fetch exhibitions from CMS on mount
   useEffect(() => {

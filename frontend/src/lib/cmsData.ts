@@ -110,7 +110,7 @@ export async function fetchExhibitions(featured = false): Promise<CMSExhibition[
       throw new Error('Invalid API response format');
     }
     
-    return data.exhibitions.map((exhibition: any) => ({
+    return data.exhibitions.map((exhibition: Record<string, unknown>) => ({
       ...exhibition,
       source: data.source || 'static',
     }));

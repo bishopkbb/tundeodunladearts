@@ -104,7 +104,7 @@ export default function NewsletterSection() {
         {/* Art Quote */}
         <motion.div variants={itemVariants} className="mb-8">
           <p className="text-sm md:text-base text-[#8B4513] italic font-serif">
-            "Art is not what you see, but what you make others see."
+            &quot;Art is not what you see, but what you make others see.&quot;
           </p>
           <p className="text-xs md:text-sm text-[#6B4423] mt-1">— Edgar Degas</p>
         </motion.div>
@@ -298,7 +298,7 @@ export default function NewsletterSection() {
                 {/* Message */}
                 <div className="text-center text-[#6B4423] mb-6 leading-relaxed">
                   <p className="mb-2">
-                    You've successfully subscribed to our newsletter.
+                    You&apos;ve successfully subscribed to our newsletter.
                   </p>
                   {subscribedEmail && (
                     <p className="text-sm font-medium text-[#8B4513] mb-2">
@@ -306,7 +306,7 @@ export default function NewsletterSection() {
                     </p>
                   )}
                   <p className="text-sm">
-                    You'll receive updates about our latest exhibitions, events, and artist stories.
+                    You&apos;ll receive updates about our latest exhibitions, events, and artist stories.
                   </p>
                 </div>
 

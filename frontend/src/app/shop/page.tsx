@@ -23,7 +23,7 @@ const sortOptions = [
 
 export default function ShopPage() {
   const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedArtist, setSelectedArtist] = useState('All Artists');
   const maxPrice = useMemo(() => Math.max(...artworks.map(a => a.price)), [artworks]);
@@ -79,7 +79,8 @@ export default function ShopPage() {
     return () => {
       cancelled = true;
     };
-  }, []); // Empty deps - only run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty deps - only run once on mount (maxPrice is stable)
 
   // Generate categories and artists dynamically from artworks
   const categories = useMemo(() => {
@@ -94,7 +95,7 @@ export default function ShopPage() {
 
   // Filter and sort artworks
   const filteredArtworks = useMemo(() => {
-    let filtered = artworks.filter(artwork => {
+    const filtered = artworks.filter(artwork => {
       const categoryMatch = selectedCategory === 'All' || artwork.category === selectedCategory;
       const artistMatch = selectedArtist === 'All Artists' || artwork.artist === selectedArtist;
       const priceMatch = artwork.price >= priceRange[0] && artwork.price <= priceRange[1];
@@ -120,7 +121,7 @@ export default function ShopPage() {
     });
 
     return filtered;
-  }, [selectedCategory, selectedArtist, priceRange, sortBy]);
+  }, [selectedCategory, selectedArtist, priceRange, sortBy, artworks]);
 
   // Memoize formatter to prevent hydration mismatches
   const formatter = useMemo(() => {

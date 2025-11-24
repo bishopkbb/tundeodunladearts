@@ -2,8 +2,30 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sanityClient, exhibitionsQuery, featuredExhibitionsQuery } from '@/lib/sanity';
 import { calculateExhibitionStatus } from '@/lib/exhibitionUtils';
 
+// Sanity exhibition type
+interface SanityExhibition {
+  _id: string;
+  title: string;
+  subtitle?: string;
+  artist?: string;
+  startDate: string;
+  endDate: string;
+  summary?: string;
+  description?: string | Array<{ children?: Array<{ text?: string }> }>;
+  heroImage?: { asset?: { url?: string } };
+  location?: {
+    name?: string;
+    address?: string;
+    city?: string;
+  };
+  artworks?: unknown[];
+  category?: string;
+  type?: string;
+  openingTime?: string;
+}
+
 // Transform Sanity exhibition to frontend format
-function transformSanityExhibition(sanityExhibition: any) {
+function transformSanityExhibition(sanityExhibition: SanityExhibition) {
   const startDate = sanityExhibition.startDate;
   const endDate = sanityExhibition.endDate;
   const status = calculateExhibitionStatus(startDate, endDate);
@@ -19,7 +41,9 @@ function transformSanityExhibition(sanityExhibition: any) {
     description: sanityExhibition.summary || 'Exhibition description coming soon.',
     longDescription: sanityExhibition.description 
       ? (Array.isArray(sanityExhibition.description) 
-          ? sanityExhibition.description.map((block: any) => block.children?.map((child: any) => child.text).join('')).join('\n')
+          ? sanityExhibition.description.map((block) => 
+              (block.children || []).map((child) => child.text || '').join('')
+            ).join('\n')
           : sanityExhibition.description)
       : 'Full exhibition description coming soon.',
     image: sanityExhibition.heroImage?.asset?.url || '/Assets/hero1.jpg',

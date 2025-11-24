@@ -16,7 +16,7 @@ const staticArtworks: Artwork[] = allArtworks;
 export default function GalleryPage() {
   // Use static artworks initially to prevent hydration mismatch
   const [artworks, setArtworks] = useState<Artwork[]>(staticArtworks);
-  const [isLoading, setIsLoading] = useState(false); // Start as false to prevent hydration mismatch
+  const [, setIsLoading] = useState(false); // Start as false to prevent hydration mismatch
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'masonry'>('masonry');

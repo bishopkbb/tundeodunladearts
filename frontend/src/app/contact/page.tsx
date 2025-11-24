@@ -245,7 +245,7 @@ export default function ContactPage() {
                     Get in Touch
                   </h2>
                   <p className="text-[#6B4423] mb-8">
-                    Have questions? Want to book a tour? We'd love to hear from you!
+                    Have questions? Want to book a tour? We&apos;d love to hear from you!
                   </p>
 
                   {/* Success Message */}
@@ -261,7 +261,7 @@ export default function ContactPage() {
                           <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
-                          <p className="text-green-800 font-semibold">Thank you! We'll get back to you soon.</p>
+                          <p className="text-green-800 font-semibold">Thank you! We&apos;ll get back to you soon.</p>
                         </div>
                       </motion.div>
                     )}

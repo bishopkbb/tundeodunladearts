@@ -40,6 +40,7 @@ export function setupLazyImages() {
 /**
  * Debounce function for performance
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
@@ -60,6 +61,7 @@ export function debounce<T extends (...args: any[]) => any>(
 /**
  * Throttle function for performance
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
   limit: number
@@ -112,6 +114,7 @@ export function getConnectionQuality(): 'slow' | 'fast' | 'unknown' {
     return 'unknown';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
   
   if (!connection) return 'unknown';

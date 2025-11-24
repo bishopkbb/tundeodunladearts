@@ -8,10 +8,10 @@ interface OrderSummaryProps {
   items: CartItem[];
   total: number;
   itemCount: number;
-  currentStep: 'details' | 'payment' | 'confirmation';
+  // currentStep: 'details' | 'payment' | 'confirmation'; // Not currently used
 }
 
-export default function OrderSummary({ items, total, itemCount, currentStep }: OrderSummaryProps) {
+export default function OrderSummary({ items, total, itemCount }: OrderSummaryProps) {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-NG', {
       style: 'currency',

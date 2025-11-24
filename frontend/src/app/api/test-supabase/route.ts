@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
 // Test endpoint to verify Supabase configuration
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const checks = {
       supabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Try to query the database
-    const { data, error } = await supabaseAdmin
+    const { error } = await supabaseAdmin
       .from('newsletter_subscriptions')
       .select('count')
       .limit(1);

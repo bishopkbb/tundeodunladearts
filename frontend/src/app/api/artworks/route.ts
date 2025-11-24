@@ -2,8 +2,25 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sanityClient, artworksQuery, featuredArtworksQuery } from '@/lib/sanity';
 import { allArtworks } from '@/lib/artworksData';
 
+// Sanity artwork type
+interface SanityArtwork {
+  _id: string;
+  title: string;
+  artist?: { name?: string };
+  year?: number;
+  medium?: string;
+  dimensions?: string;
+  price?: number;
+  category?: string;
+  images?: Array<{ asset?: { url?: string } }>;
+  description?: string;
+  story?: string;
+  availability?: string;
+  featured?: boolean;
+}
+
 // Transform Sanity artwork to frontend format
-function transformSanityArtwork(sanityArtwork: any) {
+function transformSanityArtwork(sanityArtwork: SanityArtwork) {
   return {
     id: sanityArtwork._id,
     title: sanityArtwork.title,
@@ -37,11 +54,12 @@ export async function GET(request: NextRequest) {
           const transformed = sanityArtworks.map(transformSanityArtwork);
           return NextResponse.json({ artworks: transformed, source: 'cms' }, { status: 200 });
         }
-      } catch (sanityError: any) {
+      } catch (sanityError: unknown) {
         // Silently fall back to static data if CMS fails
         // Only log in development mode
         if (process.env.NODE_ENV === 'development') {
-          console.warn('Sanity CMS fetch failed, using fallback data:', sanityError?.message || 'Unknown error');
+          const errorMessage = sanityError instanceof Error ? sanityError.message : 'Unknown error';
+          console.warn('Sanity CMS fetch failed, using fallback data:', errorMessage);
         }
       }
     }
@@ -52,7 +70,7 @@ export async function GET(request: NextRequest) {
       : allArtworks;
 
     return NextResponse.json({ artworks, source: 'static' }, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Catch any unexpected errors and still return static data
     console.error('Unexpected error in artworks API:', error);
     
@@ -61,11 +79,12 @@ export async function GET(request: NextRequest) {
       ? allArtworks.filter(a => a.featured)
       : allArtworks;
     
+    const errorMessage = error instanceof Error ? error.message : undefined;
     return NextResponse.json(
       { 
         artworks, 
         source: 'static',
-        error: process.env.NODE_ENV === 'development' ? error?.message : undefined
+        error: process.env.NODE_ENV === 'development' ? errorMessage : undefined
       }, 
       { status: 200 }
     );
