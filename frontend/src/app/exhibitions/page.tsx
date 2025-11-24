@@ -401,7 +401,10 @@ export default function ExhibitionsPage() {
                   <div className="grid md:grid-cols-2 gap-6 mb-8 p-6 bg-[#F5EFE7] rounded-xl">
                     <div>
                       <p className="text-sm text-[#8B4513] font-semibold mb-2">Exhibition Dates</p>
-                      <p className="text-[#3D2817]">{formatDate(selectedExhibition.startDate)} - {formatDate(selectedExhibition.endDate)}</p>
+                      <p className="text-[#3D2817]">
+                        {formatDate(selectedExhibition.startDate)}
+                        {selectedExhibition.endDate && ` - ${formatDate(selectedExhibition.endDate)}`}
+                      </p>
                     </div>
                     <div>
                       <p className="text-sm text-[#8B4513] font-semibold mb-2">Location</p>
