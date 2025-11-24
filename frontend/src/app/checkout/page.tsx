@@ -179,8 +179,10 @@ export default function CheckoutPage() {
                       </div>
                     }>
                       <CheckoutForm
-                        onNext={(orderId: string) => {
-                          setOrderId(orderId);
+                        onNext={(orderId?: string) => {
+                          if (orderId) {
+                            setOrderId(orderId);
+                          }
                           setCurrentStep('confirmation');
                         }}
                         isPaymentStep
