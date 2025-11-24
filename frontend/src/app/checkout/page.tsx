@@ -253,7 +253,6 @@ export default function CheckoutPage() {
                   items={cartItems}
                   total={cartTotal}
                   itemCount={cartCount}
-                  currentStep={currentStep}
                 />
               </Suspense>
             </div>
