@@ -1,7 +1,7 @@
 'use client';
 
-import { useAnimation, useInView, AnimationControls } from 'framer-motion';
-import { useEffect, useRef, RefObject } from 'react';
+import { useAnimation, useInView } from 'framer-motion';
+import { useEffect, RefObject } from 'react';
 
 interface ScrollAnimationOptions {
   threshold?: number;

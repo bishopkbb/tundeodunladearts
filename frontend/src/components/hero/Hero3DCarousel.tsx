@@ -27,14 +27,12 @@ interface FrameProps {
   position: [number, number, number];
   rotation: [number, number, number];
   imagePath: string;
-  title: string;
-  index: number;
   onClick: () => void;
   isPaused: boolean;
   mobileScale?: number;
 }
 
-function ElegantFrame({ position, rotation, imagePath, title, index, onClick, isPaused, mobileScale = 1 }: FrameProps) {
+function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobileScale = 1 }: FrameProps) {
   // Scale frame dimensions for mobile
   const scaledFrameWidth = FRAME_WIDTH * mobileScale;
   const scaledFrameHeight = FRAME_HEIGHT * mobileScale;
@@ -212,8 +210,6 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
   
   // Scale values for mobile
   const scaledOrbitRadius = ORBIT_RADIUS * mobileScale;
-  const scaledFrameWidth = FRAME_WIDTH * mobileScale;
-  const scaledFrameHeight = FRAME_HEIGHT * mobileScale;
   const scaledStandHeight = STAND_HEIGHT * mobileScale;
 
   useEffect(() => {
@@ -269,8 +265,6 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
             position={[x, 0, z]}
             rotation={[0, rotationY, 0]}
             imagePath={img.src}
-            title={img.title}
-            index={i}
             onClick={() => onFrameClick(i)}
             isPaused={isPaused}
             mobileScale={mobileScale}

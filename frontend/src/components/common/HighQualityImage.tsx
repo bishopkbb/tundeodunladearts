@@ -27,6 +27,7 @@ export default function HighQualityImage({
       quality={quality}
       sizes={defaultSizes}
       className={className}
+      alt={props.alt || ''}
       // Remove unoptimized to enable Next.js optimization
       // Next.js will automatically convert to WebP/AVIF for better quality and smaller file sizes
     />

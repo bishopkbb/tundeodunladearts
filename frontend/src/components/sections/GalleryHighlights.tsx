@@ -83,7 +83,8 @@ export default function GalleryHighlights() {
       }, 5000);
       return () => clearInterval(interval);
     }
-  }, [page, isHovered]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, isHovered]); // paginate is stable and doesn't need to be in deps
 
   return (
     <section
