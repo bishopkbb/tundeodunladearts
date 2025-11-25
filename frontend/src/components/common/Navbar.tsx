@@ -32,34 +32,31 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Optimized mobile menu toggle with useCallback
+  // Optimized mobile menu toggle - instant response
   const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen(prev => {
-      const newValue = !prev;
-      // Use requestAnimationFrame for smoother menu opening
-      requestAnimationFrame(() => {
-        document.body.style.overflow = newValue ? 'hidden' : '';
-      });
-      return newValue;
-    });
+    setIsMobileMenuOpen(prev => !prev);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
+  // Prevent body scroll when mobile menu is open - immediate effect
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      // Immediately lock scroll for instant response
+      const scrollY = window.scrollY;
       document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = '';
+      // Restore scroll position
+      const scrollY = document.body.style.top;
       document.body.style.position = '';
+      document.body.style.top = '';
       document.body.style.width = '';
+      document.body.style.overflow = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-    };
   }, [isMobileMenuOpen]);
 
   return (
@@ -184,41 +181,33 @@ function Navbar() {
                 )}
               </button>
 
-              {/* Mobile Menu Button */}
+              {/* Mobile Menu Button - Instant response on mobile */}
               <button
                 onClick={toggleMobileMenu}
-                className="p-2 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors touch-manipulation"
+                className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-100 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
               >
-                <motion.div
-                  animate={isMobileMenuOpen ? 'open' : 'closed'}
-                  className="relative w-6 h-6"
-                >
-                  <motion.span
-                    variants={{
-                      closed: { rotate: 0, y: 0 },
-                      open: { rotate: 45, y: 8 },
-                    }}
-                    className="absolute top-0 left-0 w-6 h-0.5 bg-current origin-center transition-all"
-                    style={{ transformOrigin: '3px 1px' }}
+                {/* Simplified icon animation for faster response */}
+                <div className="relative w-6 h-5 flex flex-col justify-between">
+                  <span 
+                    className={`block w-6 h-0.5 bg-current origin-center transition-all duration-200 ${
+                      isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
+                    }`}
+                    style={{ transformOrigin: '3px 0.5px' }}
                   />
-                  <motion.span
-                    variants={{
-                      closed: { opacity: 1 },
-                      open: { opacity: 0 },
-                    }}
-                    className="absolute top-2.5 left-0 w-6 h-0.5 bg-current"
+                  <span 
+                    className={`block w-6 h-0.5 bg-current transition-all duration-150 ${
+                      isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                    }`}
                   />
-                  <motion.span
-                    variants={{
-                      closed: { rotate: 0, y: 0 },
-                      open: { rotate: -45, y: -8 },
-                    }}
-                    className="absolute top-5 left-0 w-6 h-0.5 bg-current origin-center"
-                    style={{ transformOrigin: '3px 5px' }}
+                  <span 
+                    className={`block w-6 h-0.5 bg-current origin-center transition-all duration-200 ${
+                      isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                    }`}
+                    style={{ transformOrigin: '3px 4.5px' }}
                   />
-                </motion.div>
+                </div>
               </button>
             </div>
           </div>
@@ -229,29 +218,32 @@ function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop - Optimized for performance */}
+            {/* Backdrop - Instant appearance for faster response */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
               style={{ willChange: 'opacity' }}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
               onClick={toggleMobileMenu}
             />
 
-            {/* Menu Panel - Optimized with will-change for better performance */}
+            {/* Menu Panel - Ultra-fast animation for instant response */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ 
-                type: 'spring', 
-                damping: 30, 
-                stiffness: 300,
-                mass: 0.5 // Lighter mass for faster animation
+                type: 'tween',
+                duration: 0.2, // Even faster
+                ease: [0.25, 0.1, 0.25, 1] // Snappier easing
               }}
-              style={{ willChange: 'transform' }}
+              style={{ 
+                willChange: 'transform',
+                transform: 'translateZ(0)', // GPU acceleration
+                backfaceVisibility: 'hidden', // Prevent flicker
+              }}
               className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
             >
               {/* Menu Header */}
@@ -274,8 +266,8 @@ function Navbar() {
                     </div>
                   </div>
                   <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 text-[#8B4513] hover:bg-[#F5EFE7] rounded-lg transition-colors"
+                    onClick={toggleMobileMenu}
+                    className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-100 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                     aria-label="Close menu"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -285,23 +277,18 @@ function Navbar() {
                 </div>
               </div>
 
-              {/* Menu Links */}
+              {/* Menu Links - No delay for instant appearance */}
               <div className="p-6 space-y-2">
-                {navLinks.map((link, index) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.05 + index * 0.03, duration: 0.2, ease: 'easeOut' }}
-                  >
+                {navLinks.map((link) => (
+                  <div key={link.href}>
                     <Link
                       href={link.href}
-                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-150 touch-manipulation min-h-[44px] flex items-center"
+                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-100 touch-manipulation min-h-[48px] sm:min-h-[44px] flex items-center"
                       onClick={toggleMobileMenu}
                     >
                       {link.label}
                     </Link>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
