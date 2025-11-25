@@ -214,29 +214,29 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
+      {/* Mobile Menu Overlay - Instant response */}
+      <AnimatePresence mode="sync">
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop - Instant appearance for faster response */}
+            {/* Backdrop - Instant appearance */}
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={false}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.15, ease: 'easeOut' }}
+              transition={{ duration: 0.1, ease: 'easeOut' }}
               style={{ willChange: 'opacity' }}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
               onClick={toggleMobileMenu}
             />
 
-            {/* Menu Panel - Ultra-fast animation for instant response */}
+              {/* Menu Panel - Instant response with minimal animation */}
             <motion.div
-              initial={{ x: '100%' }}
+              initial={false}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ 
                 type: 'tween',
-                duration: 0.2, // Even faster
+                duration: 0.18, // Ultra-fast
                 ease: [0.25, 0.1, 0.25, 1] // Snappier easing
               }}
               style={{ 

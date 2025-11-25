@@ -8,9 +8,9 @@ function HeroCTA() {
   return (
     <motion.div
       className="absolute top-14 xs:top-18 sm:top-24 md:top-28 left-1/2 transform -translate-x-1/2 z-40 flex flex-col sm:flex-row gap-2.5 xs:gap-3 sm:gap-4 px-3 xs:px-4 sm:px-0 w-full max-w-[95vw] sm:max-w-none"
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: 0.2, ease: 'easeOut' }}
+      transition={{ duration: 0.25, delay: 0.1, ease: 'easeOut' }}
       style={{ willChange: 'transform, opacity' }}
     >
       {/* Primary Button */}
