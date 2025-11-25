@@ -382,13 +382,15 @@ export default function Hero3DCarousel() {
     );
   }
 
-  // Responsive scaling for mobile
-  const mobileScale = isMobile ? 0.6 : 1;
-  const cameraDistance = isMobile ? 12 : 14;
-  const cameraFOV = isMobile ? 55 : 45;
+  // Responsive scaling for mobile - even smaller for very small screens
+  const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 768;
+  const isVerySmall = screenWidth < 400;
+  const mobileScale = isMobile ? (isVerySmall ? 0.45 : 0.55) : 1;
+  const cameraDistance = isMobile ? (isVerySmall ? 10 : 11) : 14;
+  const cameraFOV = isMobile ? (isVerySmall ? 60 : 58) : 45;
 
   return (
-    <div className="w-full h-full relative min-h-[500px] sm:min-h-[600px] md:min-h-screen">
+    <div className="w-full h-full relative min-h-[400px] xs:min-h-[450px] sm:min-h-[550px] md:min-h-[600px] lg:min-h-screen">
       {/* Layered Background */}
       <div className="absolute inset-0 z-0">
         <div 
@@ -453,8 +455,8 @@ export default function Hero3DCarousel() {
         shadows={!isMobile} // Disable shadows on mobile for performance
         className={`relative z-10 transition-opacity duration-500 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
         style={{ 
-          pointerEvents: selectedImage !== null ? 'none' : 'auto',
-          touchAction: 'pan-y', // Allow vertical scrolling
+          pointerEvents: selectedImage !== null ? 'none' : isMobile ? 'none' : 'auto', // Disable pointer events on mobile to allow scrolling
+          touchAction: isMobile ? 'none' : 'pan-y', // Disable touch actions on mobile so page can scroll
         }}
       >
         <Lights />

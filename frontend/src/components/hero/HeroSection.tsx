@@ -28,7 +28,8 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative w-full h-screen min-h-[500px] sm:min-h-[600px] md:min-h-screen overflow-hidden"
+      className="relative w-full h-screen min-h-[400px] xs:min-h-[450px] sm:min-h-[550px] md:min-h-[600px] lg:min-h-screen"
+      style={{ touchAction: 'pan-y' }}
     >
       {prefersReducedMotion ? (
         <HeroStatic />

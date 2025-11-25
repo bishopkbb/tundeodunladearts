@@ -36,8 +36,8 @@ export default function ContactPage() {
       console.log('Contact form API response:', { status: response.status, data });
 
       if (response.ok) {
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
         setTimeout(() => setSubmitStatus('idle'), 5000);
       } else {
         setSubmitStatus('error');
