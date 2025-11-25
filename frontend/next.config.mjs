@@ -40,9 +40,76 @@ const nextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['framer-motion', '@react-three/fiber', '@react-three/drei'],
-    // Note: optimizeCss requires 'critters' package which isn't installed
-    // CSS optimization is handled through other means (compress, headers, etc.)
-    // optimizeCss: true,
+    // Enable optimized package imports for better performance
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+  
+  // Optimize bundle splitting for better performance
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            default: false,
+            vendors: false,
+            // Separate vendor chunks for better caching
+            framerMotion: {
+              name: 'framer-motion',
+              test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+              priority: 30,
+            },
+            three: {
+              name: 'three',
+              test: /[\\/]node_modules[\\/]@react-three[\\/]/,
+              priority: 30,
+            },
+            vendor: {
+              name: 'vendor',
+              test: /[\\/]node_modules[\\/]/,
+              priority: 20,
+            },
+            common: {
+              name: 'common',
+              minChunks: 2,
+              priority: 10,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
+    }
+    
+    // Handle Three.js examples imports
+    config.module.rules.push({
+      test: /\.(glsl|vs|fs|vert|frag)$/,
+      exclude: /node_modules/,
+      use: ['raw-loader'],
+    });
+
+    // Audio files for future use
+    config.module.rules.push({
+      test: /\.(mp3|wav|ogg)$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          publicPath: '/_next/static/audio/',
+          outputPath: 'static/audio/',
+          name: '[name].[hash].[ext]',
+          esModule: false,
+        },
+      },
+    });
+
+    return config;
   },
   
   // Compression for better performance on slow networks
@@ -125,31 +192,6 @@ const nextConfig = {
     ];
   },
 
-  // Webpack configuration for Three.js
-  webpack: (config, { isServer }) => {
-    // Handle Three.js examples imports
-    config.module.rules.push({
-      test: /\.(glsl|vs|fs|vert|frag)$/,
-      exclude: /node_modules/,
-      use: ['raw-loader'],
-    });
-
-    // Audio files for future use
-    config.module.rules.push({
-      test: /\.(mp3|wav|ogg)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          publicPath: '/_next/static/audio/',
-          outputPath: 'static/audio/',
-          name: '[name].[hash].[ext]',
-          esModule: false,
-        },
-      },
-    });
-
-    return config;
-  },
 
   // Environment variables exposed to the browser
   env: {

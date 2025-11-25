@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from '@/contexts/CartContext';
+import { throttle } from '@/lib/utils/performance';
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -16,26 +17,48 @@ const navLinks = [
   { label: 'Contact', href: '/contact' },
 ];
 
-export default function Navbar() {
+function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount, openCart } = useCart();
 
+  // Optimized scroll handler with throttling for better performance
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = throttle(() => {
+      setIsScrolled(window.scrollY > 20);
+    }, 16); // ~60fps throttle
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Optimized mobile menu toggle with useCallback
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen(prev => {
+      const newValue = !prev;
+      // Use requestAnimationFrame for smoother menu opening
+      requestAnimationFrame(() => {
+        document.body.style.overflow = newValue ? 'hidden' : '';
+      });
+      return newValue;
+    });
   }, []);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
     };
   }, [isMobileMenuOpen]);
 
@@ -163,8 +186,8 @@ export default function Navbar() {
 
               {/* Mobile Menu Button */}
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 text-[#8B4513] hover:bg-[#F5EFE7] rounded-lg transition-colors"
+                onClick={toggleMobileMenu}
+                className="p-2 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors touch-manipulation"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
               >
@@ -206,22 +229,29 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
+            {/* Backdrop - Optimized for performance */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              style={{ willChange: 'opacity' }}
               className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={toggleMobileMenu}
             />
 
-            {/* Menu Panel */}
+            {/* Menu Panel - Optimized with will-change for better performance */}
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              transition={{ 
+                type: 'spring', 
+                damping: 30, 
+                stiffness: 300,
+                mass: 0.5 // Lighter mass for faster animation
+              }}
+              style={{ willChange: 'transform' }}
               className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
             >
               {/* Menu Header */}
@@ -262,12 +292,12 @@ export default function Navbar() {
                     key={link.href}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 + index * 0.05 }}
+                    transition={{ delay: 0.05 + index * 0.03, duration: 0.2, ease: 'easeOut' }}
                   >
                     <Link
                       href={link.href}
-                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] rounded-lg transition-all duration-200"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-150 touch-manipulation min-h-[44px] flex items-center"
+                      onClick={toggleMobileMenu}
                     >
                       {link.label}
                     </Link>
@@ -283,7 +313,7 @@ export default function Navbar() {
                   <p>Ibadan, Oyo State</p>
                   <a 
                     href="tel:+2348160082118" 
-                    className="block text-[#C17C2E] hover:text-[#8B4513] transition-colors mt-3"
+                    className="block text-[#C17C2E] hover:text-[#8B4513] active:text-[#6B3410] transition-colors mt-3 touch-manipulation min-h-[44px] flex items-center"
                   >
                     📞 +234 816 008 2118
                   </a>
@@ -296,3 +326,6 @@ export default function Navbar() {
     </>
   );
 }
+
+// Memoize Navbar to prevent unnecessary re-renders
+export default memo(Navbar);
