@@ -7,7 +7,7 @@ import Link from 'next/link';
 function HeroCTA() {
   return (
     <motion.div
-      className="absolute left-1/2 top-1/2 sm:top-24 md:top-28 transform -translate-x-1/2 -translate-y-1/2 sm:-translate-y-0 z-40 flex flex-col sm:flex-row items-center sm:items-start gap-2.5 xs:gap-3 sm:gap-4 px-3 xs:px-4 sm:px-0 w-full max-w-[95vw] sm:max-w-none"
+      className="absolute left-[40%] sm:left-1/2 top-20 xs:top-24 sm:top-28 transform -translate-x-1/2 z-40 flex flex-col sm:flex-row gap-2 xs:gap-2.5 sm:gap-4 px-3 xs:px-4 sm:px-0 w-auto max-w-[85vw] sm:max-w-none"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, delay: 0.1, ease: 'easeOut' }}
@@ -17,11 +17,11 @@ function HeroCTA() {
       <motion.div
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-full sm:w-auto"
+        className="w-auto"
       >
         <Link
           href="/shop"
-          className="block w-full sm:w-auto text-center px-5 xs:px-7 sm:px-10 py-3.5 xs:py-4 sm:py-4 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-base sm:text-lg rounded-lg transition-colors duration-150 shadow-xl hover:shadow-2xl touch-manipulation min-h-[50px] xs:min-h-[48px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
+          className="block text-center px-3 xs:px-4 sm:px-8 py-2 xs:py-2.5 sm:py-3 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-xs xs:text-sm sm:text-base rounded-lg transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[36px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
         >
           Explore the Collection
         </Link>
@@ -31,11 +31,11 @@ function HeroCTA() {
       <motion.div
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="w-full sm:w-auto"
+        className="w-auto"
       >
         <Link
           href="/contact"
-          className="block w-full sm:w-auto text-center px-5 xs:px-7 sm:px-10 py-3.5 xs:py-4 sm:py-4 bg-[#3D2817] hover:bg-[#2C1810] active:bg-[#1A0F08] text-white font-bold text-base xs:text-base sm:text-lg rounded-lg transition-colors duration-150 shadow-xl hover:shadow-2xl touch-manipulation min-h-[50px] xs:min-h-[48px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
+          className="block text-center px-3 xs:px-4 sm:px-8 py-2 xs:py-2.5 sm:py-3 bg-[#3D2817] hover:bg-[#2C1810] active:bg-[#1A0F08] text-white font-bold text-xs xs:text-sm sm:text-base rounded-lg transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[36px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
         >
           Visit the gallery
         </Link>
