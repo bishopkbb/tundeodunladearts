@@ -52,10 +52,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addToCart = (item: Omit<CartItem, 'quantity'>) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.id === item.id);
+      // Custom pieces - limit to 1 per artwork
       if (existingItem) {
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
+        // Item already in cart, don't add more (custom pieces are unique)
+        return prevItems;
       }
       return [...prevItems, { ...item, quantity: 1 }];
     });

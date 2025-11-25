@@ -112,25 +112,12 @@ export default function CartSidebar() {
                             {formatPrice(item.price)}
                           </p>
 
-                          {/* Quantity Controls */}
+                          {/* Quantity Display - Custom pieces limited to 1 */}
                           <div className="flex items-center gap-2">
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-6 h-6 flex items-center justify-center bg-white border border-[#D4A574] text-[#8B4513] rounded hover:bg-[#F5EFE7] transition-colors"
-                              aria-label="Decrease quantity"
-                            >
-                              −
-                            </button>
                             <span className="text-sm font-semibold text-[#3D2817] w-6 text-center">
                               {item.quantity}
                             </span>
-                            <button
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-6 h-6 flex items-center justify-center bg-white border border-[#D4A574] text-[#8B4513] rounded hover:bg-[#F5EFE7] transition-colors"
-                              aria-label="Increase quantity"
-                            >
-                              +
-                            </button>
+                            <span className="text-xs text-[#6B4423] italic">Custom piece</span>
                           </div>
                         </div>
                       </div>

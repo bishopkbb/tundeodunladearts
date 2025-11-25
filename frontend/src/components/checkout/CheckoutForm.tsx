@@ -28,6 +28,9 @@ interface CheckoutFormData {
   billingZipCode?: string;
   billingCountry?: string;
   
+  // Payment Method
+  paymentMethod: 'card' | 'banktransfer' | 'mobilemoney';
+  
   // Additional Info
   notes?: string;
 }
@@ -50,13 +53,17 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<CheckoutFormData>({
     defaultValues: {
       country: 'Nigeria',
       useSameBilling: true,
+      paymentMethod: 'card',
     },
   });
+
+  const selectedPaymentMethod = watch('paymentMethod');
 
   // const useSameBilling = watch('useSameBilling'); // Not used in payment step
 
@@ -134,7 +141,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
         tx_ref: orderId,
         amount: finalTotal,
         currency: 'NGN',
-        payment_options: 'card,mobilemoney,ussd,account,banktransfer,barter',
+        payment_options: selectedPaymentMethod === 'card' ? 'card' : selectedPaymentMethod === 'banktransfer' ? 'banktransfer' : 'mobilemoney',
         redirect_url: `${window.location.origin}/checkout?order=${orderId}&status=successful`,
         customer: {
           email: finalCustomerData.email,
@@ -451,17 +458,72 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
                 Select Payment Method
               </label>
               <div className="space-y-3">
-                <label className="flex items-center p-4 border-2 border-[#D4AF37] rounded-lg cursor-pointer hover:bg-[#F5EFE7] transition-colors">
+                {/* Card Payment */}
+                <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  selectedPaymentMethod === 'card' 
+                    ? 'border-[#C17C2E] bg-[#F5EFE7] shadow-md' 
+                    : 'border-[#D4AF37] hover:bg-[#F5EFE7]'
+                }`}>
                   <input
                     type="radio"
-                    name="paymentMethod"
-                    value="flutterwave"
-                    defaultChecked
+                    {...register('paymentMethod')}
+                    value="card"
                     className="w-5 h-5 text-[#C17C2E] focus:ring-[#D4AF37]"
                   />
-                  <div className="ml-3">
-                    <span className="font-semibold text-[#3D2817]">Card, Bank Transfer & Mobile Money</span>
-                    <p className="text-sm text-[#6B4423]">Pay securely via Flutterwave</p>
+                  <div className="ml-3 flex-1">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-6 h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                      </svg>
+                      <span className="font-semibold text-[#3D2817]">Card Payment</span>
+                    </div>
+                    <p className="text-sm text-[#6B4423] mt-1">Pay with Visa, Mastercard, or Verve</p>
+                  </div>
+                </label>
+
+                {/* Bank Transfer */}
+                <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  selectedPaymentMethod === 'banktransfer' 
+                    ? 'border-[#C17C2E] bg-[#F5EFE7] shadow-md' 
+                    : 'border-[#D4AF37] hover:bg-[#F5EFE7]'
+                }`}>
+                  <input
+                    type="radio"
+                    {...register('paymentMethod')}
+                    value="banktransfer"
+                    className="w-5 h-5 text-[#C17C2E] focus:ring-[#D4AF37]"
+                  />
+                  <div className="ml-3 flex-1">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-6 h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                      </svg>
+                      <span className="font-semibold text-[#3D2817]">Bank Transfer</span>
+                    </div>
+                    <p className="text-sm text-[#6B4423] mt-1">Direct bank transfer to our account</p>
+                  </div>
+                </label>
+
+                {/* Mobile Money */}
+                <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  selectedPaymentMethod === 'mobilemoney' 
+                    ? 'border-[#C17C2E] bg-[#F5EFE7] shadow-md' 
+                    : 'border-[#D4AF37] hover:bg-[#F5EFE7]'
+                }`}>
+                  <input
+                    type="radio"
+                    {...register('paymentMethod')}
+                    value="mobilemoney"
+                    className="w-5 h-5 text-[#C17C2E] focus:ring-[#D4AF37]"
+                  />
+                  <div className="ml-3 flex-1">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-6 h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                      <span className="font-semibold text-[#3D2817]">Mobile Money</span>
+                    </div>
+                    <p className="text-sm text-[#6B4423] mt-1">Pay with mobile money (MTN, Airtel, etc.)</p>
                   </div>
                 </label>
               </div>

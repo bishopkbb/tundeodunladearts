@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
+import ArtCollections from '@/components/sections/ArtCollections';
 import { useCart } from '@/contexts/CartContext';
 import { allArtworks, type Artwork } from '@/lib/artworksData';
 import { fetchArtworks } from '@/lib/cmsData';
@@ -398,6 +399,9 @@ export default function GalleryPage() {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Art Collections Section */}
+        <ArtCollections />
 
         <Footer />
         <CartSidebar />
