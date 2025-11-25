@@ -6,7 +6,6 @@ import { useEffect, RefObject } from 'react';
 interface ScrollAnimationOptions {
   threshold?: number;
   once?: boolean;
-  margin?: string;
 }
 
 /**
@@ -18,7 +17,6 @@ export function useScrollAnimation(ref: RefObject<Element>, options?: ScrollAnim
   const isInView = useInView(ref, {
     amount: options?.threshold ?? 0.15, // 15% of the element must be visible for smoother trigger
     once: options?.once ?? false, // Default to false to re-trigger on scroll
-    margin: options?.margin || '-80px 0px -80px 0px', // Trigger slightly before entering viewport
   });
 
   useEffect(() => {
