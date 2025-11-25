@@ -454,16 +454,19 @@ export default function Hero3DCarousel() {
       {/* Canvas with 3D Carousel */}
       <Canvas
         camera={{ position: [0, 2, cameraDistance], fov: cameraFOV }}
-        dpr={isMobile ? Math.min(window.devicePixelRatio, 1.5) : undefined} // Limit pixel ratio on mobile
+        dpr={isMobile ? Math.min(window.devicePixelRatio, 1.2) : Math.min(window.devicePixelRatio, 2)} // Further limit pixel ratio
         gl={{
           antialias: !isMobile, // Disable antialiasing on mobile for performance
           alpha: true,
-          powerPreference: isMobile ? 'default' : 'high-performance',
+          powerPreference: isMobile ? 'low-power' : 'high-performance',
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.2,
+          stencil: false, // Disable stencil buffer for performance
+          depth: true,
         }}
         shadows={!isMobile} // Disable shadows on mobile for performance
-        className={`relative z-10 transition-opacity duration-500 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
+        performance={{ min: 0.5 }} // Lower performance target for smoother frame rate
+        className={`relative z-10 transition-opacity duration-300 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
         style={{ 
           pointerEvents: selectedImage !== null ? 'none' : isMobile ? 'none' : 'auto', // Disable pointer events on mobile to allow scrolling
           touchAction: isMobile ? 'none' : 'pan-y', // Disable touch actions on mobile so page can scroll
