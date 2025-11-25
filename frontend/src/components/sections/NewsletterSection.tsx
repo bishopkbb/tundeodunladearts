@@ -264,13 +264,13 @@ export default function NewsletterSection() {
               onClick={(e) => e.stopPropagation()}
             >
               <div 
-                className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 relative pointer-events-auto"
+                className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-[95vw] sm:max-w-md w-full p-4 xs:p-6 sm:p-8 relative pointer-events-auto mx-2 sm:mx-0 touch-manipulation"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Close Button */}
                 <button
                   onClick={() => setShowSuccessModal(false)}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors z-10"
+                  className="absolute top-3 right-3 xs:top-4 xs:right-4 w-10 h-10 xs:w-8 xs:h-8 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 flex items-center justify-center transition-colors z-10 touch-manipulation"
                   aria-label="Close modal"
                 >
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

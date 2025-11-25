@@ -496,19 +496,19 @@ export default function ShopPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
+              className="fixed inset-0 z-50 flex items-center justify-center p-2 xs:p-4 bg-black/80 backdrop-blur-sm overflow-y-auto touch-manipulation"
               onClick={() => setSelectedArtwork(null)}
             >
               <motion.div
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
-                className="bg-white rounded-2xl max-w-4xl w-full shadow-2xl relative overflow-hidden"
+                className="bg-white rounded-xl sm:rounded-2xl max-w-[95vw] sm:max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl relative touch-manipulation"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
                   onClick={() => setSelectedArtwork(null)}
-                  className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-[#3D2817] transition-colors flex items-center justify-center shadow-lg"
+                  className="sticky top-2 xs:top-4 right-2 xs:right-4 ml-auto z-10 w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-white/90 hover:bg-white active:bg-gray-100 text-[#3D2817] transition-colors flex items-center justify-center shadow-lg touch-manipulation"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -517,7 +517,7 @@ export default function ShopPage() {
 
                 <div className="grid md:grid-cols-2">
                   {/* Image */}
-                  <div className="relative h-96 md:h-full">
+                  <div className="relative h-64 xs:h-80 sm:h-96 md:h-full min-h-[250px]">
                     <Image
                       src={selectedArtwork.image}
                       alt={selectedArtwork.title}
@@ -529,7 +529,7 @@ export default function ShopPage() {
                   </div>
 
                   {/* Details */}
-                  <div className="p-8 flex flex-col justify-between">
+                  <div className="p-4 xs:p-6 sm:p-8 flex flex-col justify-between">
                     <div>
                       <span className="inline-block px-3 py-1 bg-[#F5EFE7] text-[#8B4513] text-sm font-semibold rounded-full mb-4">
                         {selectedArtwork.category}
@@ -572,9 +572,9 @@ export default function ShopPage() {
                         disabled={!selectedArtwork.available}
                         whileHover={selectedArtwork.available ? { scale: 1.02 } : {}}
                         whileTap={selectedArtwork.available ? { scale: 0.98 } : {}}
-                        className={`w-full py-4 rounded-lg font-bold text-lg transition-all duration-300 flex items-center justify-center gap-2 ${
+                        className={`w-full py-3 xs:py-4 rounded-lg font-bold text-base xs:text-lg transition-all duration-300 flex items-center justify-center gap-2 touch-manipulation ${
                           selectedArtwork.available
-                            ? 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-lg'
+                            ? 'bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white shadow-lg'
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                       >

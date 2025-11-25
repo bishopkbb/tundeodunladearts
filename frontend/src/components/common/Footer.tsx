@@ -106,12 +106,12 @@ export default function Footer() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="relative z-10 w-full">
+        <div className="max-w-7xl mx-auto px-4 xs:px-6 sm:px-8 py-8 xs:py-10 w-full">
           {/* Newsletter - Inline with content */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xs:gap-8 mb-6 xs:mb-8 items-center">
             {/* Logo & Info */}
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left w-full">
               <Link href="/" className="inline-flex items-center gap-3 mb-3 group">
                 <div className="relative w-12 h-12 ring-2 ring-[#D4AF37] rounded-full overflow-hidden group-hover:ring-4 transition-all">
                   <Image
@@ -141,7 +141,7 @@ export default function Footer() {
               <h3 className="text-lg font-bold mb-2 font-serif text-[#F5EFE7] text-center lg:text-left">
                 Stay Connected
               </h3>
-              <form onSubmit={handleSubmit} className="flex gap-2">
+              <form onSubmit={handleSubmit} className="flex flex-col xs:flex-row gap-2 xs:gap-2 w-full">
                 <input
                   type="email"
                   value={email}
@@ -149,7 +149,7 @@ export default function Footer() {
                   placeholder="Enter your email"
                   required
                   disabled={isSubmitting}
-                  className="flex-1 px-4 py-2 rounded-lg bg-white/95 border-2 border-[#D4AF37] focus:border-[#FFD700] focus:outline-none text-[#3D2817] placeholder:text-[#6B4423]/60 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 w-full xs:w-auto px-4 py-2.5 xs:py-2 text-sm xs:text-base rounded-lg bg-white/95 border-2 border-[#D4AF37] focus:border-[#FFD700] focus:outline-none text-[#3D2817] placeholder:text-[#6B4423]/60 disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <motion.button
                   type="submit"
@@ -157,7 +157,7 @@ export default function Footer() {
                   disabled={isSubmitting}
                   whileHover={isSubmitting ? {} : { scale: 1.05 }}
                   whileTap={isSubmitting ? {} : { scale: 0.98 }}
-                  className="px-6 py-2 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full xs:w-auto px-6 py-2.5 xs:py-2 text-sm xs:text-base bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
                 >
                   {isSubmitting ? 'Subscribing...' : 'Subscribe'}
                 </motion.button>
@@ -166,9 +166,9 @@ export default function Footer() {
           </div>
 
           {/* Links & Social */}
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 border-t border-[#D4AF37]/40 pt-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 xs:gap-6 border-t border-[#D4AF37]/40 pt-4 xs:pt-6">
             {/* Quick Links */}
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-3 xs:gap-4 w-full md:w-auto">
               {footerLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -231,13 +231,13 @@ export default function Footer() {
               onClick={(e) => e.stopPropagation()}
             >
               <div 
-                className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 relative pointer-events-auto"
+                className="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-[95vw] sm:max-w-md w-full p-4 xs:p-6 sm:p-8 relative pointer-events-auto mx-2 sm:mx-0 touch-manipulation"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Close Button */}
                 <button
                   onClick={() => setShowSuccessModal(false)}
-                  className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors z-10"
+                  className="absolute top-3 right-3 xs:top-4 xs:right-4 w-10 h-10 xs:w-8 xs:h-8 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 flex items-center justify-center transition-colors z-10 touch-manipulation"
                   aria-label="Close modal"
                 >
                   <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

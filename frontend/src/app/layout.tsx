@@ -121,7 +121,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${playfair.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300 antialiased`}
+        className={`${inter.variable} ${playfair.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300 antialiased w-full max-w-full overflow-x-hidden`}
       >
         <CartProvider>
           {children}

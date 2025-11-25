@@ -89,7 +89,7 @@ export default function GalleryHighlights() {
   return (
     <section
       id="gallery-highlights"
-      className="relative py-16 md:py-24 px-4 md:px-8 bg-[#F5F0E8]/95 backdrop-blur-sm overflow-hidden"
+      className="relative py-12 xs:py-16 md:py-24 px-4 xs:px-6 md:px-8 bg-[#F5F0E8]/95 backdrop-blur-sm overflow-hidden w-full"
     >
       {/* Subtle Batik Pattern Background */}
       <div

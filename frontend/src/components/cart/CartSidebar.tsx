@@ -42,7 +42,7 @@ export default function CartSidebar() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300, mass: 0.8 }}
-            className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
+            className="fixed top-0 right-0 bottom-0 w-full sm:max-w-md bg-white shadow-2xl z-50 flex flex-col touch-manipulation"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-[#D4A574]/30 bg-[#F5EFE7]">

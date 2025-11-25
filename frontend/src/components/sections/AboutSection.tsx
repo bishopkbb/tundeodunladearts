@@ -45,9 +45,9 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="py-20 md:py-32 px-4 md:px-8 bg-white/90 backdrop-blur-sm"
+      className="py-16 xs:py-20 md:py-32 px-4 xs:px-6 md:px-8 bg-white/90 backdrop-blur-sm w-full"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto w-full">
         {/* Section Title */}
         <motion.div
           className="text-center mb-16 md:mb-20"

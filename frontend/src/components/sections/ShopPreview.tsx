@@ -39,8 +39,8 @@ export default function ShopPreview() {
   };
 
   return (
-    <section className="py-20 md:py-32 px-4 md:px-8 bg-[#F5EFE7]/95 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-16 xs:py-20 md:py-32 px-4 xs:px-6 md:px-8 bg-[#F5EFE7]/95 backdrop-blur-sm w-full">
+      <div className="max-w-7xl mx-auto w-full">
         {/* Section Header */}
         <motion.div
           className="text-center mb-12 md:mb-16"

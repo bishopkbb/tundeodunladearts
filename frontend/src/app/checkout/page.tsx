@@ -79,7 +79,7 @@ export default function CheckoutPage() {
       <main className="relative z-10 min-h-screen pt-20">
         <Navbar />
 
-        <div className="max-w-7xl mx-auto px-4 md:px-8 py-12 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 xs:px-6 md:px-8 py-8 xs:py-12 md:py-20 w-full">
           {/* Progress Steps */}
           <div className="mb-12">
             <div className="flex items-center justify-center gap-4 md:gap-8">

@@ -277,29 +277,29 @@ export default function GalleryPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
+              className="fixed inset-0 z-50 flex items-center justify-center p-2 xs:p-4 bg-black/90 backdrop-blur-sm overflow-y-auto touch-manipulation"
               onClick={() => setSelectedArtwork(null)}
             >
               <motion.div
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
-                className="bg-white rounded-2xl max-w-6xl w-full max-h-[95vh] overflow-y-auto shadow-2xl relative"
+                className="bg-white rounded-xl sm:rounded-2xl max-w-[95vw] sm:max-w-6xl w-full max-h-[95vh] overflow-y-auto shadow-2xl relative touch-manipulation"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Close Button */}
                 <button
                   onClick={() => setSelectedArtwork(null)}
-                  className="sticky top-4 left-full ml-4 w-12 h-12 rounded-full bg-[#D4AF37] hover:bg-[#C17C2E] text-white transition-colors flex items-center justify-center z-10 shadow-lg"
+                  className="sticky top-2 xs:top-4 right-2 xs:right-4 ml-auto w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-[#D4AF37] hover:bg-[#C17C2E] active:bg-[#8B4513] text-white transition-colors flex items-center justify-center z-10 shadow-lg touch-manipulation"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
 
-                <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
+                <div className="grid md:grid-cols-2 gap-4 xs:gap-6 sm:gap-8 p-4 xs:p-6 sm:p-8 md:p-12">
                   {/* Image */}
-                  <div className="relative h-96 md:h-full rounded-xl overflow-hidden border-4 border-[#D4AF37]">
+                  <div className="relative h-64 xs:h-80 sm:h-96 md:h-full rounded-xl overflow-hidden border-2 xs:border-4 border-[#D4AF37]">
                     <Image
                       src={selectedArtwork.image}
                       alt={selectedArtwork.title}
@@ -361,15 +361,15 @@ export default function GalleryPage() {
                         </p>
                       </div>
 
-                      <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex flex-col sm:flex-row gap-3 xs:gap-4">
                         <motion.button
                           onClick={() => handleAddToCart(selectedArtwork)}
                           disabled={!selectedArtwork.available}
                           whileHover={selectedArtwork.available ? { scale: 1.05 } : {}}
                           whileTap={selectedArtwork.available ? { scale: 0.98 } : {}}
-                          className={`flex-1 py-4 rounded-lg font-bold text-lg transition-all duration-300 ${
+                          className={`flex-1 py-3 xs:py-4 rounded-lg font-bold text-base xs:text-lg transition-all duration-300 touch-manipulation ${
                             selectedArtwork.available
-                              ? 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-lg'
+                              ? 'bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white shadow-lg'
                               : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                           }`}
                         >
@@ -378,7 +378,7 @@ export default function GalleryPage() {
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.98 }}
-                          className="flex-1 py-4 bg-white border-2 border-[#D4AF37] hover:bg-[#D4AF37] text-[#3D2817] font-bold text-lg rounded-lg transition-all duration-300"
+                          className="flex-1 py-3 xs:py-4 bg-white border-2 border-[#D4AF37] hover:bg-[#D4AF37] active:bg-[#C17C2E] text-[#3D2817] font-bold text-base xs:text-lg rounded-lg transition-all duration-300 touch-manipulation"
                         >
                           Inquire
                         </motion.button>

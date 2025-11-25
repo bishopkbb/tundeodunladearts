@@ -81,7 +81,7 @@ export default function Home() {
       </div>
 
       {/* Main Content - Above background */}
-      <main className="relative z-10 w-full min-h-screen">
+      <main className="relative z-10 w-full min-h-screen max-w-full overflow-x-hidden">
         {/* Navigation */}
         <Navbar />
 

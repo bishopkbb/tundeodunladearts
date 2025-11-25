@@ -297,19 +297,19 @@ export default function AboutPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-2 xs:p-4 bg-black/70 backdrop-blur-sm overflow-y-auto touch-manipulation"
             onClick={() => setSelectedArtist(null)}
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+              className="bg-white rounded-xl sm:rounded-2xl max-w-[95vw] sm:max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl touch-manipulation"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedArtist(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#D4AF37] text-white hover:bg-[#C17C2E] transition-colors flex items-center justify-center z-10"
+                className="sticky top-2 xs:top-4 right-2 xs:right-4 ml-auto w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-[#D4AF37] text-white hover:bg-[#C17C2E] active:bg-[#8B4513] transition-colors flex items-center justify-center z-10 shadow-lg touch-manipulation"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -330,7 +330,7 @@ export default function AboutPage() {
               </div>
 
               {/* Artist Details */}
-              <div className="p-8 md:p-12">
+              <div className="p-4 xs:p-6 sm:p-8 md:p-12">
                 <h2 className="text-3xl md:text-4xl font-bold text-[#3D2817] mb-2 font-serif">
                   {selectedArtist.name}
                 </h2>
