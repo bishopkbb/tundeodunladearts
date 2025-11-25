@@ -298,14 +298,17 @@ function Navbar() {
                 </div>
               </div>
 
-              {/* Menu Links - No delay for instant appearance */}
+              {/* Menu Links - Ultra-fast, no delays */}
               <div className="p-6 space-y-2">
                 {navLinks.map((link) => (
                   <div key={link.href}>
                     <Link
                       href={link.href}
-                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-100 touch-manipulation min-h-[48px] sm:min-h-[44px] flex items-center"
+                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-h-[48px] sm:min-h-[44px] flex items-center"
                       onClick={toggleMobileMenu}
+                      style={{ 
+                        transition: 'background-color 0.05s ease, color 0.05s ease',
+                      }}
                     >
                       {link.label}
                     </Link>
