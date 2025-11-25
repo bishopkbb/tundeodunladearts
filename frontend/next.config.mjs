@@ -40,8 +40,9 @@ const nextConfig = {
   // Experimental features
   experimental: {
     optimizePackageImports: ['framer-motion', '@react-three/fiber', '@react-three/drei'],
-    // Optimize for slow networks
-    optimizeCss: true,
+    // Note: optimizeCss requires 'critters' package which isn't installed
+    // CSS optimization is handled through other means (compress, headers, etc.)
+    // optimizeCss: true,
   },
   
   // Compression for better performance on slow networks
