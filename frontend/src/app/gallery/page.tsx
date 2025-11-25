@@ -230,6 +230,14 @@ export default function GalleryPage() {
                         quality={90}
                         priority={index === 0 && artwork.image.includes('bits_and_pieces')}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          console.error(`Failed to load image: ${artwork.image}`, e);
+                          // Fallback to a placeholder or handle error
+                          const target = e.target as HTMLImageElement;
+                          if (target) {
+                            target.src = '/Assets/logo.png'; // Fallback image
+                          }
+                        }}
                       />
                       {!artwork.available && (
                         <div className="absolute top-4 right-4 px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-full">

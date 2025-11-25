@@ -400,6 +400,14 @@ export default function ShopPage() {
                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             quality={90}
                             className="object-cover group-hover:scale-110 transition-transform duration-500"
+                            onError={(e) => {
+                              console.error(`Failed to load image: ${artwork.image}`, e);
+                              // Fallback to a placeholder or handle error
+                              const target = e.target as HTMLImageElement;
+                              if (target && target.parentElement) {
+                                target.src = '/Assets/logo.png'; // Fallback image
+                              }
+                            }}
                           />
                           {/* Badges */}
                           <div className="absolute top-3 left-3 flex flex-col gap-2">

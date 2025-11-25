@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, type ThreeEvent } from '@react-three/fiber';
 import { OrbitControls, useTexture } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
@@ -47,10 +47,36 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
   });
 
   const meshRef = useRef<THREE.Mesh>(null);
+  const tapStartTime = useRef<number>(0);
+  const tapStartPosition = useRef<{ x: number; y: number } | null>(null);
 
   if (!texture || !texture.image) {
     return null;
   }
+
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+    tapStartTime.current = Date.now();
+    tapStartPosition.current = { x: e.clientX || 0, y: e.clientY || 0 };
+    e.stopPropagation();
+  };
+
+  const handlePointerUp = (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation();
+    const tapDuration = Date.now() - tapStartTime.current;
+    const isTap = tapDuration < 300; // Consider it a tap if less than 300ms
+    
+    // Check if there was significant movement (if mobile, allow some movement for tap detection)
+    let isSignificantMove = false;
+    if (tapStartPosition.current && (e.clientX !== undefined || e.clientY !== undefined)) {
+      const dx = Math.abs((e.clientX || 0) - tapStartPosition.current.x);
+      const dy = Math.abs((e.clientY || 0) - tapStartPosition.current.y);
+      isSignificantMove = dx > 10 || dy > 10; // Allow 10px movement for tap detection
+    }
+    
+    if (isTap && !isSignificantMove && !isPaused) {
+      onClick();
+    }
+  };
 
   return (
     <group position={position} rotation={rotation}>
@@ -60,8 +86,12 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
         position={[0, 0, scaledFrameDepth / 2]}
         onClick={(e) => {
           e.stopPropagation();
-          onClick();
+          if (!isPaused) {
+            onClick();
+          }
         }}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
         onPointerOver={() => {
           if (!isPaused && mobileScale >= 1) document.body.style.cursor = 'pointer';
         }}
@@ -468,8 +498,8 @@ export default function Hero3DCarousel() {
         performance={{ min: 0.5 }} // Lower performance target for smoother frame rate
         className={`relative z-10 transition-opacity duration-300 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
         style={{ 
-          pointerEvents: selectedImage !== null ? 'none' : isMobile ? 'none' : 'auto', // Disable pointer events on mobile to allow scrolling
-          touchAction: isMobile ? 'none' : 'pan-y', // Disable touch actions on mobile so page can scroll
+          pointerEvents: selectedImage !== null ? 'none' : 'auto', // Allow pointer events for clicks on all devices
+          touchAction: isMobile ? 'manipulation' : 'pan-y', // Use manipulation for better mobile tap detection
         }}
       >
         <Lights isMobile={isMobile} />
