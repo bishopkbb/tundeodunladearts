@@ -107,8 +107,8 @@ export default function FeaturedExhibitions() {
           className="text-center mb-16 md:mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+          viewport={{ once: true, margin: '-50px' }}
         >
           <h2 className="text-3xl md:text-5xl font-bold text-[#3D2817] mb-6 font-serif">
             Upcoming Exhibitions and Events
@@ -124,7 +124,7 @@ export default function FeaturedExhibitions() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true, margin: '-50px' }}
         >
           {exhibitions.map((exhibit) => {
             const formatDate = (dateStr: string) => {
@@ -151,18 +151,18 @@ export default function FeaturedExhibitions() {
               <motion.div
                 key={exhibit.id}
                 variants={itemVariants}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                whileHover={{ y: -8, transition: { duration: 0.2, ease: 'easeOut' } }}
                 className="group"
               >
                 <Link href={`/exhibitions#exhibition-${exhibit.id}`}>
-                  <div className="relative h-72 md:h-80 overflow-hidden rounded-xl mb-4 shadow-lg group-hover:shadow-2xl transition-all duration-300 border-4 border-[#D4AF37]">
+                  <div className="relative h-72 md:h-80 overflow-hidden rounded-xl mb-4 shadow-lg group-hover:shadow-2xl transition-shadow duration-200 border-4 border-[#D4AF37]">
                     <Image
                       src={exhibit.image}
                       alt={exhibit.title}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                       quality={90}
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="object-cover group-hover:scale-110 transition-transform duration-300 will-change-transform"
                     />
                     {/* Type Badge */}
                     <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${badge.bg} ${badge.textColor} shadow-lg`}>
