@@ -9,6 +9,7 @@ import CartSidebar from '@/components/cart/CartSidebar';
 import { calculateExhibitionStatus, getStatusText, getStatusColor, type ExhibitionStatus } from '@/lib/exhibitionUtils';
 import { fetchExhibitions } from '@/lib/cmsData';
 import { shareToFacebook, shareToTwitter, shareToLinkedIn, shareToWhatsApp, shareViaEmail, shareToPinterest, copyToClipboard, getAbsoluteUrl } from '@/lib/shareUtils';
+import Link from 'next/link';
 
 interface Exhibition {
   id: number;
@@ -484,13 +485,16 @@ export default function ExhibitionsPage() {
 
                   {/* CTA Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 mt-6 xs:mt-8 sm:mt-10 relative">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-300 shadow-lg touch-manipulation"
+                    <Link
+                      href="/contact"
+                      className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-200 shadow-lg touch-manipulation flex items-center justify-center"
+                      onClick={() => {
+                        setSelectedExhibition(null);
+                        setShowShareMenu(false);
+                      }}
                     >
                       Plan Your Visit
-                    </motion.button>
+                    </Link>
                     
                     {/* Share Button with Dropdown */}
                     <div className="relative">

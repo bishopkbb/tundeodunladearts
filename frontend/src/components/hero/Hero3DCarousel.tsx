@@ -220,9 +220,10 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, []);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     if (groupRef.current && isRotating && isTabActive.current && !isPaused) {
-      groupRef.current.rotation.y += ROTATION_SPEED * 0.016;
+      // Use delta time for consistent rotation speed regardless of frame rate
+      groupRef.current.rotation.y += ROTATION_SPEED * Math.min(delta, 0.02); // Cap delta to prevent jumps
     }
   });
 
@@ -298,7 +299,17 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
   );
 }
 
-function Lights() {
+function Lights({ isMobile }: { isMobile: boolean }) {
+  // Reduce lights on mobile for performance
+  if (isMobile) {
+    return (
+      <>
+        <ambientLight intensity={1.5} color="#FFF8E7" />
+        <directionalLight position={[0, 8, 15]} intensity={2} color="#FFF8DC" />
+      </>
+    );
+  }
+  
   return (
     <>
       <ambientLight intensity={1.2} color="#FFF8E7" />
@@ -309,8 +320,8 @@ function Lights() {
         intensity={2.8}
         castShadow
         color="#FFFFFF"
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
       />
       <directionalLight
         position={[0, 8, 15]}
@@ -325,7 +336,6 @@ function Lights() {
       />
       <pointLight position={[15, 6, 0]} intensity={1.2} color="#FFEFD5" />
       <pointLight position={[-15, 6, 0]} intensity={1.2} color="#FFEFD5" />
-      <pointLight position={[0, -2, 0]} intensity={0.6} color="#FFFFFF" />
     </>
   );
 }
@@ -459,7 +469,7 @@ export default function Hero3DCarousel() {
           touchAction: isMobile ? 'none' : 'pan-y', // Disable touch actions on mobile so page can scroll
         }}
       >
-        <Lights />
+        <Lights isMobile={isMobile} />
         <CarouselGroup isPaused={selectedImage !== null} onFrameClick={setSelectedImage} mobileScale={mobileScale} />
         <OrbitControls
           enabled={selectedImage === null && !isMobile} // Disable orbit controls on mobile
