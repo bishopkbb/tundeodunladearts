@@ -476,7 +476,6 @@ export default function Hero3DCarousel() {
           dampingFactor={0.05}
           rotateSpeed={0.4}
           autoRotate={false}
-          touchAction="none" // Prevent default touch actions
         />
         <fog attach="fog" args={['#8B4513', isMobile ? 24 : 28, isMobile ? 40 : 45]} />
       </Canvas>
