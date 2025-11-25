@@ -376,6 +376,18 @@ export default function Hero3DCarousel() {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Prevent body scroll when modal is open - must be called before any conditional returns
+  useEffect(() => {
+    if (selectedImage !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedImage]);
+
   useEffect(() => {
     setIsMounted(true);
     
@@ -428,18 +440,6 @@ export default function Hero3DCarousel() {
   const mobileScale = isMobile ? (isVerySmall ? 0.45 : 0.55) : 1;
   const cameraDistance = isMobile ? (isVerySmall ? 10 : 11) : 14;
   const cameraFOV = isMobile ? (isVerySmall ? 60 : 58) : 45;
-
-  // Prevent body scroll when modal is open
-  useEffect(() => {
-    if (selectedImage !== null) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [selectedImage]);
 
   return (
     <div 

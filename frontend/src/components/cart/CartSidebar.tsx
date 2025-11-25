@@ -8,7 +8,7 @@ import { useCart } from '@/contexts/CartContext';
 
 export default function CartSidebar() {
   const router = useRouter();
-  const { cartItems, cartCount, cartTotal, removeFromCart, updateQuantity, isCartOpen, closeCart } = useCart();
+  const { cartItems, cartCount, cartTotal, removeFromCart, isCartOpen, closeCart } = useCart();
 
   const handleCheckout = () => {
     closeCart();

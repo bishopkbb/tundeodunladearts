@@ -68,7 +68,7 @@ export async function copyToClipboard(url: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(url);
     return true;
-  } catch (error) {
+  } catch {
     // Fallback for older browsers
     const textArea = document.createElement('textarea');
     textArea.value = url;
@@ -80,7 +80,7 @@ export async function copyToClipboard(url: string): Promise<boolean> {
       document.execCommand('copy');
       document.body.removeChild(textArea);
       return true;
-    } catch (fallbackError) {
+    } catch {
       document.body.removeChild(textArea);
       return false;
     }
