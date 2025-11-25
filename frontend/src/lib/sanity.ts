@@ -11,11 +11,12 @@ const token = process.env.SANITY_API_TOKEN || '';
 const createSafeClient = () => {
   if (!projectId || projectId.trim() === '') {
     // Return a mock client that will fail gracefully
-      return {
-        fetch: async () => {
-          throw new Error('Sanity project ID not configured');
-        },
-      } as ReturnType<typeof createClient>;
+    // Cast through unknown first to satisfy TypeScript's strict type checking
+    return {
+      fetch: async () => {
+        throw new Error('Sanity project ID not configured');
+      },
+    } as unknown as ReturnType<typeof createClient>;
   }
   
   return createClient({
