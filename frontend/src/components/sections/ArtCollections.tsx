@@ -28,10 +28,32 @@ export default function ArtCollections() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Load collection images
-    const collectionImages = generateCollectionImages();
-    setImages(collectionImages);
-    setIsLoading(false);
+    // Load collection images from API
+    async function loadImages() {
+      try {
+        const response = await fetch('/api/collections/images');
+        if (!response.ok) {
+          throw new Error('Failed to fetch images');
+        }
+        const data = await response.json();
+        if (data.images && data.images.length > 0) {
+          setImages(data.images);
+        } else {
+          // Fallback to generated images if API returns empty
+          console.warn('API returned empty images array, using fallback');
+          const collectionImages = generateCollectionImages();
+          setImages(collectionImages);
+        }
+      } catch (error) {
+        console.error('Error loading collection images:', error);
+        // Fallback to generated images on error
+        const collectionImages = generateCollectionImages();
+        setImages(collectionImages);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadImages();
   }, []);
 
   const handleInquiry = (image: CollectionImage) => {

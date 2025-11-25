@@ -92,24 +92,24 @@ export default function AboutSection() {
           </motion.div>
 
           {/* Right: Text Content */}
-         <motion.div variants={itemVariants} className="order-1 lg:order-2">
-  <div className="space-y-5 text-[#3D2817] leading-relaxed">
-    <p className="text-lg md:text-xl font-serif italic text-[#C17C2E]">
-      Where art breathes, culture speaks, and stories live.
-    </p>
-    
-    <p className="text-base md:text-lg">
-      Founded in the heart of Ibadan by master artist <strong className="text-[#8B4513]">Prince Tunde Odunlade</strong>, TOACC is a vibrant creative space where tradition meets innovation — where Yoruba indigo patterns, music, and craftsmanship blend into living expressions of African identity.
-    </p>
-    
-    <p className="text-base md:text-lg">
-      Every wall, every sound, and every stroke tells a story — a story of purpose, connection, and pride. Our mission is simple yet powerful: to inspire, to unite, and to celebrate the soul of our people through art that heals and transforms.
-    </p>
-    
-    <p className="text-lg md:text-xl font-serif italic text-[#8B4513] pt-4">
-      Step inside. Feel the rhythm. Experience art with purpose.
-    </p>
-  
+          <motion.div variants={itemVariants} className="order-1 lg:order-2">
+            <div className="space-y-5 text-[#3D2817] leading-relaxed">
+              <p className="text-lg md:text-xl font-serif italic text-[#C17C2E]">
+                Where art breathes, culture speaks, and stories live.
+              </p>
+              
+              <p className="text-base md:text-lg">
+                Founded in Ibadan by master artist <strong className="text-[#8B4513]">Prince Tunde Odunlade</strong>, TOACC is a vibrant creative space where tradition meets innovation. Here, Yoruba indigo patterns, music, and craftsmanship come together to create powerful expressions of African identity.
+              </p>
+              
+              <p className="text-base md:text-lg">
+                Every wall, every sound, and every stroke tells a story. A story of purpose, connection, and pride. Our mission is to inspire, unite, and celebrate the soul of our people through art that heals and transforms.
+              </p>
+              
+              <p className="text-lg md:text-xl font-serif italic text-[#8B4513] pt-4">
+                Step inside. Feel the rhythm. Experience art with purpose.
+              </p>
+            
               {/* CTA Button */}
               <motion.div
                 className="pt-6"

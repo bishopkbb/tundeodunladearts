@@ -429,8 +429,26 @@ export default function Hero3DCarousel() {
   const cameraDistance = isMobile ? (isVerySmall ? 10 : 11) : 14;
   const cameraFOV = isMobile ? (isVerySmall ? 60 : 58) : 45;
 
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (selectedImage !== null) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedImage]);
+
   return (
-    <div className="w-full h-full relative min-h-[400px] xs:min-h-[450px] sm:min-h-[550px] md:min-h-[600px] lg:min-h-screen">
+    <div 
+      className="w-full h-full relative min-h-[400px] xs:min-h-[450px] sm:min-h-[550px] md:min-h-[600px] lg:min-h-screen"
+      style={{ 
+        touchAction: selectedImage === null ? 'pan-y' : 'none', // Allow scrolling when modal is closed
+        overflow: 'visible', // Don't clip content
+      }}
+    >
       {/* Layered Background */}
       <div className="absolute inset-0 z-0">
         <div 
@@ -498,8 +516,8 @@ export default function Hero3DCarousel() {
         performance={{ min: 0.5 }} // Lower performance target for smoother frame rate
         className={`relative z-10 transition-opacity duration-300 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
         style={{ 
-          pointerEvents: selectedImage !== null ? 'none' : 'auto', // Allow pointer events for clicks on all devices
-          touchAction: isMobile ? 'manipulation' : 'pan-y', // Use manipulation for better mobile tap detection
+          pointerEvents: selectedImage !== null ? 'none' : 'auto', // Allow pointer events for clicks when modal is closed
+          touchAction: isMobile && selectedImage === null ? 'pan-y' : selectedImage !== null ? 'none' : 'auto', // Allow vertical scrolling on mobile when modal is closed
         }}
       >
         <Lights isMobile={isMobile} />
