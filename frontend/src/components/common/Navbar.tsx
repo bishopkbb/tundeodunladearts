@@ -215,37 +215,23 @@ function Navbar() {
       </nav>
 
       {/* Mobile Menu Overlay - Instant response */}
-      <AnimatePresence mode="sync">
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop - Instant appearance */}
-            <motion.div
-              initial={false}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.1, ease: 'easeOut' }}
-              style={{ willChange: 'opacity' }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-              onClick={toggleMobileMenu}
-            />
+      {isMobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-100 ease-out"
+            onClick={toggleMobileMenu}
+          />
 
-              {/* Menu Panel - Instant response with minimal animation */}
-            <motion.div
-              initial={false}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ 
-                type: 'tween',
-                duration: 0.18, // Ultra-fast
-                ease: [0.25, 0.1, 0.25, 1] // Snappier easing
-              }}
-              style={{ 
-                willChange: 'transform',
-                transform: 'translateZ(0)', // GPU acceleration
-                backfaceVisibility: 'hidden', // Prevent flicker
-              }}
-              className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
-            >
+          {/* Menu Panel */}
+          <div
+            className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation translate-x-0 transition-transform duration-150 ease-out"
+            style={{
+              willChange: 'transform',
+              transform: 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+            }}
+          >
               {/* Menu Header */}
               <div className="p-6 border-b border-[#D4A574]/30">
                 <div className="flex items-center justify-between">
@@ -306,10 +292,9 @@ function Navbar() {
                   </a>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </>
         )}
-      </AnimatePresence>
     </>
   );
 }

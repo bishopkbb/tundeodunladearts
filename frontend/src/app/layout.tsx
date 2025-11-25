@@ -97,6 +97,11 @@ export const metadata: Metadata = {
     },
   },
   category: 'Art & Culture',
+  icons: {
+    icon: '/favicon.png',
+    apple: '/favicon.png',
+    shortcut: '/favicon.png',
+  },
 };
 
 export default function RootLayout({
@@ -111,9 +116,9 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         {/* Favicon */}
-        <link rel="icon" href="/Assets/logo.png" sizes="any" />
-        <link rel="apple-touch-icon" href="/Assets/logo.png" />
-        <link rel="shortcut icon" href="/Assets/logo.png" />
+        <link rel="icon" href="/favicon.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.png" />
         {/* Structured Data */}
         <script
           type="application/ld+json"

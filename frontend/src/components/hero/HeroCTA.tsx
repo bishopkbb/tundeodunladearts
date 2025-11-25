@@ -7,7 +7,7 @@ import Link from 'next/link';
 function HeroCTA() {
   return (
     <motion.div
-      className="absolute top-14 xs:top-18 sm:top-24 md:top-28 left-1/2 transform -translate-x-1/2 z-40 flex flex-col sm:flex-row gap-2.5 xs:gap-3 sm:gap-4 px-3 xs:px-4 sm:px-0 w-full max-w-[95vw] sm:max-w-none"
+      className="absolute left-1/2 top-1/2 sm:top-24 md:top-28 transform -translate-x-1/2 -translate-y-1/2 sm:-translate-y-0 z-40 flex flex-col sm:flex-row items-center sm:items-start gap-2.5 xs:gap-3 sm:gap-4 px-3 xs:px-4 sm:px-0 w-full max-w-[95vw] sm:max-w-none"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, delay: 0.1, ease: 'easeOut' }}
