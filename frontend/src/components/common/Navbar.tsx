@@ -32,28 +32,35 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Ultra-fast mobile menu toggle - immediate state change
+  // Ultra-fast mobile menu toggle - immediate state change with synchronous scroll lock
   const toggleMobileMenu = useCallback(() => {
-    // Use flushSync for immediate DOM update (React 18+)
-    setIsMobileMenuOpen(prev => !prev);
-    // Immediately apply body scroll lock synchronously for zero delay
-    if (!isMobileMenuOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    // Use functional update to get current state immediately
+    setIsMobileMenuOpen(prev => {
+      const newState = !prev;
+      
+      // Immediately apply body scroll lock synchronously BEFORE React re-renders
+      if (newState) {
+        // Opening menu - lock scroll immediately
+        const scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+      } else {
+        // Closing menu - unlock scroll immediately
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
       }
-    }
-  }, [isMobileMenuOpen]);
+      
+      return newState;
+    });
+  }, []);
 
   // Backup scroll lock for edge cases
   useEffect(() => {
