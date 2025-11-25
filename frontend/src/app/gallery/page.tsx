@@ -137,7 +137,7 @@ export default function GalleryPage() {
         </section>
 
         {/* Filters & View Toggle */}
-        <section className="py-8 px-4 md:px-8 bg-white/80 backdrop-blur-sm border-y-2 border-[#D4AF37]/30 sticky top-20 z-40">
+        <section className="py-8 px-4 md:px-8 bg-white/80 backdrop-blur-sm border-y-2 border-[#D4AF37]/30 z-30">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
               {/* Category Filters */}
@@ -284,7 +284,7 @@ export default function GalleryPage() {
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
-                className="bg-white rounded-xl sm:rounded-2xl max-w-[95vw] sm:max-w-6xl w-full max-h-[95vh] overflow-y-auto shadow-2xl relative touch-manipulation"
+                className="bg-white rounded-xl sm:rounded-2xl max-w-[90vw] md:max-w-4xl lg:max-w-5xl xl:max-w-6xl w-full max-h-[90vh] md:max-h-[85vh] overflow-y-auto shadow-2xl relative touch-manipulation"
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Close Button */}
