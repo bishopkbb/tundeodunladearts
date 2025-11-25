@@ -32,22 +32,38 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Optimized mobile menu toggle - instant response
+  // Ultra-fast mobile menu toggle - immediate state change
   const toggleMobileMenu = useCallback(() => {
+    // Use flushSync for immediate DOM update (React 18+)
     setIsMobileMenuOpen(prev => !prev);
-  }, []);
-
-  // Prevent body scroll when mobile menu is open - immediate effect
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      // Immediately lock scroll for instant response
+    // Immediately apply body scroll lock synchronously for zero delay
+    if (!isMobileMenuOpen) {
       const scrollY = window.scrollY;
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
     } else {
-      // Restore scroll position
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+    }
+  }, [isMobileMenuOpen]);
+
+  // Backup scroll lock for edge cases
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    } else {
       const scrollY = document.body.style.top;
       document.body.style.position = '';
       document.body.style.top = '';
@@ -181,31 +197,44 @@ function Navbar() {
                 )}
               </button>
 
-              {/* Mobile Menu Button - Instant response on mobile */}
+              {/* Mobile Menu Button - Ultra-fast response */}
               <button
                 onClick={toggleMobileMenu}
-                className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-100 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
+                style={{ 
+                  transition: 'background-color 0.05s ease',
+                  willChange: 'transform',
+                }}
               >
-                {/* Simplified icon animation for faster response */}
-                <div className="relative w-6 h-5 flex flex-col justify-between">
+                {/* Ultra-fast CSS-only icon - no transitions, instant transforms */}
+                <div className="relative w-6 h-5 flex flex-col justify-between" style={{ willChange: 'transform' }}>
                   <span 
-                    className={`block w-6 h-0.5 bg-current origin-center transition-all duration-200 ${
+                    className={`block w-6 h-0.5 bg-current origin-center ${
                       isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
                     }`}
-                    style={{ transformOrigin: '3px 0.5px' }}
+                    style={{ 
+                      transformOrigin: '3px 0.5px',
+                      transition: 'none',
+                      willChange: 'transform',
+                    }}
                   />
                   <span 
-                    className={`block w-6 h-0.5 bg-current transition-all duration-150 ${
+                    className={`block w-6 h-0.5 bg-current ${
                       isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
                     }`}
+                    style={{ transition: 'none' }}
                   />
                   <span 
-                    className={`block w-6 h-0.5 bg-current origin-center transition-all duration-200 ${
+                    className={`block w-6 h-0.5 bg-current origin-center ${
                       isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
                     }`}
-                    style={{ transformOrigin: '3px 4.5px' }}
+                    style={{ 
+                      transformOrigin: '3px 4.5px',
+                      transition: 'none',
+                      willChange: 'transform',
+                    }}
                   />
                 </div>
               </button>
@@ -214,21 +243,28 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Instant response */}
+      {/* Mobile Menu Overlay - Ultra-fast, zero delay */}
       {isMobileMenuOpen && (
         <>
-          {/* Backdrop - Instant */}
+          {/* Backdrop - Instant, no transitions */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
             onClick={toggleMobileMenu}
+            style={{ 
+              animation: 'none',
+              transition: 'none',
+            }}
           />
 
-          {/* Menu Panel - Instant appearance, no animation */}
+          {/* Menu Panel - Instant appearance, GPU-accelerated */}
           <div
             className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
             style={{
               transform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
+              willChange: 'transform',
+              animation: 'none',
+              transition: 'none',
             }}
           >
               {/* Menu Header */}

@@ -20,7 +20,7 @@ function HeroCTA() {
         className="w-auto"
       >
         <Link
-          href="/shop"
+          href="/gallery"
           className="block text-center px-3 xs:px-3.5 sm:px-8 py-2 xs:py-2 sm:py-3 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-semibold text-xs xs:text-xs sm:text-base rounded-md transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[38px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
         >
           Explore the Collection
