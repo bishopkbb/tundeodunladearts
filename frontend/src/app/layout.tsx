@@ -122,10 +122,11 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         {/* Favicon - Multiple formats for better browser support */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="any" />
+        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="192x192" />
         <link rel="apple-touch-icon" href="/Assets/logo.png" sizes="180x180" />
-        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         {/* Structured Data */}
         <script

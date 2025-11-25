@@ -217,17 +217,16 @@ function Navbar() {
       {/* Mobile Menu Overlay - Instant response */}
       {isMobileMenuOpen && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop - Instant */}
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-100 ease-out"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
             onClick={toggleMobileMenu}
           />
 
-          {/* Menu Panel */}
+          {/* Menu Panel - Instant appearance, no animation */}
           <div
-            className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation translate-x-0 transition-transform duration-150 ease-out"
+            className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
             style={{
-              willChange: 'transform',
               transform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
             }}

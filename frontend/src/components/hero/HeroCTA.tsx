@@ -7,7 +7,7 @@ import Link from 'next/link';
 function HeroCTA() {
   return (
     <motion.div
-      className="absolute left-[40%] sm:left-1/2 top-20 xs:top-24 sm:top-28 transform -translate-x-1/2 z-40 flex flex-col sm:flex-row gap-2 xs:gap-2.5 sm:gap-4 px-3 xs:px-4 sm:px-0 w-auto max-w-[85vw] sm:max-w-none"
+      className="absolute left-[35%] sm:left-[45%] md:left-1/2 top-20 xs:top-24 sm:top-28 transform -translate-x-1/2 z-40 flex flex-col sm:flex-row gap-2 xs:gap-2 sm:gap-4 px-3 xs:px-4 sm:px-0 w-auto sm:max-w-none"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, delay: 0.1, ease: 'easeOut' }}
@@ -21,7 +21,7 @@ function HeroCTA() {
       >
         <Link
           href="/shop"
-          className="block text-center px-3 xs:px-4 sm:px-8 py-2 xs:py-2.5 sm:py-3 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-xs xs:text-sm sm:text-base rounded-lg transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[36px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
+          className="block text-center px-3 xs:px-3.5 sm:px-8 py-2 xs:py-2 sm:py-3 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-semibold text-xs xs:text-xs sm:text-base rounded-md transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[38px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
         >
           Explore the Collection
         </Link>
@@ -35,7 +35,7 @@ function HeroCTA() {
       >
         <Link
           href="/contact"
-          className="block text-center px-3 xs:px-4 sm:px-8 py-2 xs:py-2.5 sm:py-3 bg-[#3D2817] hover:bg-[#2C1810] active:bg-[#1A0F08] text-white font-bold text-xs xs:text-sm sm:text-base rounded-lg transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[36px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
+          className="block text-center px-3 xs:px-3.5 sm:px-8 py-2 xs:py-2 sm:py-3 bg-[#3D2817] hover:bg-[#2C1810] active:bg-[#1A0F08] text-white font-semibold text-xs xs:text-xs sm:text-base rounded-md transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[38px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
         >
           Visit the gallery
         </Link>
