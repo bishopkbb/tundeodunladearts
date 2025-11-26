@@ -8,6 +8,7 @@ export async function GET() {
     
     // Read all files from the directory
     const files = await readdir(imagesDirectory);
+    console.log(`📁 Found ${files.length} files in picturedoscope directory`);
     
     // Filter only .jpg files, exclude specific images, and create image paths
     const excludedImages = [
@@ -22,7 +23,11 @@ export async function GET() {
     ];
     
     const imageFiles = files
-      .filter(file => file.toLowerCase().endsWith('.jpg') && !excludedImages.includes(file))
+      .filter(file => {
+        const isJpg = file.toLowerCase().endsWith('.jpg');
+        const isExcluded = excludedImages.includes(file);
+        return isJpg && !isExcluded;
+      })
       .map(file => ({
         id: `collection-${file.replace('.jpg', '').replace(/\s+/g, '-')}`,
         src: `/Assets/picturedoscope/${file}`,
@@ -32,11 +37,20 @@ export async function GET() {
         return b.src.localeCompare(a.src);
       });
     
+    console.log(`✅ Returning ${imageFiles.length} images after filtering`);
+    if (imageFiles.length > 0) {
+      console.log(`📸 Sample image path: ${imageFiles[0].src}`);
+    }
+    
     return NextResponse.json({ images: imageFiles });
   } catch (error: unknown) {
-    console.error('Error reading collection images:', error);
+    console.error('❌ Error reading collection images:', error);
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
     // Return empty array on error
-    return NextResponse.json({ images: [] });
+    return NextResponse.json({ images: [], error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
   }
 }
 

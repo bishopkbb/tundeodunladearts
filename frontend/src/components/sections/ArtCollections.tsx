@@ -189,16 +189,28 @@ export default function ArtCollections() {
                           alt={`Art collection piece ${image.id}`}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                          quality={80}
+                          quality={75}
                           className="object-cover transition-transform duration-500 group-hover:scale-110 relative"
                           style={{ zIndex: 30 }}
                           loading="lazy"
                           priority={index < 6}
                           onError={(e) => {
-                            console.error(`Failed to load image: ${image.src}`);
+                            console.error(`❌ Failed to load image: ${image.src}`);
+                            console.error(`Image ID: ${image.id}`);
                             const target = e.target as HTMLImageElement;
-                            if (target && target.parentElement) {
-                              target.parentElement.style.display = 'none';
+                            if (target) {
+                              console.error('Error details:', {
+                                naturalWidth: target.naturalWidth,
+                                naturalHeight: target.naturalHeight,
+                                complete: target.complete,
+                                src: target.src,
+                                currentSrc: target.currentSrc || 'N/A'
+                              });
+                            }
+                          }}
+                          onLoad={() => {
+                            if (index < 3) { // Only log first 3 to avoid spam
+                              console.log(`✅ Successfully loaded: ${image.src}`);
                             }
                           }}
                         />
