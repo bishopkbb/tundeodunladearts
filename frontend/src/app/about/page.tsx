@@ -41,15 +41,25 @@ His life motto encapsulates his fearless creative spirit: "He who does not attem
   },
   {
     id: 2,
-    name: 'Artist Name 2',
-    role: 'Contemporary Artist',
-    specialty: 'Oil Painting, Mixed Media',
-    image: '/Assets/hero2.jpg',
-    bio: 'Artist biography coming soon. This talented artist specializes in contemporary African art with a focus on vibrant colors and cultural narratives.',
+    name: 'Yinka Adeyemi',
+    role: 'Master Artist & Mentor',
+    specialty: 'Traditional African Art, Sculpture, Textile Design',
+    image: '/Assets/picturedoscope/IMG-20251121-WA0050.jpg',
+    bio: `Yinka Adeyemi is a distinguished Nigerian artist and master craftsman, renowned for his deep commitment to preserving and advancing traditional African artistic techniques. As one of the foundational figures of the Oshogbo school of arts, Adeyemi has been instrumental in training and mentoring generations of artists, including the esteemed Prince Tunde Odunlade.
+
+Born into a family with rich cultural heritage, Adeyemi's artistic journey began in the vibrant artistic community of Osogbo, where he developed his expertise in traditional Yoruba art forms. His mastery spans across multiple disciplines including sculpture, textile design, and ceremonial art, with each piece reflecting profound understanding of Yoruba cosmology and cultural narratives.
+
+Adeyemi's work is characterized by its authentic representation of African identity, blending traditional motifs with contemporary relevance. His sculptures, often carved from indigenous materials, tell stories of ancestral wisdom, community values, and spiritual connections that define the Yoruba worldview.
+
+Throughout his career, Adeyemi has dedicated himself to artistic education and cultural preservation. His mentorship has shaped countless artists who now carry forward the legacy of Nigerian artistic excellence both locally and internationally. His influence extends beyond the studio, as he actively participates in cultural festivals, art workshops, and community initiatives that promote African art and culture.
+
+Adeyemi's commitment to artistic excellence and cultural preservation makes him a cornerstone of the Nigerian art community. His works serve as bridges between the past and present, ensuring that traditional knowledge and artistic techniques continue to inspire and guide future generations.`,
     achievements: [
-      'National Art Exhibition Winner 2022',
-      'Featured in Lagos Art Fair',
-      'Commissioned works for corporate collections',
+      'Master Artist, Oshogbo School of Arts',
+      'Mentor to Prince Tunde Odunlade and numerous contemporary artists',
+      'Cultural Preservation Advocate',
+      'Featured in major Nigerian art exhibitions',
+      'Works in private collections across Africa and internationally',
     ],
   },
   {

@@ -9,9 +9,9 @@ export async function GET() {
     // Read all files from the directory
     const files = await readdir(imagesDirectory);
     
-    // Filter only .jpg files and create image paths
+    // Filter only .jpg files, exclude IMG-20251121-WA0050, and create image paths
     const imageFiles = files
-      .filter(file => file.toLowerCase().endsWith('.jpg'))
+      .filter(file => file.toLowerCase().endsWith('.jpg') && file !== 'IMG-20251121-WA0050.jpg')
       .map(file => ({
         id: `collection-${file.replace('.jpg', '').replace(/\s+/g, '-')}`,
         src: `/Assets/picturedoscope/${file}`,

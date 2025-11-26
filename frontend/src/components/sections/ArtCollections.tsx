@@ -24,12 +24,14 @@ const generateCollectionImages = (): CollectionImage[] => {
     });
   }
   
-  // 20251121 images (WA0042 onwards - estimate range based on file count)
+  // 20251121 images (WA0042 onwards - estimate range based on file count, excluding WA0050)
   for (let i = 100; i >= 42; i--) {
-    images.push({
-      id: `collection-20251121-${i}`,
-      src: `/Assets/picturedoscope/IMG-20251121-WA${String(i).padStart(4, '0')}.jpg`,
-    });
+    if (i !== 50) { // Exclude IMG-20251121-WA0050.jpg
+      images.push({
+        id: `collection-20251121-${i}`,
+        src: `/Assets/picturedoscope/IMG-20251121-WA${String(i).padStart(4, '0')}.jpg`,
+      });
+    }
   }
   
   // 20251026 images (WA0053 to WA0059)

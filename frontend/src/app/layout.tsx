@@ -99,14 +99,17 @@ export const metadata: Metadata = {
   category: 'Art & Culture',
   icons: {
     icon: [
-      { url: '/favicon.png', sizes: 'any' },
-      { url: '/Assets/logo.png', sizes: 'any' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', sizes: '32x32' },
+      { url: '/favicon.png', sizes: '16x16' },
+      { url: '/Assets/logo.png', sizes: '192x192' },
+      { url: '/Assets/logo.png', sizes: '512x512' },
     ],
     apple: [
-      { url: '/favicon.png', sizes: '180x180' },
       { url: '/Assets/logo.png', sizes: '180x180' },
+      { url: '/favicon.png', sizes: '180x180' },
     ],
-    shortcut: '/favicon.png',
+    shortcut: '/favicon.ico',
   },
 };
 
@@ -122,11 +125,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         {/* Favicon - Multiple formats for better browser support */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16" />
         <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="192x192" />
+        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/Assets/logo.png" sizes="180x180" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         {/* Structured Data */}
         <script

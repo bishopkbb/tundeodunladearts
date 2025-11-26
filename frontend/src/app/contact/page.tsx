@@ -84,19 +84,19 @@ export default function ContactPage() {
         <Navbar />
 
         {/* Hero Section */}
-        <section className="py-16 md:py-24 px-4 md:px-8">
+        <section className="py-12 xs:py-16 md:py-24 px-4 xs:px-6 md:px-8">
           <div className="max-w-7xl mx-auto">
             <motion.div
-              className="text-center mb-12"
+              className="text-center mb-10 xs:mb-12"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-6xl font-bold text-[#3D2817] mb-6 font-serif">
+              <h1 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold text-[#3D2817] mb-4 xs:mb-6 font-serif px-4">
                 Visit & Contact Us
               </h1>
-              <div className="w-32 h-1 bg-[#D4AF37] mx-auto mb-8 rounded-full" />
-              <p className="text-lg md:text-xl text-[#6B4423] max-w-3xl mx-auto leading-relaxed">
+              <div className="w-24 xs:w-32 h-1 bg-[#D4AF37] mx-auto mb-6 xs:mb-8 rounded-full" />
+              <p className="text-base xs:text-lg md:text-xl text-[#6B4423] max-w-3xl mx-auto leading-relaxed px-4">
                 Experience art in the heart of Ibadan. We&apos;d love to hear from you!
               </p>
             </motion.div>
@@ -104,27 +104,27 @@ export default function ContactPage() {
         </section>
 
         {/* Gallery Image */}
-        <section className="py-8 px-4 md:px-8">
+        <section className="py-6 xs:py-8 px-4 xs:px-6 md:px-8">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="relative h-64 md:h-96 rounded-2xl overflow-hidden shadow-2xl border-4 border-[#D4AF37]"
+              className="relative h-48 xs:h-64 sm:h-80 md:h-96 rounded-xl xs:rounded-2xl overflow-hidden shadow-2xl border-2 xs:border-4 border-[#D4AF37]"
             >
               <Image
                 src="/Assets/cover2.jpg"
                 alt="TOACC Gallery Interior"
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
                 quality={90}
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-                <div className="p-8 text-white">
-                  <h3 className="text-2xl md:text-3xl font-bold mb-2 font-serif">Welcome to TOACC</h3>
-                  <p className="text-sm md:text-base">Where African heritage meets contemporary expression</p>
+                <div className="p-4 xs:p-6 md:p-8 text-white">
+                  <h3 className="text-xl xs:text-2xl md:text-3xl font-bold mb-1 xs:mb-2 font-serif">Welcome to TOACC</h3>
+                  <p className="text-xs xs:text-sm md:text-base">Where African heritage meets contemporary expression</p>
                 </div>
               </div>
             </motion.div>
@@ -132,9 +132,9 @@ export default function ContactPage() {
         </section>
 
         {/* Main Content: Two Columns */}
-        <section className="py-16 md:py-24 px-4 md:px-8">
+        <section className="py-12 xs:py-16 md:py-24 px-4 xs:px-6 md:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12">
+            <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
               
               {/* LEFT: Visit Information */}
               <motion.div
@@ -142,28 +142,28 @@ export default function ContactPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
-                className="space-y-8"
+                className="space-y-6 xs:space-y-8"
               >
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-[#3D2817] mb-6 font-serif">
+                  <h2 className="text-2xl xs:text-3xl md:text-4xl font-bold text-[#3D2817] mb-4 xs:mb-6 font-serif">
                     Plan Your Visit
                   </h2>
-                  <p className="text-[#6B4423] leading-relaxed mb-8">
+                  <p className="text-sm xs:text-base text-[#6B4423] leading-relaxed mb-6 xs:mb-8">
                     Located in the vibrant city of Ibadan, our gallery welcomes you to explore the rich tapestry of Nigerian creativity. Experience live art, exhibitions, and cultural performances.
                   </p>
                 </div>
 
                 {/* Location */}
-                <div className="flex gap-4 items-start p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-l-4 border-[#D4AF37]">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex gap-3 xs:gap-4 items-start p-4 xs:p-5 md:p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-l-4 border-[#D4AF37]">
+                  <div className="flex-shrink-0 w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 xs:w-6 xs:h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[#3D2817] mb-2">Address</h3>
-                    <p className="text-[#6B4423] leading-relaxed">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base xs:text-lg font-bold text-[#3D2817] mb-2">Address</h3>
+                    <p className="text-sm xs:text-base text-[#6B4423] leading-relaxed">
                       2, Ladoke Akintola Avenue<br />
                       Off Aare, New Bodija<br />
                       Ibadan, Oyo State<br />
@@ -173,15 +173,15 @@ export default function ContactPage() {
                 </div>
 
                 {/* Opening Hours */}
-                <div className="flex gap-4 items-start p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-l-4 border-[#C17C2E]">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#C17C2E]/20 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex gap-3 xs:gap-4 items-start p-4 xs:p-5 md:p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-l-4 border-[#C17C2E]">
+                  <div className="flex-shrink-0 w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-[#C17C2E]/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 xs:w-6 xs:h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[#3D2817] mb-2">Opening Hours</h3>
-                    <div className="text-[#6B4423] space-y-1">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base xs:text-lg font-bold text-[#3D2817] mb-2">Opening Hours</h3>
+                    <div className="text-sm xs:text-base text-[#6B4423] space-y-1">
                       <p className="font-semibold">Monday - Saturday</p>
                       <p>10:00 AM - 7:00 PM</p>
                       <p className="font-semibold mt-2">Sunday</p>
@@ -191,24 +191,24 @@ export default function ContactPage() {
                 </div>
 
                 {/* Contact Info */}
-                <div className="flex gap-4 items-start p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-l-4 border-[#8B4513]">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#8B4513]/20 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex gap-3 xs:gap-4 items-start p-4 xs:p-5 md:p-6 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border-l-4 border-[#8B4513]">
+                  <div className="flex-shrink-0 w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-[#8B4513]/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 xs:w-6 xs:h-6 text-[#C17C2E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-[#3D2817] mb-2">Contact</h3>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-base xs:text-lg font-bold text-[#3D2817] mb-2">Contact</h3>
                     <div className="space-y-2">
                       <a 
                         href="tel:+2348160082118" 
-                        className="block text-[#C17C2E] hover:text-[#8B4513] transition-colors font-semibold"
+                        className="block text-sm xs:text-base text-[#C17C2E] hover:text-[#8B4513] transition-colors font-semibold break-all"
                       >
                         📞 +234 816 008 2118
                       </a>
                       <a 
                         href="mailto:info@tundeodunladearts.com" 
-                        className="block text-[#C17C2E] hover:text-[#8B4513] transition-colors font-semibold"
+                        className="block text-sm xs:text-base text-[#C17C2E] hover:text-[#8B4513] transition-colors font-semibold break-all"
                       >
                         ✉️ info@tundeodunladearts.com
                       </a>
@@ -224,12 +224,12 @@ export default function ContactPage() {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 xs:gap-3 px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto justify-center min-h-[44px]"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 xs:w-6 xs:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
-                  Get Directions
+                  <span className="whitespace-nowrap">Get Directions</span>
                 </motion.a>
               </motion.div>
 
@@ -240,11 +240,11 @@ export default function ContactPage() {
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
               >
-                <div className="bg-white/90 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-2xl border-2 border-[#D4AF37]/30">
-                  <h2 className="text-3xl md:text-4xl font-bold text-[#3D2817] mb-4 font-serif">
+                <div className="bg-white/90 backdrop-blur-sm p-5 xs:p-6 md:p-8 lg:p-10 rounded-xl xs:rounded-2xl shadow-2xl border-2 border-[#D4AF37]/30">
+                  <h2 className="text-2xl xs:text-3xl md:text-4xl font-bold text-[#3D2817] mb-3 xs:mb-4 font-serif">
                     Get in Touch
                   </h2>
-                  <p className="text-[#6B4423] mb-8">
+                  <p className="text-sm xs:text-base text-[#6B4423] mb-6 xs:mb-8">
                     Have questions? Want to book a tour? We&apos;d love to hear from you!
                   </p>
 
@@ -267,10 +267,10 @@ export default function ContactPage() {
                     )}
                   </AnimatePresence>
 
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-4 xs:space-y-5 md:space-y-6">
                     {/* Name */}
                     <div>
-                      <label htmlFor="name" className="block text-sm font-semibold text-[#3D2817] mb-2">
+                      <label htmlFor="name" className="block text-xs xs:text-sm font-semibold text-[#3D2817] mb-2">
                         Full Name *
                       </label>
                       <input
@@ -280,14 +280,14 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-[#3D2817]"
+                        className="w-full px-3 xs:px-4 py-2.5 xs:py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-sm xs:text-base text-[#3D2817] min-h-[44px]"
                         placeholder="John Doe"
                       />
                     </div>
 
                     {/* Email */}
                     <div>
-                      <label htmlFor="email" className="block text-sm font-semibold text-[#3D2817] mb-2">
+                      <label htmlFor="email" className="block text-xs xs:text-sm font-semibold text-[#3D2817] mb-2">
                         Email Address *
                       </label>
                       <input
@@ -297,14 +297,14 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-[#3D2817]"
+                        className="w-full px-3 xs:px-4 py-2.5 xs:py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-sm xs:text-base text-[#3D2817] min-h-[44px]"
                         placeholder="john@example.com"
                       />
                     </div>
 
                     {/* Phone */}
                     <div>
-                      <label htmlFor="phone" className="block text-sm font-semibold text-[#3D2817] mb-2">
+                      <label htmlFor="phone" className="block text-xs xs:text-sm font-semibold text-[#3D2817] mb-2">
                         Phone Number
                       </label>
                       <input
@@ -313,14 +313,14 @@ export default function ContactPage() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-[#3D2817]"
+                        className="w-full px-3 xs:px-4 py-2.5 xs:py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-sm xs:text-base text-[#3D2817] min-h-[44px]"
                         placeholder="+234 XXX XXX XXXX"
                       />
                     </div>
 
                     {/* Subject */}
                     <div>
-                      <label htmlFor="subject" className="block text-sm font-semibold text-[#3D2817] mb-2">
+                      <label htmlFor="subject" className="block text-xs xs:text-sm font-semibold text-[#3D2817] mb-2">
                         Subject *
                       </label>
                       <select
@@ -329,7 +329,7 @@ export default function ContactPage() {
                         value={formData.subject}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-[#3D2817]"
+                        className="w-full px-3 xs:px-4 py-2.5 xs:py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-sm xs:text-base text-[#3D2817] min-h-[44px]"
                       >
                         <option value="">Select a subject</option>
                         <option value="general">General Inquiry</option>
@@ -345,7 +345,7 @@ export default function ContactPage() {
 
                     {/* Message */}
                     <div>
-                      <label htmlFor="message" className="block text-sm font-semibold text-[#3D2817] mb-2">
+                      <label htmlFor="message" className="block text-xs xs:text-sm font-semibold text-[#3D2817] mb-2">
                         Message *
                       </label>
                       <textarea
@@ -355,7 +355,7 @@ export default function ContactPage() {
                         onChange={handleChange}
                         required
                         rows={5}
-                        className="w-full px-4 py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-[#3D2817] resize-none"
+                        className="w-full px-3 xs:px-4 py-2.5 xs:py-3 bg-white border-2 border-[#D4A574] rounded-lg focus:border-[#C17C2E] focus:outline-none focus:ring-2 focus:ring-[#C17C2E]/20 transition-all text-sm xs:text-base text-[#3D2817] resize-none"
                         placeholder="Tell us how we can help you..."
                       />
                     </div>
@@ -366,7 +366,7 @@ export default function ContactPage() {
                       disabled={isSubmitting}
                       whileHover={!isSubmitting ? { scale: 1.02, y: -2 } : {}}
                       whileTap={!isSubmitting ? { scale: 0.98 } : {}}
-                      className={`w-full py-4 rounded-lg font-bold text-lg transition-all duration-300 flex items-center justify-center gap-3 ${
+                      className={`w-full py-3 xs:py-4 rounded-lg font-bold text-base xs:text-lg transition-all duration-300 flex items-center justify-center gap-2 xs:gap-3 min-h-[44px] ${
                         isSubmitting
                           ? 'bg-gray-400 cursor-not-allowed'
                           : 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-lg hover:shadow-xl'
@@ -397,7 +397,7 @@ export default function ContactPage() {
         </section>
 
         {/* Google Map */}
-        <section className="py-16 px-4 md:px-8 bg-white/80 backdrop-blur-sm">
+        <section className="py-12 xs:py-16 px-4 xs:px-6 md:px-8 bg-white/80 backdrop-blur-sm">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -405,10 +405,10 @@ export default function ContactPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-[#3D2817] mb-8 text-center font-serif">
+              <h2 className="text-2xl xs:text-3xl md:text-4xl font-bold text-[#3D2817] mb-6 xs:mb-8 text-center font-serif px-4">
                 Find Us on the Map
               </h2>
-              <div className="relative w-full h-96 md:h-[500px] rounded-2xl overflow-hidden shadow-2xl border-4 border-[#D4AF37]">
+              <div className="relative w-full h-64 xs:h-80 sm:h-96 md:h-[500px] rounded-xl xs:rounded-2xl overflow-hidden shadow-2xl border-2 xs:border-4 border-[#D4AF37] mx-auto">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126688.56347862248!2d3.8480571!3d7.377758!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1039ed0f999c0a89%3A0x78e3a4cb8dd6a6c7!2sIbadan%2C%20Nigeria!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
                   width="100%"
@@ -421,7 +421,7 @@ export default function ContactPage() {
                   className="grayscale-0 hover:grayscale-0 transition-all"
                 />
               </div>
-              <p className="text-center text-sm text-[#6B4423] mt-4 italic">
+              <p className="text-center text-xs xs:text-sm text-[#6B4423] mt-3 xs:mt-4 italic px-4">
                 2, Ladoke Akintola Avenue, Off Aare, New Bodija, Ibadan
               </p>
             </motion.div>
