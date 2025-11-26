@@ -7,6 +7,7 @@ import Image from 'next/image';
 interface CollectionImage {
   src: string;
   id: string;
+  uniqueId?: string; // Human-readable unique identifier like "TOACC-001"
 }
 
 // Generate image paths for all picturedoscope images - fallback if API fails
@@ -43,6 +44,23 @@ export default function ArtCollections() {
   const [images, setImages] = useState<CollectionImage[]>([]);
   const [selectedImage, setSelectedImage] = useState<CollectionImage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Generate unique identifiers for images (TOACC-001, TOACC-002, etc.)
+  const generateUniqueId = (index: number): string => {
+    return `TOACC-${String(index + 1).padStart(3, '0')}`;
+  };
+
+  // Copy unique ID to clipboard
+  const copyToClipboard = async (uniqueId: string) => {
+    try {
+      await navigator.clipboard.writeText(uniqueId);
+      setCopiedId(uniqueId);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (error) {
+      console.error('Failed to copy to clipboard:', error);
+    }
+  };
 
   useEffect(() => {
     // Load collection images from API
@@ -55,20 +73,35 @@ export default function ArtCollections() {
         const data = await response.json();
         if (data.images && data.images.length > 0) {
           console.log(`✅ Loaded ${data.images.length} collection images from API`);
-          setImages(data.images);
+          // Add unique identifiers to each image
+          const imagesWithIds = data.images.map((img: CollectionImage, index: number) => ({
+            ...img,
+            uniqueId: generateUniqueId(index),
+          }));
+          setImages(imagesWithIds);
         } else {
           // Fallback to generated images if API returns empty
           console.warn('⚠️ API returned empty images array, using fallback');
           const collectionImages = generateCollectionImages();
           console.log(`📸 Fallback: Generated ${collectionImages.length} images`);
-          setImages(collectionImages);
+          // Add unique identifiers to fallback images
+          const imagesWithIds = collectionImages.map((img, index) => ({
+            ...img,
+            uniqueId: generateUniqueId(index),
+          }));
+          setImages(imagesWithIds);
         }
       } catch (error) {
         console.error('❌ Error loading collection images from API, using fallback:', error);
         // Fallback to generated images on error
         const collectionImages = generateCollectionImages();
         console.log(`📸 Fallback: Generated ${collectionImages.length} images`);
-        setImages(collectionImages);
+        // Add unique identifiers to fallback images
+        const imagesWithIds = collectionImages.map((img, index) => ({
+          ...img,
+          uniqueId: generateUniqueId(index),
+        }));
+        setImages(imagesWithIds);
       } finally {
         setIsLoading(false);
       }
@@ -77,9 +110,10 @@ export default function ArtCollections() {
   }, []);
 
   const handleInquiry = (image: CollectionImage) => {
-    const subject = encodeURIComponent(`Inquiry about Art Collection Image - ${image.id}`);
+    const uniqueId = image.uniqueId || image.id;
+    const subject = encodeURIComponent(`Inquiry about Artwork ${uniqueId} - Tunde Odunlade Arts`);
     const body = encodeURIComponent(
-      `Hello,\n\nI am interested in learning more about this artwork from your collection.\n\nImage ID: ${image.id}\n\nPlease provide information about:\n- Availability\n- Pricing\n- Dimensions\n- Medium\n\nThank you!`
+      `Hello,\n\nI am interested in learning more about this artwork from your collection.\n\nArtwork Reference: ${uniqueId}\n\nPlease provide information about:\n- Availability\n- Pricing\n- Dimensions\n- Medium\n- Artist Information\n\nThank you!\n\nBest regards`
     );
     window.location.href = `mailto:info@tundeodunladearts.com?subject=${subject}&body=${body}`;
   };
@@ -172,6 +206,13 @@ export default function ArtCollections() {
 
                   {/* Main Card */}
                   <div className="relative bg-white rounded-lg shadow-xl group-hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-[#D4AF37]/30" style={{ zIndex: 10 }}>
+                    {/* Unique Identifier Badge */}
+                    {image.uniqueId && (
+                      <div className="absolute top-2 left-2 z-30 bg-[#D4AF37]/95 backdrop-blur-sm text-[#3D2817] px-2 py-1 rounded-md text-xs font-bold shadow-lg border border-[#C17C2E]/50">
+                        {image.uniqueId}
+                      </div>
+                    )}
+
                     {/* Top Adire Pattern Border */}
                     <div 
                       className="h-2 bg-gradient-to-r from-transparent via-[#C17C2E] to-transparent"
@@ -186,7 +227,7 @@ export default function ArtCollections() {
                       <div className="relative w-full h-full rounded-sm overflow-hidden bg-white">
                         <Image
                           src={image.src}
-                          alt={`Art collection piece ${image.id}`}
+                          alt={`Art collection piece ${image.uniqueId || image.id}`}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                           quality={75}
@@ -239,7 +280,7 @@ export default function ArtCollections() {
                               Click to View
                             </p>
                             <p className="text-white/90 text-xs md:text-sm mt-1 drop-shadow-md">
-                              Tap for details
+                              {image.uniqueId && `Ref: ${image.uniqueId}`}
                             </p>
                           </div>
                         </div>
@@ -333,7 +374,7 @@ export default function ArtCollections() {
               <div className="relative w-full h-[60vh] sm:h-[70vh]">
                 <Image
                   src={selectedImage.src}
-                  alt={`Art collection piece ${selectedImage.id}`}
+                  alt={`Art collection piece ${selectedImage.uniqueId || selectedImage.id}`}
                   fill
                   sizes="(max-width: 768px) 100vw, 80vw"
                   quality={95}
@@ -347,26 +388,84 @@ export default function ArtCollections() {
 
               {/* Inquiry Section */}
               <div className="p-6 sm:p-8 bg-gradient-to-b from-white to-[#F5EFE7]">
-                <h3 className="text-2xl font-bold text-[#3D2817] mb-4 font-serif">
+                {/* Unique Identifier Display */}
+                {selectedImage.uniqueId && (
+                  <div className="mb-6 flex items-center justify-between flex-wrap gap-4 p-4 bg-white/80 backdrop-blur-sm rounded-lg border-2 border-[#D4AF37]/50 shadow-md">
+                    <div>
+                      <p className="text-sm text-[#6B4423] font-medium mb-1">Artwork Reference</p>
+                      <p className="text-2xl font-bold text-[#3D2817] font-mono">{selectedImage.uniqueId}</p>
+                    </div>
+                    <motion.button
+                      onClick={() => copyToClipboard(selectedImage.uniqueId!)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] hover:bg-[#C17C2E] text-[#3D2817] font-semibold rounded-lg transition-colors shadow-md"
+                    >
+                      {copiedId === selectedImage.uniqueId ? (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          <span>Copy ID</span>
+                        </>
+                      )}
+                    </motion.button>
+                  </div>
+                )}
+
+                <h3 className="text-2xl font-bold text-[#3D2817] mb-2 font-serif">
                   Interested in this artwork?
                 </h3>
                 <p className="text-[#6B4423] mb-6">
-                  Contact us for information about availability, pricing, dimensions, and more.
+                  Contact us for information about availability, pricing, dimensions, medium, and artist details. 
+                  {selectedImage.uniqueId && ` Please mention reference ${selectedImage.uniqueId} in your inquiry.`}
                 </p>
-                <motion.button
-                  onClick={() => {
-                    handleInquiry(selectedImage);
-                    setSelectedImage(null);
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
-                >
-                  Inquire About This Piece
-                </motion.button>
-                <p className="mt-4 text-sm text-[#6B4423]">
-                  Email: <a href="mailto:info@tundeodunladearts.com" className="text-[#C17C2E] hover:underline font-semibold">info@tundeodunladearts.com</a>
-                </p>
+
+                {/* Inquiry Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <motion.button
+                    onClick={() => handleInquiry(selectedImage)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex-1 sm:flex-initial px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Send Inquiry Email
+                  </motion.button>
+                  
+                  <motion.a
+                    href={`tel:+234123456789`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex-1 sm:flex-initial px-8 py-4 bg-white hover:bg-[#F5EFE7] text-[#3D2817] font-bold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg border-2 border-[#D4AF37] flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    Call Us
+                  </motion.a>
+                </div>
+
+                <div className="pt-4 border-t border-[#D4AF37]/30">
+                  <p className="text-sm text-[#6B4423] mb-2">
+                    <span className="font-semibold">Email:</span>{' '}
+                    <a href="mailto:info@tundeodunladearts.com" className="text-[#C17C2E] hover:underline font-semibold">
+                      info@tundeodunladearts.com
+                    </a>
+                  </p>
+                  <p className="text-xs text-[#6B4423]/80">
+                    We typically respond within 24-48 hours. Please include the artwork reference in your inquiry for faster service.
+                  </p>
+                </div>
               </div>
             </motion.div>
           </motion.div>
