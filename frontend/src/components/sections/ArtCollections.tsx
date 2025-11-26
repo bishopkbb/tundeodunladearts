@@ -194,6 +194,7 @@ export default function ArtCollections() {
                           style={{ zIndex: 30 }}
                           loading="lazy"
                           priority={index < 6}
+                          unoptimized={true}
                           onError={(e) => {
                             console.error(`❌ Failed to load image: ${image.src}`);
                             console.error(`Image ID: ${image.id}`);
