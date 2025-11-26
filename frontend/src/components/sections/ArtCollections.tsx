@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface CollectionImage {
   src: string;
@@ -296,6 +297,26 @@ export default function ArtCollections() {
                       }}
                     ></div>
 
+                    {/* Inquiry Button - Bottom of Card */}
+                    <div className="p-3 bg-gradient-to-br from-[#F5EFE7] to-white border-t border-[#D4AF37]/20">
+                      <Link
+                        href={`/contact?artwork=${encodeURIComponent(image.uniqueId || image.id)}&ref=${encodeURIComponent(image.uniqueId || '')}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="block w-full"
+                      >
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full px-4 py-2.5 bg-[#C17C2E] hover:bg-[#8B4513] text-white text-sm font-semibold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          <span>Inquire</span>
+                        </motion.button>
+                      </Link>
+                    </div>
+
                     {/* Side Pattern Accents */}
                     <div 
                       className="absolute left-0 top-0 bottom-0 w-1 opacity-50 group-hover:opacity-100 transition-opacity"
@@ -356,27 +377,27 @@ export default function ArtCollections() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl"
+              className="relative w-full max-w-[95vw] xs:max-w-[90vw] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[95vh] sm:max-h-[90vh] bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 z-10 w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-white/90 hover:bg-white text-[#3D2817] flex items-center justify-center transition-colors shadow-lg"
+                className="absolute top-2 right-2 xs:top-3 xs:right-3 sm:top-4 sm:right-4 z-10 w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 hover:bg-white text-[#3D2817] flex items-center justify-center transition-colors shadow-lg touch-manipulation"
                 aria-label="Close"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
-              {/* Image */}
-              <div className="relative w-full h-[60vh] sm:h-[70vh]">
+              {/* Image Container - Scrollable */}
+              <div className="relative w-full flex-shrink-0 h-[40vh] xs:h-[45vh] sm:h-[50vh] md:h-[55vh] lg:h-[60vh] xl:h-[65vh] overflow-hidden bg-gradient-to-br from-[#F5EFE7] to-white">
                 <Image
                   src={selectedImage.src}
                   alt={`Art collection piece ${selectedImage.uniqueId || selectedImage.id}`}
                   fill
-                  sizes="(max-width: 768px) 100vw, 80vw"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, (max-width: 1280px) 80vw, 70vw"
                   quality={95}
                   className="object-contain"
                   unoptimized={true}
@@ -386,31 +407,31 @@ export default function ArtCollections() {
                 />
               </div>
 
-              {/* Inquiry Section */}
-              <div className="p-6 sm:p-8 bg-gradient-to-b from-white to-[#F5EFE7]">
+              {/* Inquiry Section - Scrollable */}
+              <div className="flex-shrink overflow-y-auto p-4 xs:p-5 sm:p-6 md:p-7 lg:p-8 bg-gradient-to-b from-white to-[#F5EFE7]">
                 {/* Unique Identifier Display */}
                 {selectedImage.uniqueId && (
-                  <div className="mb-6 flex items-center justify-between flex-wrap gap-4 p-4 bg-white/80 backdrop-blur-sm rounded-lg border-2 border-[#D4AF37]/50 shadow-md">
-                    <div>
-                      <p className="text-sm text-[#6B4423] font-medium mb-1">Artwork Reference</p>
-                      <p className="text-2xl font-bold text-[#3D2817] font-mono">{selectedImage.uniqueId}</p>
+                  <div className="mb-4 xs:mb-5 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 xs:gap-4 p-3 xs:p-4 bg-white/80 backdrop-blur-sm rounded-lg border-2 border-[#D4AF37]/50 shadow-md">
+                    <div className="flex-1">
+                      <p className="text-xs xs:text-sm text-[#6B4423] font-medium mb-1">Artwork Reference</p>
+                      <p className="text-lg xs:text-xl sm:text-2xl font-bold text-[#3D2817] font-mono">{selectedImage.uniqueId}</p>
                     </div>
                     <motion.button
                       onClick={() => copyToClipboard(selectedImage.uniqueId!)}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] hover:bg-[#C17C2E] text-[#3D2817] font-semibold rounded-lg transition-colors shadow-md"
+                      className="flex items-center gap-2 px-3 xs:px-4 py-2 bg-[#D4AF37] hover:bg-[#C17C2E] text-[#3D2817] text-xs xs:text-sm font-semibold rounded-lg transition-colors shadow-md touch-manipulation min-h-[44px]"
                     >
                       {copiedId === selectedImage.uniqueId ? (
                         <>
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                           <span>Copied!</span>
                         </>
                       ) : (
                         <>
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 xs:w-5 xs:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                           </svg>
                           <span>Copy ID</span>
@@ -420,45 +441,64 @@ export default function ArtCollections() {
                   </div>
                 )}
 
-                <h3 className="text-2xl font-bold text-[#3D2817] mb-2 font-serif">
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-[#3D2817] mb-2 font-serif">
                   Interested in this artwork?
                 </h3>
-                <p className="text-[#6B4423] mb-6">
+                <p className="text-sm xs:text-base text-[#6B4423] mb-4 xs:mb-5 sm:mb-6">
                   Contact us for information about availability, pricing, dimensions, medium, and artist details. 
                   {selectedImage.uniqueId && ` Please mention reference ${selectedImage.uniqueId} in your inquiry.`}
                 </p>
 
                 {/* Inquiry Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <motion.button
-                    onClick={() => handleInquiry(selectedImage)}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex-1 sm:flex-initial px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+                <div className="flex flex-col gap-3 xs:gap-4 mb-4 xs:mb-5 sm:mb-6">
+                  <Link
+                    href={`/contact?artwork=${encodeURIComponent(selectedImage.uniqueId || selectedImage.id)}&ref=${encodeURIComponent(selectedImage.uniqueId || '')}`}
+                    onClick={() => setSelectedImage(null)}
+                    className="block w-full"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Send Inquiry Email
-                  </motion.button>
-                  
-                  <motion.a
-                    href={`tel:+234123456789`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="flex-1 sm:flex-initial px-8 py-4 bg-white hover:bg-[#F5EFE7] text-[#3D2817] font-bold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg border-2 border-[#D4AF37] flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    Call Us
-                  </motion.a>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white text-sm xs:text-base font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 touch-manipulation min-h-[48px]"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span>Fill Inquiry Form</span>
+                    </motion.button>
+                  </Link>
+
+                  <div className="flex flex-col sm:flex-row gap-3 xs:gap-4">
+                    <motion.button
+                      onClick={() => handleInquiry(selectedImage)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 px-6 xs:px-8 py-3 xs:py-4 bg-white hover:bg-[#F5EFE7] text-[#3D2817] text-sm xs:text-base font-bold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg border-2 border-[#D4AF37] flex items-center justify-center gap-2 touch-manipulation min-h-[48px]"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                      <span>Send Email</span>
+                    </motion.button>
+                    
+                    <motion.a
+                      href={`tel:+234123456789`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex-1 px-6 xs:px-8 py-3 xs:py-4 bg-white hover:bg-[#F5EFE7] text-[#3D2817] text-sm xs:text-base font-bold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg border-2 border-[#D4AF37] flex items-center justify-center gap-2 touch-manipulation min-h-[48px]"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                      <span>Call Us</span>
+                    </motion.a>
+                  </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#D4AF37]/30">
-                  <p className="text-sm text-[#6B4423] mb-2">
+                <div className="pt-3 xs:pt-4 border-t border-[#D4AF37]/30">
+                  <p className="text-xs xs:text-sm text-[#6B4423] mb-2">
                     <span className="font-semibold">Email:</span>{' '}
-                    <a href="mailto:info@tundeodunladearts.com" className="text-[#C17C2E] hover:underline font-semibold">
+                    <a href="mailto:info@tundeodunladearts.com" className="text-[#C17C2E] hover:underline font-semibold break-all">
                       info@tundeodunladearts.com
                     </a>
                   </p>
