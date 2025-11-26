@@ -54,18 +54,20 @@ export default function ArtCollections() {
         }
         const data = await response.json();
         if (data.images && data.images.length > 0) {
-          console.log(`Loaded ${data.images.length} collection images from API`);
+          console.log(`✅ Loaded ${data.images.length} collection images from API`);
           setImages(data.images);
         } else {
           // Fallback to generated images if API returns empty
-          console.warn('API returned empty images array, using fallback');
+          console.warn('⚠️ API returned empty images array, using fallback');
           const collectionImages = generateCollectionImages();
+          console.log(`📸 Fallback: Generated ${collectionImages.length} images`);
           setImages(collectionImages);
         }
       } catch (error) {
-        console.error('Error loading collection images from API, using fallback:', error);
+        console.error('❌ Error loading collection images from API, using fallback:', error);
         // Fallback to generated images on error
         const collectionImages = generateCollectionImages();
+        console.log(`📸 Fallback: Generated ${collectionImages.length} images`);
         setImages(collectionImages);
       } finally {
         setIsLoading(false);
@@ -125,9 +127,16 @@ export default function ArtCollections() {
             </div>
           </motion.div>
 
+          {/* Debug Info - Remove in production */}
+          {images.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-red-600 font-semibold">No images found. Please check the API endpoint.</p>
+            </div>
+          )}
+
           {/* Masonry Grid Layout - Beautiful African-Themed Design */}
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 md:gap-7">
-            {images.map((image, index) => (
+            {images.length > 0 && images.map((image, index) => (
               <motion.div
                 key={image.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -150,20 +159,21 @@ export default function ArtCollections() {
                   }}
                   aria-label={`View details for artwork ${image.id}`}
                 >
-                  {/* Outer Border - Kente-inspired Stripes */}
-                  <div className="absolute -inset-1 bg-gradient-to-br from-[#D4AF37] via-[#C17C2E] to-[#8B4513] rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                  {/* Outer Border - Kente-inspired Stripes - Behind everything */}
+                  <div className="absolute -inset-1 bg-gradient-to-br from-[#D4AF37] via-[#C17C2E] to-[#8B4513] rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-300 blur-sm" style={{ zIndex: -1 }}></div>
                   
-                  {/* Middle Border - Geometric Pattern */}
+                  {/* Middle Border - Geometric Pattern - Behind main card */}
                   <div 
                     className="absolute -inset-0.5 rounded-xl opacity-40 group-hover:opacity-70 transition-opacity duration-300"
                     style={{
+                      zIndex: -1,
                       backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23D4AF37' stroke-width='2'%3E%3Cpath d='M0 0 L60 0 L60 60 L0 60 Z'/%3E%3Cpath d='M0 30 L60 30'/%3E%3Cpath d='M30 0 L30 60'/%3E%3Ccircle cx='15' cy='15' r='3'/%3E%3Ccircle cx='45' cy='15' r='3'/%3E%3Ccircle cx='15' cy='45' r='3'/%3E%3Ccircle cx='45' cy='45' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
                       backgroundSize: '30px 30px',
                     }}
                   ></div>
 
                   {/* Main Card */}
-                  <div className="relative bg-white rounded-lg shadow-xl group-hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-[#D4AF37]/30">
+                  <div className="relative bg-white rounded-lg shadow-xl group-hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-[#D4AF37]/30 z-10">
                     {/* Top Adire Pattern Border */}
                     <div 
                       className="h-2 bg-gradient-to-r from-transparent via-[#C17C2E] to-transparent"
@@ -174,8 +184,8 @@ export default function ArtCollections() {
                     ></div>
                     
                     {/* Image Container */}
-                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#F5EFE7] to-white p-1">
-                      <div className="relative w-full h-full rounded-sm overflow-hidden">
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#F5EFE7] to-white p-1 z-20">
+                      <div className="relative w-full h-full rounded-sm overflow-hidden bg-white">
                         <Image
                           src={image.src}
                           alt={`Art collection piece ${image.id}`}
@@ -184,6 +194,7 @@ export default function ArtCollections() {
                           quality={80}
                           className="object-cover transition-transform duration-500 group-hover:scale-110"
                           loading="lazy"
+                          priority={index < 6}
                           onError={(e) => {
                             console.error(`Failed to load image: ${image.src}`);
                             const target = e.target as HTMLImageElement;
@@ -250,8 +261,9 @@ export default function ArtCollections() {
                   </div>
                 </div>
               </motion.div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Inquiry CTA */}
           <motion.div
