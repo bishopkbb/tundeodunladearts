@@ -338,6 +338,10 @@ export default function ArtCollections() {
                   sizes="(max-width: 768px) 100vw, 80vw"
                   quality={95}
                   className="object-contain"
+                  unoptimized={true}
+                  onError={(e) => {
+                    console.error(`❌ Failed to load modal image: ${selectedImage.src}`);
+                  }}
                 />
               </div>
 
