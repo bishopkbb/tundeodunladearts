@@ -77,7 +77,7 @@ export const allArtworks: Artwork[] = [
     year: 2024,
     medium: 'Beaded Batik Quilt Tapestry',
     dimensions: '60 x 18"',
-    price: 44425000,
+    price: 4425000,
     category: 'Batik',
     image: '/Assets/basketball-lg.jpg',
     description: PLACEHOLDER_DESCRIPTION,

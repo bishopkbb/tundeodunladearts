@@ -87,7 +87,7 @@ export default function AboutSection() {
               </video>
             </div>
             <p className="text-sm text-[#6B4423] mt-4 text-center italic">
-              Take a visual journey through TOACC — where ancestral wisdom dances with contemporary creativity
+              Take a visual journey through TOACC where ancestral wisdom meets contemporary creativity
             </p>
           </motion.div>
 
@@ -99,11 +99,11 @@ export default function AboutSection() {
               </p>
               
               <p className="text-base md:text-lg">
-                Founded in Ibadan by master artist <strong className="text-[#8B4513]">Prince Tunde Odunlade</strong>, TOACC is a vibrant creative space where tradition meets innovation. Here, Yoruba indigo patterns, music, and craftsmanship come together to create powerful expressions of African identity.
+                Founded in Ibadan by master artist <strong className="text-[#8B4513]">Prince Tunde Odunlade</strong>, TOACC brings together tradition and innovation in one vibrant creative space. Yoruba indigo patterns blend with music and craftsmanship to express the richness of African identity.
               </p>
               
               <p className="text-base md:text-lg">
-                Every wall, every sound, and every stroke tells a story. A story of purpose, connection, and pride. Our mission is to inspire, unite, and celebrate the soul of our people through art that heals and transforms.
+                Every wall tells a story. Every sound carries meaning. Every stroke speaks of purpose, connection, and pride. We believe art has the power to heal and transform. That&apos;s why we work to inspire, unite, and celebrate the soul of our people.
               </p>
               
               <p className="text-lg md:text-xl font-serif italic text-[#8B4513] pt-4">

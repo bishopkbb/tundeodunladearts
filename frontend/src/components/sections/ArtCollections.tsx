@@ -9,16 +9,37 @@ interface CollectionImage {
   id: string;
 }
 
-// Generate image paths for all picturedoscope images
+// Generate image paths for all picturedoscope images - fallback if API fails
 const generateCollectionImages = (): CollectionImage[] => {
   const images: CollectionImage[] = [];
-  // Generate paths for numbered images (WA0300 to WA0376)
+  
+  // Generate all possible image paths based on file naming patterns
+  // Date range: 20251026 (WA0053-WA0059), 20251121 (WA0042+), 20251125 (WA0271-WA0376)
+  
+  // 20251125 images (WA0271 to WA0376)
   for (let i = 376; i >= 271; i--) {
     images.push({
-      id: `collection-${i}`,
+      id: `collection-20251125-${i}`,
       src: `/Assets/picturedoscope/IMG-20251125-WA${String(i).padStart(4, '0')}.jpg`,
     });
   }
+  
+  // 20251121 images (WA0042 onwards - estimate range based on file count)
+  for (let i = 100; i >= 42; i--) {
+    images.push({
+      id: `collection-20251121-${i}`,
+      src: `/Assets/picturedoscope/IMG-20251121-WA${String(i).padStart(4, '0')}.jpg`,
+    });
+  }
+  
+  // 20251026 images (WA0053 to WA0059)
+  for (let i = 59; i >= 53; i--) {
+    images.push({
+      id: `collection-20251026-${i}`,
+      src: `/Assets/picturedoscope/IMG-20251026-WA${String(i).padStart(4, '0')}.jpg`,
+    });
+  }
+  
   return images;
 };
 
@@ -33,10 +54,11 @@ export default function ArtCollections() {
       try {
         const response = await fetch('/api/collections/images');
         if (!response.ok) {
-          throw new Error('Failed to fetch images');
+          throw new Error(`Failed to fetch images: ${response.status}`);
         }
         const data = await response.json();
         if (data.images && data.images.length > 0) {
+          console.log(`Loaded ${data.images.length} collection images from API`);
           setImages(data.images);
         } else {
           // Fallback to generated images if API returns empty
@@ -45,7 +67,7 @@ export default function ArtCollections() {
           setImages(collectionImages);
         }
       } catch (error) {
-        console.error('Error loading collection images:', error);
+        console.error('Error loading collection images from API, using fallback:', error);
         // Fallback to generated images on error
         const collectionImages = generateCollectionImages();
         setImages(collectionImages);
@@ -83,51 +105,40 @@ export default function ArtCollections() {
     <>
       <section className="py-16 md:py-24 px-4 md:px-8 bg-gradient-to-b from-[#F5EFE7] to-white">
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 md:mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#3D2817] mb-4 font-serif">
-              Art Collections
-            </h2>
-            <p className="text-lg md:text-xl text-[#6B4423] max-w-3xl mx-auto">
-              Explore our curated collection of unique artworks. Each piece is available for inquiry.
-            </p>
-          </motion.div>
 
-          {/* Masonry Grid Layout */}
+          {/* Masonry Grid Layout - Performance Optimized */}
           <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6">
             {images.map((image, index) => (
               <motion.div
                 key={image.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.4, delay: index * 0.03 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.2 }}
                 className="mb-4 md:mb-6 break-inside-avoid group cursor-pointer"
                 onClick={() => setSelectedImage(image)}
               >
-                <div className="relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 bg-white">
+                <div className="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white">
                   <div className="relative aspect-square overflow-hidden">
                     <Image
                       src={image.src}
                       alt={`Art collection piece ${image.id}`}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                      quality={85}
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      quality={75}
+                      className="object-cover"
                       loading="lazy"
+                      onError={(e) => {
+                        console.error(`Failed to load image: ${image.src}`);
+                        const target = e.target as HTMLImageElement;
+                        if (target && target.parentElement) {
+                          target.parentElement.style.display = 'none';
+                        }
+                      }}
                     />
-                    {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <div className="text-center text-white p-4">
-                        <p className="text-sm font-semibold mb-2">Click to view</p>
-                        <p className="text-xs">Tap for details</p>
-                      </div>
+                    {/* Simplified overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
+                      <p className="text-white text-sm font-semibold">View</p>
                     </div>
                   </div>
                 </div>

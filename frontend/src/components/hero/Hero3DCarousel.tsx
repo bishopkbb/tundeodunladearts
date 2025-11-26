@@ -447,6 +447,7 @@ export default function Hero3DCarousel() {
       style={{ 
         touchAction: selectedImage === null ? 'pan-y' : 'none', // Allow scrolling when modal is closed
         overflow: 'visible', // Don't clip content
+        pointerEvents: isMobile && selectedImage === null ? 'auto' : 'auto', // Allow scrolling on mobile
       }}
     >
       {/* Layered Background */}
@@ -499,29 +500,39 @@ export default function Hero3DCarousel() {
         />
       </div>
 
-      {/* Canvas with 3D Carousel */}
-      <Canvas
-        camera={{ position: [0, 2, cameraDistance], fov: cameraFOV }}
-        dpr={isMobile ? Math.min(window.devicePixelRatio, 1.2) : Math.min(window.devicePixelRatio, 2)} // Further limit pixel ratio
-        gl={{
-          antialias: !isMobile, // Disable antialiasing on mobile for performance
-          alpha: true,
-          powerPreference: isMobile ? 'low-power' : 'high-performance',
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.2,
-          stencil: false, // Disable stencil buffer for performance
-          depth: true,
-        }}
-        shadows={!isMobile} // Disable shadows on mobile for performance
-        performance={{ min: 0.5 }} // Lower performance target for smoother frame rate
-        className={`relative z-10 transition-opacity duration-300 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
+      {/* Canvas with 3D Carousel - Wrapped to allow mobile scrolling */}
+      <div 
+        className={`relative z-10 w-full h-full ${selectedImage !== null ? 'pointer-events-none' : ''}`}
         style={{ 
-          pointerEvents: selectedImage !== null ? 'none' : 'auto', // Allow pointer events for clicks when modal is closed
-          touchAction: isMobile && selectedImage === null ? 'pan-y' : selectedImage !== null ? 'none' : 'auto', // Allow vertical scrolling on mobile when modal is closed
+          touchAction: selectedImage === null ? 'pan-y' : 'none', // Allow vertical scrolling when modal closed
         }}
       >
+        <Canvas
+          camera={{ position: [0, 2, cameraDistance], fov: cameraFOV }}
+          dpr={isMobile ? Math.min(window.devicePixelRatio, 1.2) : Math.min(window.devicePixelRatio, 2)} // Further limit pixel ratio
+          gl={{
+            antialias: !isMobile, // Disable antialiasing on mobile for performance
+            alpha: true,
+            powerPreference: isMobile ? 'low-power' : 'high-performance',
+            toneMapping: THREE.ACESFilmicToneMapping,
+            toneMappingExposure: 1.2,
+            stencil: false, // Disable stencil buffer for performance
+            depth: true,
+          }}
+          shadows={!isMobile} // Disable shadows on mobile for performance
+          performance={{ min: 0.5 }} // Lower performance target for smoother frame rate
+          className={`transition-opacity duration-300 w-full h-full ${selectedImage !== null ? 'opacity-30' : 'opacity-100'}`}
+          style={{ 
+            pointerEvents: selectedImage !== null ? 'none' : isMobile ? 'none' : 'auto', // Disable pointer events on mobile to allow scrolling
+            touchAction: 'none', // Canvas doesn't handle touch, wrapper handles scrolling
+          }}
+        >
         <Lights isMobile={isMobile} />
-        <CarouselGroup isPaused={selectedImage !== null} onFrameClick={setSelectedImage} mobileScale={mobileScale} />
+        <CarouselGroup 
+          isPaused={selectedImage !== null} 
+          onFrameClick={setSelectedImage}
+          mobileScale={mobileScale} 
+        />
         <OrbitControls
           enabled={selectedImage === null && !isMobile} // Disable orbit controls on mobile
           enableZoom={!isMobile}
@@ -535,7 +546,8 @@ export default function Hero3DCarousel() {
           autoRotate={false}
         />
         <fog attach="fog" args={['#8B4513', isMobile ? 24 : 28, isMobile ? 40 : 45]} />
-      </Canvas>
+        </Canvas>
+      </div>
 
       {/* Lightbox Overlay */}
       <AnimatePresence>
