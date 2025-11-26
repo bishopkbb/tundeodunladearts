@@ -34,13 +34,7 @@ const generateCollectionImages = (): CollectionImage[] => {
     }
   }
   
-  // 20251026 images (WA0053 to WA0059)
-  for (let i = 59; i >= 53; i--) {
-    images.push({
-      id: `collection-20251026-${i}`,
-      src: `/Assets/picturedoscope/IMG-20251026-WA${String(i).padStart(4, '0')}.jpg`,
-    });
-  }
+  // 20251026 images excluded (WA0053 to WA0059 are removed)
   
   return images;
 };
@@ -108,40 +102,151 @@ export default function ArtCollections() {
       <section className="py-16 md:py-24 px-4 md:px-8 bg-gradient-to-b from-[#F5EFE7] to-white">
         <div className="max-w-7xl mx-auto">
 
-          {/* Masonry Grid Layout - Performance Optimized */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6">
+          {/* Click Indicator Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-8 text-center"
+          >
+            <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#D4AF37]/20 via-[#C17C2E]/20 to-[#D4AF37]/20 rounded-full border-2 border-[#D4AF37]/40 backdrop-blur-sm">
+              <svg className="w-5 h-5 text-[#8B4513]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <p className="text-sm sm:text-base font-semibold text-[#3D2817]">
+                Click on any artwork to view details
+              </p>
+              <svg className="w-5 h-5 text-[#8B4513]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+          </motion.div>
+
+          {/* Masonry Grid Layout - Beautiful African-Themed Design */}
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 md:gap-7">
             {images.map((image, index) => (
               <motion.div
                 key={image.id}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.2 }}
-                className="mb-4 md:mb-6 break-inside-avoid group cursor-pointer"
-                onClick={() => setSelectedImage(image)}
+                transition={{ duration: 0.4, delay: index * 0.02 }}
+                className="mb-5 md:mb-7 break-inside-avoid group"
               >
-                <div className="relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 bg-white">
-                  <div className="relative aspect-square overflow-hidden">
-                    <Image
-                      src={image.src}
-                      alt={`Art collection piece ${image.id}`}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                      quality={75}
-                      className="object-cover"
-                      loading="lazy"
-                      onError={(e) => {
-                        console.error(`Failed to load image: ${image.src}`);
-                        const target = e.target as HTMLImageElement;
-                        if (target && target.parentElement) {
-                          target.parentElement.style.display = 'none';
-                        }
+                {/* African Pattern Frame Container */}
+                <div 
+                  className="relative cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1"
+                  onClick={() => setSelectedImage(image)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setSelectedImage(image);
+                    }
+                  }}
+                  aria-label={`View details for artwork ${image.id}`}
+                >
+                  {/* Outer Border - Kente-inspired Stripes */}
+                  <div className="absolute -inset-1 bg-gradient-to-br from-[#D4AF37] via-[#C17C2E] to-[#8B4513] rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
+                  
+                  {/* Middle Border - Geometric Pattern */}
+                  <div 
+                    className="absolute -inset-0.5 rounded-xl opacity-40 group-hover:opacity-70 transition-opacity duration-300"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23D4AF37' stroke-width='2'%3E%3Cpath d='M0 0 L60 0 L60 60 L0 60 Z'/%3E%3Cpath d='M0 30 L60 30'/%3E%3Cpath d='M30 0 L30 60'/%3E%3Ccircle cx='15' cy='15' r='3'/%3E%3Ccircle cx='45' cy='15' r='3'/%3E%3Ccircle cx='15' cy='45' r='3'/%3E%3Ccircle cx='45' cy='45' r='3'/%3E%3C/g%3E%3C/svg%3E")`,
+                      backgroundSize: '30px 30px',
+                    }}
+                  ></div>
+
+                  {/* Main Card */}
+                  <div className="relative bg-white rounded-lg shadow-xl group-hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-[#D4AF37]/30">
+                    {/* Top Adire Pattern Border */}
+                    <div 
+                      className="h-2 bg-gradient-to-r from-transparent via-[#C17C2E] to-transparent"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='8' viewBox='0 0 40 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37'%3E%3Ccircle cx='5' cy='4' r='1.5'/%3E%3Ccircle cx='15' cy='4' r='1.5'/%3E%3Ccircle cx='25' cy='4' r='1.5'/%3E%3Ccircle cx='35' cy='4' r='1.5'/%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundSize: '20px 8px',
                       }}
-                    />
-                    {/* Simplified overlay */}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center pointer-events-none">
-                      <p className="text-white text-sm font-semibold">View</p>
+                    ></div>
+                    
+                    {/* Image Container */}
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#F5EFE7] to-white p-1">
+                      <div className="relative w-full h-full rounded-sm overflow-hidden">
+                        <Image
+                          src={image.src}
+                          alt={`Art collection piece ${image.id}`}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                          quality={80}
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          loading="lazy"
+                          onError={(e) => {
+                            console.error(`Failed to load image: ${image.src}`);
+                            const target = e.target as HTMLImageElement;
+                            if (target && target.parentElement) {
+                              target.parentElement.style.display = 'none';
+                            }
+                          }}
+                        />
+                        
+                        {/* Hover Overlay with African Pattern */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#8B4513]/90 via-[#C17C2E]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          {/* Geometric Pattern Overlay */}
+                          <div 
+                            className="absolute inset-0 opacity-30"
+                            style={{
+                              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23F5EFE7' stroke-width='2' stroke-opacity='0.5'%3E%3Cpath d='M0 50 L100 50'/%3E%3Cpath d='M50 0 L50 100'/%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3Ccircle cx='50' cy='50' r='35'/%3E%3C/g%3E%3C/svg%3E")`,
+                              backgroundSize: '60px 60px',
+                            }}
+                          ></div>
+                          
+                          {/* Click to View Message */}
+                          <div className="relative z-10 text-center px-4">
+                            <div className="mb-2 inline-block p-2 bg-white/20 backdrop-blur-md rounded-full">
+                              <svg className="w-6 h-6 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                            </div>
+                            <p className="text-white font-bold text-sm md:text-base drop-shadow-lg">
+                              Click to View
+                            </p>
+                            <p className="text-white/90 text-xs md:text-sm mt-1 drop-shadow-md">
+                              Tap for details
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Bottom Adire Pattern Border */}
+                    <div 
+                      className="h-2 bg-gradient-to-r from-transparent via-[#C17C2E] to-transparent"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='8' viewBox='0 0 40 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37'%3E%3Ccircle cx='5' cy='4' r='1.5'/%3E%3Ccircle cx='15' cy='4' r='1.5'/%3E%3Ccircle cx='25' cy='4' r='1.5'/%3E%3Ccircle cx='35' cy='4' r='1.5'/%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundSize: '20px 8px',
+                      }}
+                    ></div>
+
+                    {/* Side Pattern Accents */}
+                    <div 
+                      className="absolute left-0 top-0 bottom-0 w-1 opacity-50 group-hover:opacity-100 transition-opacity"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='4' height='40' viewBox='0 0 4 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37'%3E%3Crect x='0' y='5' width='2' height='10'/%3E%3Crect x='0' y='25' width='2' height='10'/%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundSize: '4px 20px',
+                      }}
+                    ></div>
+                    <div 
+                      className="absolute right-0 top-0 bottom-0 w-1 opacity-50 group-hover:opacity-100 transition-opacity"
+                      style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='4' height='40' viewBox='0 0 4 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4AF37'%3E%3Crect x='2' y='5' width='2' height='10'/%3E%3Crect x='2' y='25' width='2' height='10'/%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundSize: '4px 20px',
+                      }}
+                    ></div>
                   </div>
                 </div>
               </motion.div>
