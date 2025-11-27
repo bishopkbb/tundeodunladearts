@@ -41,25 +41,25 @@ His life motto encapsulates his fearless creative spirit: "He who does not attem
   },
   {
     id: 2,
-    name: 'Yinka Adeyemi',
-    role: 'Master Artist & Mentor',
-    specialty: 'Traditional African Art, Sculpture, Textile Design',
+    name: 'Olalekan Taofeek',
+    role: 'Artist',
+    specialty: 'Portraiture, Mosaic Painting, Pen & Ink Design, Framing, Graphic Design',
     image: '/Assets/picturedoscope/IMG-20251121-WA0050.jpg',
-    bio: `Yinka Adeyemi is a distinguished Nigerian artist and master craftsman, renowned for his deep commitment to preserving and advancing traditional African artistic techniques. As one of the foundational figures of the Oshogbo school of arts, Adeyemi has been instrumental in training and mentoring generations of artists, including the esteemed Prince Tunde Odunlade.
+    bio: `Olalekan Taofeek originates from Ilobu, Irepodun Local Government Area, Osun State, Nigeria. He was born into the culturally rich Mogba-Fun-Sango family compound, a place steeped in Yoruba tradition that has deeply influenced his artistic journey.
 
-Born into a family with rich cultural heritage, Adeyemi's artistic journey began in the vibrant artistic community of Osogbo, where he developed his expertise in traditional Yoruba art forms. His mastery spans across multiple disciplines including sculpture, textile design, and ceremonial art, with each piece reflecting profound understanding of Yoruba cosmology and cultural narratives.
+His educational foundation was laid at St. Theresa Primary School, Ilobu, followed by Ilobu Secondary School Commercial Grammar School. From a young age, he showed a natural propensity and passion for art and craft, which naturally led him to pursue a career in the creative field.
 
-Adeyemi's work is characterized by its authentic representation of African identity, blending traditional motifs with contemporary relevance. His sculptures, often carved from indigenous materials, tell stories of ancestral wisdom, community values, and spiritual connections that define the Yoruba worldview.
+To refine his skills and deepen his artistic knowledge, Olalekan apprenticed under the esteemed artist Isiaka Azeez Oyeyemi, the founder of MAO Arts Gallery in Osogbo. This mentorship proved transformative, enabling him to master various art forms including portraiture, mosaic painting, pen and ink design, framing, and graphic design.
 
-Throughout his career, Adeyemi has dedicated himself to artistic education and cultural preservation. His mentorship has shaped countless artists who now carry forward the legacy of Nigerian artistic excellence both locally and internationally. His influence extends beyond the studio, as he actively participates in cultural festivals, art workshops, and community initiatives that promote African art and culture.
+Olalekan's artistic expertise has garnered international recognition, with his works showcased in exhibitions both nationally and globally. He extends heartfelt gratitude to Prince Tunde Odunlade for invaluable guidance and mentorship in navigating the art world, acknowledging Prince Tunde's support in showcasing his work to diverse audiences around the world.
 
-Adeyemi's commitment to artistic excellence and cultural preservation makes him a cornerstone of the Nigerian art community. His works serve as bridges between the past and present, ensuring that traditional knowledge and artistic techniques continue to inspire and guide future generations.`,
+Through his art, Olalekan strives to celebrate his cultural heritage and inspire a global audience to appreciate the beauty and richness of African art and culture. His work serves as a bridge between traditional Yoruba artistic expression and contemporary artistic dialogue, contributing to the vibrant tapestry of Nigerian contemporary art.`,
     achievements: [
-      'Master Artist, Oshogbo School of Arts',
-      'Mentor to Prince Tunde Odunlade and numerous contemporary artists',
-      'Cultural Preservation Advocate',
-      'Featured in major Nigerian art exhibitions',
-      'Works in private collections across Africa and internationally',
+      'Apprenticed under Isiaka Azeez Oyeyemi, Founder of MAO Arts Gallery, Osogbo',
+      'International exhibitions and recognition',
+      'Master of portraiture, mosaic painting, and graphic design',
+      'Mentored by Prince Tunde Odunlade',
+      'Works showcased nationally and globally',
     ],
   },
   {
