@@ -74,20 +74,18 @@ const swipePower = (offset: number, velocity: number) => {
 export default function GalleryHighlights() {
   const [[page, direction], setPage] = useState([0, 0]);
   const [isHovered, setIsHovered] = useState(false);
-  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
-  const [currentImageSrc, setCurrentImageSrc] = useState<string>('');
+  const [failedImages, setFailedImages] = useState<Map<number, string>>(new Map());
 
   const imageIndex = ((page % galleryImages.length) + galleryImages.length) % galleryImages.length;
   const currentImage = galleryImages[imageIndex];
-
-  // Update image source when index changes
-  useEffect(() => {
-    if (imageErrors.has(imageIndex)) {
-      setCurrentImageSrc(currentImage.fallback);
-    } else {
-      setCurrentImageSrc(currentImage.src);
+  
+  // Get the image source, using fallback if primary failed
+  const getImageSrc = (index: number) => {
+    if (failedImages.has(index)) {
+      return failedImages.get(index) || galleryImages[index].fallback;
     }
-  }, [imageIndex, imageErrors, currentImage.src, currentImage.fallback]);
+    return galleryImages[index].src;
+  };
 
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
@@ -172,22 +170,25 @@ export default function GalleryHighlights() {
               >
                 <div className="relative w-full h-full">
                   <Image
-                    src={currentImageSrc || currentImage.src}
+                    key={`${imageIndex}-${failedImages.has(imageIndex) ? 'fallback' : 'primary'}`}
+                    src={getImageSrc(imageIndex)}
                     alt={currentImage.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 80vw"
                     quality={90}
                     priority
                     className="object-cover"
-                    onError={() => {
-                      console.error(`❌ Failed to load image: ${currentImageSrc || currentImage.src} (Index: ${imageIndex})`);
-                      // Try fallback if primary image fails
-                      if (currentImageSrc === currentImage.src && currentImage.fallback) {
+                    onError={(e) => {
+                      const currentSrc = getImageSrc(imageIndex);
+                      console.error(`❌ Failed to load image: ${currentSrc} (Index: ${imageIndex})`);
+                      
+                      // If primary image failed, try fallback
+                      if (!failedImages.has(imageIndex) && currentImage.fallback) {
                         console.log(`🔄 Trying fallback image: ${currentImage.fallback}`);
-                        setCurrentImageSrc(currentImage.fallback);
+                        setFailedImages(prev => new Map(prev).set(imageIndex, currentImage.fallback));
                       } else {
-                        // Mark as error if fallback also fails
-                        setImageErrors(prev => new Set(prev).add(imageIndex));
+                        // Both failed, show placeholder
+                        console.error(`❌ Both primary and fallback failed for index ${imageIndex}`);
                       }
                     }}
                   />
