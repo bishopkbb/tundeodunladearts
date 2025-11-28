@@ -209,7 +209,7 @@ export default function NewsletterSection() {
 
             {/* TikTok */}
             <motion.a
-              href="https://tiktok.com/tundeodunladearts0"
+              href="https://www.tiktok.com/@tunde.odunlade.ar"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.15, y: -2 }}

@@ -139,7 +139,7 @@ export const structuredData = {
   sameAs: [
     'https://instagram.com/tundeodunladearts',
     'https://facebook.com/tundeodunladearts',
-    'https://tiktok.com/tundeodunladearts0',
+    'https://www.tiktok.com/@tunde.odunlade.ar',
   ],
 };
 

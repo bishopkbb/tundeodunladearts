@@ -271,7 +271,7 @@ export default function FeaturedExhibitions() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[10000] flex items-center justify-center p-1 xs:p-2 sm:p-3 md:p-4 pointer-events-none"
+              className="fixed inset-0 z-[10000] flex items-center justify-center p-0 sm:p-2 md:p-4 pointer-events-none"
               style={{
                 position: 'fixed',
                 top: 0,
@@ -281,19 +281,19 @@ export default function FeaturedExhibitions() {
               }}
             >
               <motion.div
-                initial={{ scale: 0.9, y: 20 }}
+                initial={{ scale: 0.95, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.9, y: 20 }}
-                className="bg-white rounded-lg xs:rounded-xl sm:rounded-2xl w-full max-w-[98vw] xs:max-w-[95vw] sm:max-w-[90vw] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[98vh] xs:max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh] overflow-y-auto shadow-2xl relative touch-manipulation pointer-events-auto"
+                exit={{ scale: 0.95, y: 20 }}
+                className="bg-white rounded-none sm:rounded-xl md:rounded-2xl w-full h-full sm:h-auto sm:max-w-[90vw] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl sm:max-h-[90vh] md:max-h-[85vh] overflow-y-auto shadow-2xl relative touch-manipulation pointer-events-auto flex flex-col"
                 onClick={(e) => e.stopPropagation()}
                 style={{
-                  maxHeight: 'calc(100vh - 0.5rem)',
+                  maxHeight: '100vh',
                 }}
               >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedExhibition(null)}
-                className="sticky top-1 xs:top-2 sm:top-4 right-1 xs:right-2 sm:right-4 ml-auto w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-full bg-[#D4AF37] hover:bg-[#C17C2E] active:bg-[#8B4513] text-white transition-colors flex items-center justify-center z-10 shadow-lg touch-manipulation"
+                className="absolute top-2 xs:top-3 sm:top-4 right-2 xs:right-3 sm:right-4 w-9 h-9 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-full bg-[#D4AF37] hover:bg-[#C17C2E] active:bg-[#8B4513] text-white transition-colors flex items-center justify-center z-20 shadow-lg touch-manipulation"
               >
                 <svg className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
