@@ -53,7 +53,7 @@ function HeroCTA() {
       {/* Handwritten Text with Pen Animation - Mobile Only */}
       <div className="relative text-center">
         <h1 
-          className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold leading-tight xs:leading-[1.2] break-words"
+          className="text-xl xs:text-2xl sm:text-3xl md:text-4xl font-bold leading-tight xs:leading-[1.2] break-words"
           style={{
             fontFamily: 'var(--font-dancing), "Dancing Script", "Brush Script MT", cursive',
             color: '#3D2817',

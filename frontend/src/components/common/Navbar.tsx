@@ -33,35 +33,41 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lightning-fast mobile menu toggle - truly instant with flushSync
-  const toggleMobileMenu = useCallback(() => {
-    // Get current state first
+  // Ultra-fast mobile menu toggle - maximum performance with immediate DOM updates
+  const toggleMobileMenu = useCallback((e?: React.MouseEvent | React.TouchEvent) => {
+    // Prevent default to avoid any browser delay
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    // Get current state synchronously
     const currentState = isMobileMenuOpen;
     const newState = !currentState;
     
-    // Apply DOM changes IMMEDIATELY before React re-renders
+    // Update DOM INSTANTLY - before React even processes the event
     if (newState) {
-      // Opening menu - lock scroll instantly
+      // Opening menu - lock scroll immediately
       const scrollY = window.scrollY;
-      document.body.style.setProperty('position', 'fixed', 'important');
-      document.body.style.setProperty('top', `-${scrollY}px`, 'important');
-      document.body.style.setProperty('width', '100%', 'important');
-      document.body.style.setProperty('overflow', 'hidden', 'important');
-      document.body.style.setProperty('touch-action', 'none', 'important');
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     } else {
-      // Closing menu - unlock scroll instantly
+      // Closing menu - unlock scroll immediately
       const scrollY = document.body.style.top;
-      document.body.style.removeProperty('position');
-      document.body.style.removeProperty('top');
-      document.body.style.removeProperty('width');
-      document.body.style.removeProperty('overflow');
-      document.body.style.removeProperty('touch-action');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
       if (scrollY) {
         window.scrollTo(0, parseInt(scrollY || '0') * -1);
       }
     }
     
-    // Force synchronous state update using flushSync for instant DOM update
+    // Update React state synchronously for instant UI update
     flushSync(() => {
       setIsMobileMenuOpen(newState);
     });
@@ -189,15 +195,18 @@ function Navbar() {
                 )}
               </button>
 
-              {/* Mobile Menu Button - Lightning-fast, zero delay */}
+              {/* Mobile Menu Button - Ultra-fast response with onMouseDown and onTouchStart */}
               <button
-                onClick={toggleMobileMenu}
-                className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                onMouseDown={toggleMobileMenu}
+                onTouchStart={toggleMobileMenu}
+                onClick={(e) => e.preventDefault()}
+                className="p-2.5 text-[#8B4513] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
                 style={{ 
                   transition: 'none',
-                  willChange: 'auto',
+                  WebkitTapHighlightColor: 'transparent',
+                  touchAction: 'manipulation',
                 }}
               >
                 {/* Instant CSS-only icon - no transitions, pure state-based transforms */}
@@ -239,12 +248,15 @@ function Navbar() {
           {/* Backdrop - Instant display, no backdrop blur for performance */}
           <div
             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onClick={toggleMobileMenu}
+            onMouseDown={toggleMobileMenu}
+            onTouchStart={toggleMobileMenu}
+            onClick={(e) => e.preventDefault()}
             style={{ 
               animation: 'none',
               transition: 'none',
               opacity: 1,
-              willChange: 'auto',
+              WebkitTapHighlightColor: 'transparent',
+              touchAction: 'manipulation',
             }}
           />
 
@@ -280,9 +292,16 @@ function Navbar() {
                     </div>
                   </div>
                   <button
-                    onClick={toggleMobileMenu}
-                    className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg transition-colors duration-100 touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    onMouseDown={toggleMobileMenu}
+                    onTouchStart={toggleMobileMenu}
+                    onClick={(e) => e.preventDefault()}
+                    className="p-2.5 text-[#8B4513] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                     aria-label="Close menu"
+                    style={{
+                      transition: 'none',
+                      WebkitTapHighlightColor: 'transparent',
+                      touchAction: 'manipulation',
+                    }}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
