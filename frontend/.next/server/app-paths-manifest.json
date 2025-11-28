@@ -1,7 +1,7 @@
 {
   "/checkout/page": "app/checkout/page.js",
-  "/gallery/page": "app/gallery/page.js",
-  "/about/page": "app/about/page.js",
+  "/exhibitions/page": "app/exhibitions/page.js",
   "/shop/page": "app/shop/page.js",
-  "/exhibitions/page": "app/exhibitions/page.js"
+  "/gallery/page": "app/gallery/page.js",
+  "/about/page": "app/about/page.js"
 }
