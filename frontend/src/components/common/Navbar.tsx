@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, memo } from 'react';
+import { flushSync } from 'react-dom';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -32,40 +33,39 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Lightning-fast mobile menu toggle - zero delays, instant response
+  // Lightning-fast mobile menu toggle - truly instant with flushSync
   const toggleMobileMenu = useCallback(() => {
-    // Immediately toggle state synchronously
-    setIsMobileMenuOpen(prev => {
-      const newState = !prev;
-      
-      // Apply scroll lock INSTANTLY before any React re-render
-      if (newState) {
-        // Opening menu - lock scroll immediately
-        const scrollY = window.scrollY;
-        document.body.style.setProperty('position', 'fixed', 'important');
-        document.body.style.setProperty('top', `-${scrollY}px`, 'important');
-        document.body.style.setProperty('width', '100%', 'important');
-        document.body.style.setProperty('overflow', 'hidden', 'important');
-        document.body.style.setProperty('touch-action', 'none', 'important');
-      } else {
-        // Closing menu - unlock scroll immediately
-        const scrollY = document.body.style.top;
-        document.body.style.removeProperty('position');
-        document.body.style.removeProperty('top');
-        document.body.style.removeProperty('width');
-        document.body.style.removeProperty('overflow');
-        document.body.style.removeProperty('touch-action');
-        if (scrollY) {
-          // Use requestAnimationFrame for smooth scroll restore
-          requestAnimationFrame(() => {
-            window.scrollTo(0, parseInt(scrollY || '0') * -1);
-          });
-        }
+    // Get current state first
+    const currentState = isMobileMenuOpen;
+    const newState = !currentState;
+    
+    // Apply DOM changes IMMEDIATELY before React re-renders
+    if (newState) {
+      // Opening menu - lock scroll instantly
+      const scrollY = window.scrollY;
+      document.body.style.setProperty('position', 'fixed', 'important');
+      document.body.style.setProperty('top', `-${scrollY}px`, 'important');
+      document.body.style.setProperty('width', '100%', 'important');
+      document.body.style.setProperty('overflow', 'hidden', 'important');
+      document.body.style.setProperty('touch-action', 'none', 'important');
+    } else {
+      // Closing menu - unlock scroll instantly
+      const scrollY = document.body.style.top;
+      document.body.style.removeProperty('position');
+      document.body.style.removeProperty('top');
+      document.body.style.removeProperty('width');
+      document.body.style.removeProperty('overflow');
+      document.body.style.removeProperty('touch-action');
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
       }
-      
-      return newState;
+    }
+    
+    // Force synchronous state update using flushSync for instant DOM update
+    flushSync(() => {
+      setIsMobileMenuOpen(newState);
     });
-  }, []);
+  }, [isMobileMenuOpen]);
 
   return (
     <>
@@ -236,26 +236,28 @@ function Navbar() {
       {/* Mobile Menu Overlay - Instant display, zero animations */}
       {isMobileMenuOpen && (
         <>
-          {/* Backdrop - Instant display */}
+          {/* Backdrop - Instant display, no backdrop blur for performance */}
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
             onClick={toggleMobileMenu}
             style={{ 
               animation: 'none',
               transition: 'none',
               opacity: 1,
+              willChange: 'auto',
             }}
           />
 
-          {/* Menu Panel - Instant appearance, no animations */}
+          {/* Menu Panel - Instant appearance, no animations, GPU accelerated */}
           <div
             className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
             style={{
-              transform: 'translateX(0) translateZ(0)',
+              transform: 'translateX(0)',
               backfaceVisibility: 'hidden',
               animation: 'none',
               transition: 'none',
               opacity: 1,
+              willChange: 'auto',
             }}
           >
               {/* Menu Header */}

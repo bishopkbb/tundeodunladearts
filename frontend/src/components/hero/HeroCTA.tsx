@@ -44,7 +44,7 @@ function HeroCTA() {
 
   return (
     <motion.div
-      className="absolute left-1/2 top-16 xs:top-20 sm:top-24 transform -translate-x-1/2 z-30 pointer-events-none w-full max-w-4xl px-4 xs:px-6 sm:px-8 md:hidden"
+      className="absolute left-1/2 top-28 xs:top-32 sm:top-36 transform -translate-x-1/2 z-30 pointer-events-none w-full max-w-[95%] xs:max-w-[90%] sm:max-w-4xl px-3 xs:px-4 sm:px-6 md:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.3 }}
@@ -53,7 +53,7 @@ function HeroCTA() {
       {/* Handwritten Text with Pen Animation - Mobile Only */}
       <div className="relative text-center">
         <h1 
-          className="text-lg xs:text-xl sm:text-2xl font-bold leading-[1.2]"
+          className="text-base xs:text-lg sm:text-xl md:text-2xl font-bold leading-tight xs:leading-[1.2] break-words"
           style={{
             fontFamily: 'var(--font-dancing), "Dancing Script", "Brush Script MT", cursive',
             color: '#3D2817',
