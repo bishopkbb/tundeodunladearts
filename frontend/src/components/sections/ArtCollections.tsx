@@ -401,7 +401,7 @@ export default function ArtCollections() {
                   quality={95}
                   className="object-contain"
                   unoptimized={true}
-                  onError={(e) => {
+                  onError={() => {
                     console.error(`❌ Failed to load modal image: ${selectedImage.src}`);
                   }}
                 />
