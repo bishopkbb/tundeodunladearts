@@ -86,8 +86,8 @@ function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center h-20">
             {/* Logo & Brand */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-14 h-14 rounded-full overflow-hidden ring-2 ring-[#D4AF37] group-hover:ring-4 transition-all duration-300">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+              <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden ring-2 ring-[#D4AF37] group-hover:ring-4 transition-all duration-300 flex-shrink-0">
                 <Image
                   src="/Assets/logo.png"
                   alt="TOACC Logo"
@@ -98,14 +98,14 @@ function Navbar() {
                   className="object-cover"
                 />
               </div>
-              <div className="hidden sm:block">
-                <p className="text-xl font-bold text-[#8B4513] leading-tight group-hover:text-[#C17C2E] transition-colors">
+              <div className="flex flex-col">
+                <p className="text-base xs:text-lg sm:text-xl font-bold text-[#8B4513] leading-tight group-hover:text-[#C17C2E] transition-colors">
                   T<span className="text-[#C17C2E]">O</span>ACC
                 </p>
-                <p className="text-ml text-[#6B4423] leading-tight tracking-wide">
+                <p className="text-xs xs:text-sm sm:text-base text-[#6B4423] leading-tight tracking-wide hidden xs:block">
                   Tunde Odunlade
                 </p>
-                <p className="text-ml text-[#6B4423] leading-tight tracking-wide">
+                <p className="text-xs xs:text-sm sm:text-base text-[#6B4423] leading-tight tracking-wide hidden sm:block">
                   Arts & Culture Connexions
                 </p>
               </div>
@@ -268,8 +268,8 @@ function Navbar() {
               {/* Menu Header */}
               <div className="p-6 border-b border-[#D4A574]/30">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                  <Link href="/" className="flex items-center gap-3 group" onClick={toggleMobileMenu}>
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#D4AF37] flex-shrink-0">
                       <Image
                         src="/Assets/logo.png"
                         alt="TOACC Logo"
@@ -279,11 +279,18 @@ function Navbar() {
                         className="object-cover"
                       />
                     </div>
-                    <div>
-                      <p className="text-lg font-bold text-[#8B4513]">TOACC</p>
-                      <p className="text-xs text-[#6B4423]">Gallery</p>
+                    <div className="flex flex-col">
+                      <p className="text-base sm:text-lg font-bold text-[#8B4513] leading-tight group-hover:text-[#C17C2E] transition-colors">
+                        T<span className="text-[#C17C2E]">O</span>ACC
+                      </p>
+                      <p className="text-xs sm:text-sm text-[#6B4423] leading-tight tracking-wide">
+                        Tunde Odunlade
+                      </p>
+                      <p className="text-xs sm:text-sm text-[#6B4423] leading-tight tracking-wide">
+                        Arts & Culture Connexions
+                      </p>
                     </div>
-                  </div>
+                  </Link>
                   <button
                     onClick={toggleMobileMenu}
                     className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
