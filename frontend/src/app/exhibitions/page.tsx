@@ -119,6 +119,42 @@ export default function ExhibitionsPage() {
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
+  // Handle hash navigation and smooth scroll to exhibition
+  useEffect(() => {
+    const handleHashNavigation = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const id = hash.substring(1); // Remove the #
+        const element = document.getElementById(id);
+        if (element) {
+          // Wait a bit for content to render
+          setTimeout(() => {
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - 100; // 100px offset for navbar
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth'
+            });
+            
+            // Highlight the card briefly
+            element.classList.add('ring-4', 'ring-[#D4AF37]');
+            setTimeout(() => {
+              element.classList.remove('ring-4', 'ring-[#D4AF37]');
+            }, 2000);
+          }, 300);
+        }
+      }
+    };
+
+    // Handle initial hash on mount
+    handleHashNavigation();
+
+    // Handle hash changes
+    window.addEventListener('hashchange', handleHashNavigation);
+    return () => window.removeEventListener('hashchange', handleHashNavigation);
+  }, [exhibitions]);
+
   // Fetch exhibitions from CMS on mount
   useEffect(() => {
     async function loadExhibitions() {
@@ -309,11 +345,12 @@ export default function ExhibitionsPage() {
                 {filteredExhibitions.map((exhibition, index) => (
                   <motion.div
                     key={exhibition.id}
+                    id={`exhibition-${exhibition.id}`}
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     onClick={() => setSelectedExhibition(exhibition)}
-                    className="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-[#D4A574]/30 hover:border-[#D4AF37]"
+                    className="group cursor-pointer bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-[#D4A574]/30 hover:border-[#D4AF37] scroll-mt-24"
                   >
                     {/* Image */}
                     <div className="relative h-64 overflow-hidden">
