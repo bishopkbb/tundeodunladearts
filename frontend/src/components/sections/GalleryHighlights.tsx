@@ -178,7 +178,7 @@ export default function GalleryHighlights() {
                     quality={90}
                     priority
                     className="object-cover"
-                    onError={(e) => {
+                    onError={() => {
                       const currentSrc = getImageSrc(imageIndex);
                       console.error(`❌ Failed to load image: ${currentSrc} (Index: ${imageIndex})`);
                       
