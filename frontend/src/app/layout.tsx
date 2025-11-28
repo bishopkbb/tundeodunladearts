@@ -113,15 +113,16 @@ export const metadata: Metadata = {
   category: 'Art & Culture',
   icons: {
     icon: [
-      { url: '/Assets/logo.png', sizes: '32x32', type: 'image/png' },
-      { url: '/Assets/logo.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.png', sizes: '16x16', type: 'image/png' },
       { url: '/Assets/logo.png', sizes: '192x192', type: 'image/png' },
       { url: '/Assets/logo.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
       { url: '/Assets/logo.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: '/Assets/logo.png',
+    shortcut: '/favicon.ico',
     other: [
       {
         rel: 'apple-touch-icon-precomposed',
@@ -143,12 +144,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         {/* Favicon - Using Tunde Odunlade Logo */}
-        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="16x16" />
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16" />
         <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="192x192" />
         <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/Assets/logo.png" sizes="180x180" />
-        <link rel="shortcut icon" type="image/png" href="/Assets/logo.png" />
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="manifest" href="https://www.tundeodunladearts.com/manifest.json" />
         {/* Structured Data */}
         <script
