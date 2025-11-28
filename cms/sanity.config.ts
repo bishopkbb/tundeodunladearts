@@ -3,6 +3,24 @@ import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 import { deskTool } from 'sanity/desk';
 
+/**
+ * TOACC Gallery CMS Configuration
+ * 
+ * ROLE-BASED ACCESS:
+ * - Gallery Staff (adeola@tundeodunladearts.com, elizabeth@tundeodunladearts.com):
+ *   - Access: /admin panel only
+ *   - Can manage: Artworks, Exhibitions, Artists, Gallery Images
+ *   - Cannot: Delete content, access Press content, modify site config
+ * 
+ * - Super Admin (tunde@tundeodunladearts.com):
+ *   - Access: Both /admin and /press-admin panels
+ *   - Can manage: All content types including Press
+ *   - Full permissions: Create, Read, Update, Delete, Manage team
+ * 
+ * SETUP INSTRUCTIONS:
+ * See SANITY_CMS_SETUP_GUIDE.md for complete setup and role configuration steps.
+ */
+
 // Import schemas
 import artwork from './schemas/artwork';
 import exhibition from './schemas/exhibition';

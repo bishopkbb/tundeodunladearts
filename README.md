@@ -2,11 +2,30 @@
 
 > A production-ready, full-stack web application for Tunde Odunlade Art Gallery, featuring immersive 3D experiences, e-commerce capabilities, and comprehensive content management.
 
+[![Live Site](https://img.shields.io/badge/Live_Site-www.tundeodunladearts.com-8B4513?style=flat-square)](https://www.tundeodunladearts.com)
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.5-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat-square&logo=supabase)](https://supabase.com/)
 [![Sanity](https://img.shields.io/badge/Sanity-CMS-F03E2F?style=flat-square&logo=sanity)](https://www.sanity.io/)
+
+## 🌐 Live Website
+
+**🌍 Visit the live site:** [www.tundeodunladearts.com](https://www.tundeodunladearts.com)
+
+![TOACC Gallery Website Preview](https://www.tundeodunladearts.com/Assets/logo.png)
+
+### Website Features Available Online:
+- ✅ **Immersive 3D Hero Carousel** - Interactive rotating gallery showcase
+- ✅ **Art Gallery** - Browse curated collections of contemporary African art
+- ✅ **Shop** - Purchase authentic Nigerian artworks with secure Flutterwave payments
+- ✅ **Exhibitions** - View upcoming, current, and past exhibitions with RSVP functionality
+- ✅ **About** - Learn about Prince Tunde Odunlade and the gallery
+- ✅ **Press** - Read articles, essays, and interviews
+- ✅ **Contact** - Get in touch with the gallery team
+- ✅ **Newsletter** - Subscribe for updates on new artworks and events
+
+*Tunde Odunlade Arts & Culture Connexions - Showcasing contemporary African art and cultural heritage from Ibadan, Nigeria.*
 
 ## 📋 Table of Contents
 
