@@ -271,7 +271,7 @@ export default function FeaturedExhibitions() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[10000] flex items-center justify-center p-2 xs:p-4 pointer-events-none"
+              className="fixed inset-0 z-[10000] flex items-center justify-center p-1 xs:p-2 sm:p-3 md:p-4 pointer-events-none"
               style={{
                 position: 'fixed',
                 top: 0,
@@ -284,24 +284,24 @@ export default function FeaturedExhibitions() {
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.9, y: 20 }}
-                className="bg-white rounded-xl sm:rounded-2xl max-w-[95vw] xs:max-w-[90vw] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl w-full max-h-[95vh] xs:max-h-[90vh] md:max-h-[85vh] overflow-y-auto shadow-2xl relative touch-manipulation pointer-events-auto"
+                className="bg-white rounded-lg xs:rounded-xl sm:rounded-2xl w-full max-w-[98vw] xs:max-w-[95vw] sm:max-w-[90vw] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[98vh] xs:max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh] overflow-y-auto shadow-2xl relative touch-manipulation pointer-events-auto"
                 onClick={(e) => e.stopPropagation()}
                 style={{
-                  maxHeight: 'calc(100vh - 2rem)',
+                  maxHeight: 'calc(100vh - 0.5rem)',
                 }}
               >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedExhibition(null)}
-                className="sticky top-2 xs:top-4 right-2 xs:right-4 ml-auto w-10 h-10 xs:w-12 xs:h-12 rounded-full bg-[#D4AF37] hover:bg-[#C17C2E] active:bg-[#8B4513] text-white transition-colors flex items-center justify-center z-10 shadow-lg touch-manipulation"
+                className="sticky top-1 xs:top-2 sm:top-4 right-1 xs:right-2 sm:right-4 ml-auto w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 rounded-full bg-[#D4AF37] hover:bg-[#C17C2E] active:bg-[#8B4513] text-white transition-colors flex items-center justify-center z-10 shadow-lg touch-manipulation"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
               {/* Exhibition Hero Image */}
-              <div className="relative h-80 md:h-96">
+              <div className="relative h-48 xs:h-56 sm:h-64 md:h-80 lg:h-96">
                 <Image
                   src={selectedExhibition.image}
                   alt={selectedExhibition.title}
@@ -311,72 +311,72 @@ export default function FeaturedExhibitions() {
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className={`absolute top-6 right-6 px-6 py-3 rounded-full text-white text-sm font-bold ${getTypeBadge(selectedExhibition.type).bg} ${getTypeBadge(selectedExhibition.type).textColor} shadow-lg`}>
+                <div className={`absolute top-2 xs:top-4 sm:top-6 right-2 xs:right-4 sm:right-6 px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 rounded-full text-white text-xs xs:text-sm font-bold ${getTypeBadge(selectedExhibition.type).bg} ${getTypeBadge(selectedExhibition.type).textColor} shadow-lg`}>
                   {getTypeBadge(selectedExhibition.type).text}
                 </div>
               </div>
 
               {/* Exhibition Details */}
-              <div className="p-4 xs:p-6 sm:p-8 md:p-12">
-                <span className="inline-block px-4 py-2 bg-[#F5EFE7] text-[#8B4513] text-sm font-semibold rounded-full mb-4">
+              <div className="p-3 xs:p-4 sm:p-6 md:p-8 lg:p-12">
+                <span className="inline-block px-3 xs:px-4 py-1.5 xs:py-2 bg-[#F5EFE7] text-[#8B4513] text-xs xs:text-sm font-semibold rounded-full mb-3 xs:mb-4">
                   {selectedExhibition.category}
                 </span>
                 
-                <h2 className="text-2xl xs:text-3xl md:text-4xl lg:text-5xl font-bold text-[#3D2817] mb-2 font-serif">
+                <h2 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#3D2817] mb-1 xs:mb-2 font-serif leading-tight">
                   {selectedExhibition.title}
                 </h2>
                 {selectedExhibition.subtitle && (
-                  <p className="text-lg xs:text-xl md:text-2xl text-[#8B4513] italic mb-3">
+                  <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-[#8B4513] italic mb-2 xs:mb-3">
                     {selectedExhibition.subtitle}
                   </p>
                 )}
-                <p className="text-lg xs:text-xl text-[#C17C2E] font-semibold mb-6">{selectedExhibition.artist}</p>
+                <p className="text-base xs:text-lg sm:text-xl text-[#C17C2E] font-semibold mb-4 xs:mb-6">{selectedExhibition.artist}</p>
 
-                <div className="w-20 h-1 bg-[#D4AF37] mb-8 rounded-full" />
+                <div className="w-16 xs:w-20 h-0.5 xs:h-1 bg-[#D4AF37] mb-4 xs:mb-6 sm:mb-8 rounded-full" />
 
                 {/* Exhibition Info Grid */}
-                <div className="grid md:grid-cols-2 gap-4 xs:gap-6 mb-8 p-4 xs:p-6 bg-[#F5EFE7] rounded-xl">
+                <div className="grid md:grid-cols-2 gap-3 xs:gap-4 sm:gap-6 mb-4 xs:mb-6 sm:mb-8 p-3 xs:p-4 sm:p-6 bg-[#F5EFE7] rounded-lg xs:rounded-xl">
                   <div>
-                    <p className="text-xs xs:text-sm text-[#8B4513] font-semibold mb-2">Event Dates</p>
-                    <p className="text-sm xs:text-base text-[#3D2817]">
+                    <p className="text-xs xs:text-sm text-[#8B4513] font-semibold mb-1 xs:mb-2">Event Dates</p>
+                    <p className="text-xs xs:text-sm sm:text-base text-[#3D2817]">
                       {formatDate(selectedExhibition.startDate)}
                       {selectedExhibition.endDate && ` - ${formatDate(selectedExhibition.endDate)}`}
                     </p>
                     {selectedExhibition.openingTime && (
-                      <p className="text-sm xs:text-base text-[#3D2817] mt-1">
+                      <p className="text-xs xs:text-sm sm:text-base text-[#3D2817] mt-1">
                         Opening: {selectedExhibition.openingTime}
                       </p>
                     )}
                   </div>
                   <div>
-                    <p className="text-xs xs:text-sm text-[#8B4513] font-semibold mb-2">Venue</p>
-                    <p className="text-sm xs:text-base text-[#3D2817]">{selectedExhibition.venue}</p>
+                    <p className="text-xs xs:text-sm text-[#8B4513] font-semibold mb-1 xs:mb-2">Venue</p>
+                    <p className="text-xs xs:text-sm sm:text-base text-[#3D2817]">{selectedExhibition.venue}</p>
                     {selectedExhibition.address && (
-                      <p className="text-xs xs:text-sm text-[#6B4423] mt-1">{selectedExhibition.address}</p>
+                      <p className="text-[10px] xs:text-xs sm:text-sm text-[#6B4423] mt-1">{selectedExhibition.address}</p>
                     )}
                   </div>
                 </div>
 
                 {/* Description */}
                 <div className="prose max-w-none">
-                  <h3 className="text-xl xs:text-2xl font-bold text-[#3D2817] mb-4 font-serif">About This Event</h3>
-                  <p className="text-sm xs:text-base md:text-lg text-[#3D2817] leading-relaxed whitespace-pre-line">
+                  <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-[#3D2817] mb-2 xs:mb-3 sm:mb-4 font-serif">About This Event</h3>
+                  <p className="text-xs xs:text-sm sm:text-base md:text-lg text-[#3D2817] leading-relaxed whitespace-pre-line">
                     {selectedExhibition.description}
                   </p>
                 </div>
 
-                {/* CTA Button */}
-                <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 mt-6 xs:mt-8 sm:mt-10">
+                {/* CTA Buttons */}
+                <div className="flex flex-col sm:flex-row gap-2 xs:gap-3 sm:gap-4 mt-4 xs:mt-6 sm:mt-8 md:mt-10">
                   <Link
                     href="/contact"
-                    className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-200 shadow-lg touch-manipulation flex items-center justify-center"
+                    className="w-full sm:w-auto px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-sm xs:text-base sm:text-lg rounded-lg transition-all duration-200 shadow-lg touch-manipulation flex items-center justify-center min-h-[44px]"
                     onClick={() => setSelectedExhibition(null)}
                   >
                     Plan Your Visit
                   </Link>
                   <Link
                     href={`/exhibitions#exhibition-${selectedExhibition.id}`}
-                    className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-white border-2 border-[#D4AF37] hover:bg-[#D4AF37] active:bg-[#C17C2E] text-[#3D2817] font-bold text-base xs:text-lg rounded-lg transition-all duration-300 touch-manipulation flex items-center justify-center"
+                    className="w-full sm:w-auto px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 bg-white border-2 border-[#D4AF37] hover:bg-[#D4AF37] active:bg-[#C17C2E] text-[#3D2817] font-bold text-sm xs:text-base sm:text-lg rounded-lg transition-all duration-300 touch-manipulation flex items-center justify-center min-h-[44px]"
                     onClick={() => setSelectedExhibition(null)}
                   >
                     View Full Details
