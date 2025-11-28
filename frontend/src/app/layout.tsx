@@ -113,21 +113,19 @@ export const metadata: Metadata = {
   category: 'Art & Culture',
   icons: {
     icon: [
-      { url: 'https://www.tundeodunladearts.com/favicon.ico', sizes: 'any' },
-      { url: 'https://www.tundeodunladearts.com/favicon.png', sizes: '32x32' },
-      { url: 'https://www.tundeodunladearts.com/favicon.png', sizes: '16x16' },
-      { url: 'https://www.tundeodunladearts.com/Assets/logo.png', sizes: '192x192' },
-      { url: 'https://www.tundeodunladearts.com/Assets/logo.png', sizes: '512x512' },
+      { url: '/Assets/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/Assets/logo.png', sizes: '16x16', type: 'image/png' },
+      { url: '/Assets/logo.png', sizes: '192x192', type: 'image/png' },
+      { url: '/Assets/logo.png', sizes: '512x512', type: 'image/png' },
     ],
     apple: [
-      { url: 'https://www.tundeodunladearts.com/Assets/logo.png', sizes: '180x180' },
-      { url: 'https://www.tundeodunladearts.com/favicon.png', sizes: '180x180' },
+      { url: '/Assets/logo.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: 'https://www.tundeodunladearts.com/favicon.ico',
+    shortcut: '/Assets/logo.png',
     other: [
       {
         rel: 'apple-touch-icon-precomposed',
-        url: 'https://www.tundeodunladearts.com/Assets/logo.png',
+        url: '/Assets/logo.png',
       },
     ],
   },
@@ -144,14 +142,13 @@ export default function RootLayout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-        {/* Favicon - Multiple formats for better browser support */}
-        <link rel="icon" type="image/x-icon" href="https://www.tundeodunladearts.com/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" href="https://www.tundeodunladearts.com/favicon.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="https://www.tundeodunladearts.com/favicon.png" sizes="16x16" />
-        <link rel="icon" type="image/png" href="https://www.tundeodunladearts.com/Assets/logo.png" sizes="192x192" />
-        <link rel="icon" type="image/png" href="https://www.tundeodunladearts.com/Assets/logo.png" sizes="512x512" />
-        <link rel="apple-touch-icon" href="https://www.tundeodunladearts.com/Assets/logo.png" sizes="180x180" />
-        <link rel="shortcut icon" type="image/x-icon" href="https://www.tundeodunladearts.com/favicon.ico" />
+        {/* Favicon - Using Tunde Odunlade Logo */}
+        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="192x192" />
+        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="512x512" />
+        <link rel="apple-touch-icon" href="/Assets/logo.png" sizes="180x180" />
+        <link rel="shortcut icon" type="image/png" href="/Assets/logo.png" />
         <link rel="manifest" href="https://www.tundeodunladearts.com/manifest.json" />
         {/* Structured Data */}
         <script
