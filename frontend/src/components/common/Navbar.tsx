@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, memo } from 'react';
-import { flushSync } from 'react-dom';
+import { useState, useEffect, useCallback, useRef, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -195,16 +194,13 @@ function Navbar() {
                 )}
               </button>
 
-              {/* Mobile Menu Button - Ultra-fast response with onMouseDown and onTouchStart */}
+              {/* Mobile Menu Button - Stable click handler */}
               <button
-                onMouseDown={toggleMobileMenu}
-                onTouchStart={toggleMobileMenu}
-                onClick={(e) => e.preventDefault()}
-                className="p-2.5 text-[#8B4513] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                onClick={toggleMobileMenu}
+                className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
                 style={{ 
-                  transition: 'none',
                   WebkitTapHighlightColor: 'transparent',
                   touchAction: 'manipulation',
                 }}
@@ -245,16 +241,11 @@ function Navbar() {
       {/* Mobile Menu Overlay - Instant display, zero animations */}
       {isMobileMenuOpen && (
         <>
-          {/* Backdrop - Instant display, no backdrop blur for performance */}
+          {/* Backdrop - Click to close */}
           <div
             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-            onMouseDown={toggleMobileMenu}
-            onTouchStart={toggleMobileMenu}
-            onClick={(e) => e.preventDefault()}
+            onClick={toggleMobileMenu}
             style={{ 
-              animation: 'none',
-              transition: 'none',
-              opacity: 1,
               WebkitTapHighlightColor: 'transparent',
               touchAction: 'manipulation',
             }}
@@ -292,13 +283,10 @@ function Navbar() {
                     </div>
                   </div>
                   <button
-                    onMouseDown={toggleMobileMenu}
-                    onTouchStart={toggleMobileMenu}
-                    onClick={(e) => e.preventDefault()}
-                    className="p-2.5 text-[#8B4513] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    onClick={toggleMobileMenu}
+                    className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                     aria-label="Close menu"
                     style={{
-                      transition: 'none',
                       WebkitTapHighlightColor: 'transparent',
                       touchAction: 'manipulation',
                     }}

@@ -4,7 +4,6 @@ import { Suspense, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import HeroStatic from './HeroStatic';
-import HeroCTA from './HeroCTA';
 
 const Hero3DCarousel = dynamic(() => import('./Hero3DCarousel'), {
   ssr: false,
@@ -44,8 +43,6 @@ export default function HeroSection() {
           >
             <Hero3DCarousel />
           </Suspense>
-
-          <HeroCTA />
         </>
       )}
     </section>
