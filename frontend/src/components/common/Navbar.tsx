@@ -83,10 +83,10 @@ function Navbar() {
             : 'bg-white/90 backdrop-blur-sm shadow-md'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex justify-between items-center h-20">
+        <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
+          <div className="flex justify-between items-center h-18 xs:h-20 sm:h-20 min-h-[64px] xs:min-h-[72px] sm:min-h-[80px]">
             {/* Logo & Brand */}
-            <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden ring-2 ring-[#D4AF37] group-hover:ring-4 transition-all duration-300 flex-shrink-0">
                 <Image
                   src="/Assets/logo.png"
@@ -98,14 +98,14 @@ function Navbar() {
                   className="object-cover"
                 />
               </div>
-              <div className="flex flex-col">
-                <p className="text-base xs:text-lg sm:text-xl font-bold text-[#8B4513] leading-tight group-hover:text-[#C17C2E] transition-colors">
+              <div className="flex flex-col min-w-0">
+                <p className="text-sm xs:text-base sm:text-xl font-bold text-[#8B4513] leading-tight group-hover:text-[#C17C2E] transition-colors whitespace-nowrap">
                   T<span className="text-[#C17C2E]">O</span>ACC
                 </p>
-                <p className="text-xs xs:text-sm sm:text-base text-[#6B4423] leading-tight tracking-wide hidden xs:block">
+                <p className="text-[10px] xs:text-xs sm:text-base text-[#6B4423] leading-tight tracking-wide whitespace-nowrap">
                   Tunde Odunlade
                 </p>
-                <p className="text-xs xs:text-sm sm:text-base text-[#6B4423] leading-tight tracking-wide hidden sm:block">
+                <p className="text-[10px] xs:text-xs sm:text-base text-[#6B4423] leading-tight tracking-wide whitespace-nowrap">
                   Arts & Culture Connexions
                 </p>
               </div>
