@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -98,6 +98,34 @@ const itemVariants = {
 
 export default function FeaturedExhibitions() {
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition | null>(null);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedExhibition) {
+      const scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflow = 'hidden';
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
+    }
+
+    return () => {
+      // Cleanup on unmount
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflow = '';
+    };
+  }, [selectedExhibition]);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('en-US', {
@@ -224,20 +252,44 @@ export default function FeaturedExhibitions() {
       {/* Exhibition Detail Modal */}
       <AnimatePresence>
         {selectedExhibition && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-2 xs:p-4 bg-black/80 backdrop-blur-md overflow-y-auto touch-manipulation"
-            onClick={() => setSelectedExhibition(null)}
-          >
+          <>
             <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="bg-white rounded-xl sm:rounded-2xl max-w-[90vw] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl w-full max-h-[90vh] md:max-h-[85vh] overflow-y-auto shadow-2xl relative touch-manipulation"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md"
+              onClick={() => setSelectedExhibition(null)}
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
+            />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[10000] flex items-center justify-center p-2 xs:p-4 pointer-events-none"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
             >
+              <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                className="bg-white rounded-xl sm:rounded-2xl max-w-[95vw] xs:max-w-[90vw] md:max-w-3xl lg:max-w-4xl xl:max-w-5xl w-full max-h-[95vh] xs:max-h-[90vh] md:max-h-[85vh] overflow-y-auto shadow-2xl relative touch-manipulation pointer-events-auto"
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  maxHeight: 'calc(100vh - 2rem)',
+                }}
+              >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedExhibition(null)}
@@ -331,8 +383,9 @@ export default function FeaturedExhibitions() {
                   </Link>
                 </div>
               </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </section>
