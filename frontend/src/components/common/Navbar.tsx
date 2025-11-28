@@ -32,55 +32,40 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Ultra-fast mobile menu toggle - immediate state change with synchronous scroll lock
+  // Lightning-fast mobile menu toggle - zero delays, instant response
   const toggleMobileMenu = useCallback(() => {
-    // Use functional update to get current state immediately
+    // Immediately toggle state synchronously
     setIsMobileMenuOpen(prev => {
       const newState = !prev;
       
-      // Immediately apply body scroll lock synchronously BEFORE React re-renders
+      // Apply scroll lock INSTANTLY before any React re-render
       if (newState) {
         // Opening menu - lock scroll immediately
         const scrollY = window.scrollY;
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
+        document.body.style.setProperty('position', 'fixed', 'important');
+        document.body.style.setProperty('top', `-${scrollY}px`, 'important');
+        document.body.style.setProperty('width', '100%', 'important');
+        document.body.style.setProperty('overflow', 'hidden', 'important');
+        document.body.style.setProperty('touch-action', 'none', 'important');
       } else {
         // Closing menu - unlock scroll immediately
         const scrollY = document.body.style.top;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
+        document.body.style.removeProperty('position');
+        document.body.style.removeProperty('top');
+        document.body.style.removeProperty('width');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('touch-action');
         if (scrollY) {
-          window.scrollTo(0, parseInt(scrollY || '0') * -1);
+          // Use requestAnimationFrame for smooth scroll restore
+          requestAnimationFrame(() => {
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+          });
         }
       }
       
       return newState;
     });
   }, []);
-
-  // Backup scroll lock for edge cases
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-    } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
-      }
-    }
-  }, [isMobileMenuOpen]);
 
   return (
     <>
@@ -204,19 +189,19 @@ function Navbar() {
                 )}
               </button>
 
-              {/* Mobile Menu Button - Ultra-fast response */}
+              {/* Mobile Menu Button - Lightning-fast, zero delay */}
               <button
                 onClick={toggleMobileMenu}
                 className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
                 style={{ 
-                  transition: 'background-color 0.05s ease',
-                  willChange: 'transform',
+                  transition: 'none',
+                  willChange: 'auto',
                 }}
               >
-                {/* Ultra-fast CSS-only icon - no transitions, instant transforms */}
-                <div className="relative w-6 h-5 flex flex-col justify-between" style={{ willChange: 'transform' }}>
+                {/* Instant CSS-only icon - no transitions, pure state-based transforms */}
+                <div className="relative w-6 h-5 flex flex-col justify-between">
                   <span 
                     className={`block w-6 h-0.5 bg-current origin-center ${
                       isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
@@ -224,7 +209,6 @@ function Navbar() {
                     style={{ 
                       transformOrigin: '3px 0.5px',
                       transition: 'none',
-                      willChange: 'transform',
                     }}
                   />
                   <span 
@@ -240,7 +224,6 @@ function Navbar() {
                     style={{ 
                       transformOrigin: '3px 4.5px',
                       transition: 'none',
-                      willChange: 'transform',
                     }}
                   />
                 </div>
@@ -250,28 +233,29 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Ultra-fast, zero delay */}
+      {/* Mobile Menu Overlay - Instant display, zero animations */}
       {isMobileMenuOpen && (
         <>
-          {/* Backdrop - Instant, no transitions */}
+          {/* Backdrop - Instant display */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
             onClick={toggleMobileMenu}
             style={{ 
               animation: 'none',
               transition: 'none',
+              opacity: 1,
             }}
           />
 
-          {/* Menu Panel - Instant appearance, GPU-accelerated */}
+          {/* Menu Panel - Instant appearance, no animations */}
           <div
             className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
             style={{
-              transform: 'translateZ(0)',
+              transform: 'translateX(0) translateZ(0)',
               backfaceVisibility: 'hidden',
-              willChange: 'transform',
               animation: 'none',
               transition: 'none',
+              opacity: 1,
             }}
           >
               {/* Menu Header */}
@@ -314,7 +298,7 @@ function Navbar() {
                       className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-h-[48px] sm:min-h-[44px] flex items-center"
                       onClick={toggleMobileMenu}
                       style={{ 
-                        transition: 'background-color 0.05s ease, color 0.05s ease',
+                        transition: 'none',
                       }}
                     >
                       {link.label}

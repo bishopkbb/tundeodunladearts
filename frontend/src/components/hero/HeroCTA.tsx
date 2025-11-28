@@ -44,34 +44,24 @@ function HeroCTA() {
 
   return (
     <motion.div
-      className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none w-full max-w-4xl px-4 xs:px-6 sm:px-8 md:px-12"
+      className="absolute left-1/2 top-16 xs:top-20 sm:top-24 transform -translate-x-1/2 z-30 pointer-events-none w-full max-w-4xl px-4 xs:px-6 sm:px-8 md:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.3 }}
       style={{ willChange: 'transform, opacity' }}
     >
-      {/* Semi-transparent background for better readability */}
+      {/* Handwritten Text with Pen Animation - Mobile Only */}
       <div className="relative text-center">
-        <div 
-          className="absolute inset-0 -mx-8 -my-4 bg-[#F5EFE7]/20 backdrop-blur-sm rounded-2xl"
-          style={{ 
-            backdropFilter: 'blur(4px)',
-            WebkitBackdropFilter: 'blur(4px)',
+        <h1 
+          className="text-lg xs:text-xl sm:text-2xl font-bold leading-[1.2]"
+          style={{
+            fontFamily: 'var(--font-dancing), "Dancing Script", "Brush Script MT", cursive',
+            color: '#3D2817',
+            textShadow: '1px 1px 3px rgba(245, 239, 231, 0.9), 0 0 10px rgba(245, 239, 231, 0.7), 0 0 15px rgba(212, 175, 55, 0.4)',
+            letterSpacing: '0.02em',
+            fontWeight: 700,
           }}
-        />
-        
-        {/* Handwritten Text with Pen Animation */}
-        <div className="relative">
-          <h1 
-            className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.2]"
-            style={{
-              fontFamily: 'var(--font-dancing), "Dancing Script", "Brush Script MT", cursive',
-              color: '#3D2817',
-              textShadow: '2px 2px 6px rgba(245, 239, 231, 0.9), 0 0 15px rgba(245, 239, 231, 0.7), 0 0 25px rgba(212, 175, 55, 0.4), 0 0 35px rgba(193, 124, 46, 0.3)',
-              letterSpacing: '0.03em',
-              fontWeight: 700,
-            }}
-          >
+        >
             {displayedText}
             {showCursor && (
               <motion.span
@@ -97,40 +87,40 @@ function HeroCTA() {
           </h1>
         </div>
 
-        {/* Decorative Pen/Ink Splash Effect */}
+        {/* Decorative Pen/Ink Splash Effect - Smaller for mobile */}
         <motion.div
-          className="absolute -top-4 -right-4 xs:-top-6 xs:-right-6 sm:-top-8 sm:-right-8 opacity-30"
+          className="absolute -top-2 -right-2 xs:-top-3 xs:-right-3 sm:-top-4 sm:-right-4 opacity-30"
           initial={{ scale: 0, rotate: -45 }}
           animate={{ scale: 1, rotate: -45 }}
           transition={{ duration: 0.8, delay: 1.2, ease: 'easeOut' }}
         >
           <svg 
-            width="60" 
-            height="60" 
-            viewBox="0 0 60 60" 
+            width="40" 
+            height="40" 
+            viewBox="0 0 40 40" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
-            className="w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20"
+            className="w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12"
             style={{ color: '#8B4513' }}
           >
             {/* Ink splash */}
             <path 
-              d="M30 10 C35 15, 40 20, 45 25 C50 30, 48 35, 42 40 C38 44, 32 46, 28 42 C24 38, 22 32, 25 28 C28 24, 32 20, 30 15 Z" 
+              d="M20 7 C23 10, 27 13, 30 17 C33 20, 32 23, 28 27 C25 29, 21 31, 19 28 C16 25, 15 21, 17 19 C19 16, 21 13, 20 10 Z" 
               fill="currentColor" 
               opacity="0.6"
             />
             {/* Pen nib */}
             <path 
-              d="M25 20 L30 15 L35 20 L32 22 Z" 
+              d="M17 13 L20 10 L23 13 L21 15 Z" 
               fill="currentColor"
             />
             {/* Pen body */}
             <rect 
-              x="28" 
-              y="15" 
-              width="4" 
-              height="25" 
-              rx="2" 
+              x="19" 
+              y="10" 
+              width="2" 
+              height="17" 
+              rx="1" 
               fill="currentColor" 
               opacity="0.8"
             />
@@ -139,7 +129,7 @@ function HeroCTA() {
 
         {/* Subtle underline animation */}
         <motion.div
-          className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-[#C17C2E] to-transparent opacity-60"
+          className="absolute bottom-[-6px] left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-transparent via-[#C17C2E] to-transparent opacity-60"
           initial={{ width: 0 }}
           animate={{ width: '100%' }}
           transition={{ duration: 1.2, delay: 2.5, ease: 'easeInOut' }}
