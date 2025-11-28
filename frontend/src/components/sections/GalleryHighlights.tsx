@@ -10,36 +10,42 @@ const galleryImages = [
     src: '/Assets/hero1.jpg',
     title: 'Inside the Gallery',
     description: 'Contemporary African art in a vibrant space',
+    fallback: '/Assets/gallery1.jpg',
   },
   {
     id: 2,
     src: '/Assets/gallery1.jpg',
     title: 'Cultural Performance',
     description: 'Live artistic expressions and storytelling',
+    fallback: '/Assets/gallery2.jpg',
   },
   {
     id: 3,
     src: '/Assets/gallery5.jpg',
     title: 'Art Workshop',
     description: 'Mentorship and creative learning',
+    fallback: '/Assets/gallery3.jpg',
   },
   {
     id: 4,
     src: '/Assets/gallery2.jpg',
     title: 'Exhibition Opening',
     description: 'Community gathering and celebration',
+    fallback: '/Assets/gallery4.jpg',
   },
   {
     id: 5,
     src: '/Assets/workspace.jpg',
     title: 'Work Space',
     description: 'Where arts are brought to life',
+    fallback: '/Assets/gallery1.jpg',
   },
   {
     id: 6,
     src: '/Assets/dance.jpg',
     title: 'Dance Performance',
     description: 'Creating heritage through rhythm and movement',
+    fallback: '/Assets/gallery2.jpg',
   },
 ];
 
@@ -68,8 +74,20 @@ const swipePower = (offset: number, velocity: number) => {
 export default function GalleryHighlights() {
   const [[page, direction], setPage] = useState([0, 0]);
   const [isHovered, setIsHovered] = useState(false);
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
+  const [currentImageSrc, setCurrentImageSrc] = useState<string>('');
 
   const imageIndex = ((page % galleryImages.length) + galleryImages.length) % galleryImages.length;
+  const currentImage = galleryImages[imageIndex];
+
+  // Update image source when index changes
+  useEffect(() => {
+    if (imageErrors.has(imageIndex)) {
+      setCurrentImageSrc(currentImage.fallback);
+    } else {
+      setCurrentImageSrc(currentImage.src);
+    }
+  }, [imageIndex, imageErrors, currentImage.src, currentImage.fallback]);
 
   const paginate = (newDirection: number) => {
     setPage([page + newDirection, newDirection]);
@@ -154,13 +172,24 @@ export default function GalleryHighlights() {
               >
                 <div className="relative w-full h-full">
                   <Image
-                    src={galleryImages[imageIndex].src}
-                    alt={galleryImages[imageIndex].title}
+                    src={currentImageSrc || currentImage.src}
+                    alt={currentImage.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 80vw"
                     quality={90}
                     priority
                     className="object-cover"
+                    onError={() => {
+                      console.error(`❌ Failed to load image: ${currentImageSrc || currentImage.src} (Index: ${imageIndex})`);
+                      // Try fallback if primary image fails
+                      if (currentImageSrc === currentImage.src && currentImage.fallback) {
+                        console.log(`🔄 Trying fallback image: ${currentImage.fallback}`);
+                        setCurrentImageSrc(currentImage.fallback);
+                      } else {
+                        // Mark as error if fallback also fails
+                        setImageErrors(prev => new Set(prev).add(imageIndex));
+                      }
+                    }}
                   />
 
                   {/* Always visible subtle caption overlay */}
