@@ -1,21 +1,80 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = 'https://www.tundeodunladearts.com';
+  
   return {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/checkout', '/admin/', '/_next/', '/private/'],
+        allow: [
+          '/',
+          '/shop',
+          '/gallery',
+          '/exhibitions',
+          '/about',
+          '/contact',
+          '/press',
+        ],
+        disallow: [
+          '/api/',
+          '/checkout',
+          '/admin/',
+          '/press-admin/',
+          '/_next/',
+          '/private/',
+          '*.json',
+          '*.xml',
+          '/favicon.ico',
+        ],
       },
       {
         userAgent: 'Googlebot',
-        allow: '/',
-        disallow: ['/api/', '/checkout', '/admin/', '/_next/', '/private/'],
-        crawlDelay: 1,
+        allow: [
+          '/',
+          '/shop',
+          '/gallery',
+          '/exhibitions',
+          '/about',
+          '/contact',
+          '/press',
+        ],
+        disallow: [
+          '/api/',
+          '/checkout',
+          '/admin/',
+          '/press-admin/',
+          '/_next/',
+          '/private/',
+        ],
+        crawlDelay: 0,
+      },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/Assets/',
+        disallow: [],
+      },
+      {
+        userAgent: 'Bingbot',
+        allow: [
+          '/',
+          '/shop',
+          '/gallery',
+          '/exhibitions',
+          '/about',
+          '/contact',
+          '/press',
+        ],
+        disallow: [
+          '/api/',
+          '/checkout',
+          '/admin/',
+          '/_next/',
+          '/private/',
+        ],
       },
     ],
-    sitemap: 'https://toacc.com/sitemap.xml',
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }
 

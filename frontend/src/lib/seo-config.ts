@@ -7,7 +7,7 @@ const siteConfig = {
   shortName: 'TOACC',
   description:
     'Celebrating African heritage through contemporary art. Discover the vibrant works of Prince Tunde Odunlade and experience authentic Nigerian culture at TOACC Gallery in Ibadan.',
-  url: 'https://toacc.com',
+  url: 'https://www.tundeodunladearts.com',
   ogImage: '/Assets/og-image.jpg', // Create this 1200x630px image
   twitterHandle: '@tundeodunladearts',
   keywords: [
