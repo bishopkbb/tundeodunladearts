@@ -1,45 +1,138 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 
 function HeroCTA() {
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const fullText = 'Welcome to Tunde Odunlade Arts and Culture Connexions';
+  const writingSpeed = 100; // milliseconds per character
+
+  useEffect(() => {
+    let currentIndex = 0;
+    let timeoutId: NodeJS.Timeout;
+    let cursorInterval: NodeJS.Timeout;
+
+    const typeText = () => {
+      if (currentIndex < fullText.length) {
+        setDisplayedText(fullText.slice(0, currentIndex + 1));
+        currentIndex++;
+        timeoutId = setTimeout(typeText, writingSpeed);
+      } else {
+        // Blinking cursor effect after typing is complete
+        cursorInterval = setInterval(() => {
+          setShowCursor((prev) => !prev);
+        }, 530);
+        
+        // Stop blinking after a few seconds and keep cursor visible
+        setTimeout(() => {
+          if (cursorInterval) clearInterval(cursorInterval);
+          setShowCursor(true);
+        }, 3000);
+      }
+    };
+
+    // Start typing animation after a short delay
+    timeoutId = setTimeout(typeText, 800);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (cursorInterval) clearInterval(cursorInterval);
+    };
+  }, [fullText.length, writingSpeed]);
+
   return (
     <motion.div
-      className="absolute left-[35%] sm:left-[45%] md:left-1/2 top-20 xs:top-24 sm:top-28 transform -translate-x-1/2 z-40 flex flex-col sm:flex-row gap-2 xs:gap-2 sm:gap-4 px-3 xs:px-4 sm:px-0 w-auto sm:max-w-none"
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25, delay: 0.1, ease: 'easeOut' }}
+      className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none w-full max-w-4xl px-4 xs:px-6 sm:px-8 md:px-12"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, delay: 0.3 }}
       style={{ willChange: 'transform, opacity' }}
     >
-      {/* Primary Button */}
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="w-auto"
-      >
-        <Link
-          href="/gallery"
-          className="block text-center px-3 xs:px-3.5 sm:px-8 py-2 xs:py-2 sm:py-3 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-semibold text-xs xs:text-xs sm:text-base rounded-md transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[38px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
+      <div className="relative text-center">
+        {/* Handwritten Text with Pen Animation */}
+        <h1 
+          className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.2]"
+          style={{
+            fontFamily: 'var(--font-dancing), "Dancing Script", "Brush Script MT", cursive',
+            textShadow: '3px 3px 10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2)',
+            letterSpacing: '0.03em',
+            fontWeight: 700,
+          }}
         >
-          Explore the Collection
-        </Link>
-      </motion.div>
+          {displayedText}
+          {showCursor && (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="inline-block ml-1 text-[#D4AF37]"
+              style={{
+                width: '0.08em',
+                height: '1em',
+                backgroundColor: '#D4AF37',
+                verticalAlign: 'baseline',
+              }}
+              aria-hidden="true"
+            >
+              |
+            </motion.span>
+          )}
+        </h1>
 
-      {/* Secondary Button */}
-      <motion.div
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="w-auto"
-      >
-        <Link
-          href="/contact"
-          className="block text-center px-3 xs:px-3.5 sm:px-8 py-2 xs:py-2 sm:py-3 bg-[#3D2817] hover:bg-[#2C1810] active:bg-[#1A0F08] text-white font-semibold text-xs xs:text-xs sm:text-base rounded-md transition-colors duration-150 shadow-md hover:shadow-lg touch-manipulation min-h-[38px] xs:min-h-[40px] sm:min-h-[44px] flex items-center justify-center whitespace-nowrap"
+        {/* Decorative Pen/Ink Splash Effect */}
+        <motion.div
+          className="absolute -top-4 -right-4 xs:-top-6 xs:-right-6 sm:-top-8 sm:-right-8 opacity-20"
+          initial={{ scale: 0, rotate: -45 }}
+          animate={{ scale: 1, rotate: -45 }}
+          transition={{ duration: 0.8, delay: 1.2, ease: 'easeOut' }}
         >
-          Visit the gallery
-        </Link>
-      </motion.div>
+          <svg 
+            width="60" 
+            height="60" 
+            viewBox="0 0 60 60" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-12 h-12 xs:w-16 xs:h-16 sm:w-20 sm:h-20 text-[#D4AF37]"
+          >
+            {/* Ink splash */}
+            <path 
+              d="M30 10 C35 15, 40 20, 45 25 C50 30, 48 35, 42 40 C38 44, 32 46, 28 42 C24 38, 22 32, 25 28 C28 24, 32 20, 30 15 Z" 
+              fill="currentColor" 
+              opacity="0.6"
+            />
+            {/* Pen nib */}
+            <path 
+              d="M25 20 L30 15 L35 20 L32 22 Z" 
+              fill="currentColor"
+            />
+            {/* Pen body */}
+            <rect 
+              x="28" 
+              y="15" 
+              width="4" 
+              height="25" 
+              rx="2" 
+              fill="currentColor" 
+              opacity="0.8"
+            />
+          </svg>
+        </motion.div>
+
+        {/* Subtle underline animation */}
+        <motion.div
+          className="absolute bottom-[-8px] left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"
+          initial={{ width: 0 }}
+          animate={{ width: '100%' }}
+          transition={{ duration: 1.2, delay: 2.5, ease: 'easeInOut' }}
+          style={{ maxWidth: '80%' }}
+        />
+      </div>
     </motion.div>
   );
 }

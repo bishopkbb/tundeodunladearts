@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Inter, Playfair_Display, Dancing_Script, Kalam } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/contexts/CartContext';
 import { structuredData } from '@/lib/seo-config';
@@ -14,6 +14,20 @@ const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
   weight: ['400', '700', '900'],
+  display: 'swap',
+});
+
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+  variable: '--font-dancing',
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
+
+const kalam = Kalam({
+  subsets: ['latin'],
+  variable: '--font-kalam',
+  weight: ['300', '400', '700'],
   display: 'swap',
 });
 
@@ -140,7 +154,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${playfair.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300 antialiased w-full max-w-full overflow-x-hidden`}
+        className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} ${kalam.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300 antialiased w-full max-w-full overflow-x-hidden`}
       >
         <CartProvider>
           {children}
