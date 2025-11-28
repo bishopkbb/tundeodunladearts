@@ -375,8 +375,7 @@ export default function FeaturedExhibitions() {
                 </div>
               </div>
               </motion.div>
-            </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </section>
