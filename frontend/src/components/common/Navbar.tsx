@@ -21,6 +21,7 @@ function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount, openCart } = useCart();
+  const isTogglingRef = useRef(false);
 
   // Optimized scroll handler with throttling for better performance
   useEffect(() => {
@@ -32,45 +33,46 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Ultra-fast mobile menu toggle - maximum performance with immediate DOM updates
-  const toggleMobileMenu = useCallback((e?: React.MouseEvent | React.TouchEvent) => {
-    // Prevent default to avoid any browser delay
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+  // Stable mobile menu toggle - prevents glitching with ref guard
+  const toggleMobileMenu = useCallback(() => {
+    // Prevent double-firing with ref guard
+    if (isTogglingRef.current) return;
+    isTogglingRef.current = true;
     
-    // Get current state synchronously
-    const currentState = isMobileMenuOpen;
-    const newState = !currentState;
-    
-    // Update DOM INSTANTLY - before React even processes the event
-    if (newState) {
-      // Opening menu - lock scroll immediately
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
-    } else {
-      // Closing menu - unlock scroll immediately
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflow = '';
-      document.body.style.touchAction = '';
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+    // Get current state and toggle
+    setIsMobileMenuOpen(prev => {
+      const newState = !prev;
+      
+      // Update DOM synchronously with the state change
+      if (newState) {
+        // Opening menu - lock scroll
+        const scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        document.body.style.touchAction = 'none';
+      } else {
+        // Closing menu - unlock scroll
+        const scrollY = document.body.style.top;
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.body.style.touchAction = '';
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
       }
-    }
-    
-    // Update React state synchronously for instant UI update
-    flushSync(() => {
-      setIsMobileMenuOpen(newState);
+      
+      // Reset toggle guard after a brief delay
+      setTimeout(() => {
+        isTogglingRef.current = false;
+      }, 100);
+      
+      return newState;
     });
-  }, [isMobileMenuOpen]);
+  }, []);
 
   return (
     <>
