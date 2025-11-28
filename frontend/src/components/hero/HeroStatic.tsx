@@ -58,8 +58,8 @@ export default function HeroStatic() {
             fill
             className="object-cover"
             priority
-            sizes="100vw"
-            quality={90}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+            quality={85}
           />
         </motion.div>
       </motion.div>

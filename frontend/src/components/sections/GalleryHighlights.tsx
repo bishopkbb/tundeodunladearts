@@ -174,9 +174,9 @@ export default function GalleryHighlights() {
                     src={getImageSrc(imageIndex)}
                     alt={currentImage.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, 80vw"
-                    quality={90}
-                    priority
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+                    quality={85}
+                    loading="lazy"
                     className="object-cover"
                     onError={() => {
                       const currentSrc = getImageSrc(imageIndex);

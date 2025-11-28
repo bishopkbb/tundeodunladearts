@@ -2,7 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRef } from 'react';
+import Image from 'next/image';
+import { useRef, useState, useEffect } from 'react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -35,12 +36,34 @@ const videoVariants = {
 
 export default function AboutSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const videoContainerRef = useRef<HTMLDivElement>(null);
 
   const handleVideoEnd = () => {
     if (videoRef.current) {
       videoRef.current.load(); // Reload video to show poster
     }
   };
+
+  // Lazy load video when it enters viewport
+  useEffect(() => {
+    if (!videoContainerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !shouldLoadVideo) {
+            setShouldLoadVideo(true);
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: '100px' } // Start loading 100px before video enters viewport
+    );
+
+    observer.observe(videoContainerRef.current);
+    return () => observer.disconnect();
+  }, [shouldLoadVideo]);
 
   return (
     <section
@@ -72,19 +95,45 @@ export default function AboutSection() {
         >
           {/* Left: Video */}
           <motion.div variants={videoVariants} className="order-2 lg:order-1 lg:sticky lg:top-24">
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl bg-black">
-              <video
-                ref={videoRef}
-                src="/Assets/ghighlight.mp4"
-                controls
-                className="w-full h-full object-cover"
-                style={{ objectPosition: 'center 20%' }}
-                poster="/Assets/cover1.jpg"
-                preload="metadata"
-                onEnded={handleVideoEnd}
-              >
-                Your browser does not support the video tag.
-              </video>
+            <div ref={videoContainerRef} className="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl bg-black">
+              {shouldLoadVideo ? (
+                <video
+                  ref={videoRef}
+                  src="/Assets/ghighlight.mp4"
+                  controls
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: 'center 20%' }}
+                  poster="/Assets/cover1.jpg"
+                  preload="metadata"
+                  playsInline
+                  onEnded={handleVideoEnd}
+                  width={1280}
+                  height={720}
+                >
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                // Placeholder with poster image while video loads
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/Assets/cover1.jpg"
+                    alt="TOACC Gallery Video Preview"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    quality={85}
+                    className="object-cover"
+                    style={{ objectPosition: 'center 20%' }}
+                    priority={false}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                    <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center">
+                      <svg className="w-8 h-8 text-[#C17C2E]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <p className="text-sm text-[#6B4423] mt-4 text-center italic">
               Take a visual journey through TOACC where ancestral wisdom meets contemporary creativity

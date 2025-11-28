@@ -589,7 +589,10 @@ export default function Hero3DCarousel() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.1, type: 'spring', damping: 20 }}
                   className="max-w-full max-h-[70vh] sm:max-h-[75vh] md:max-h-[80vh] w-auto h-auto object-contain rounded-lg sm:rounded-xl shadow-2xl border-2 sm:border-4 border-[#D4AF37]"
-                  loading="lazy"
+                  loading="eager"
+                  width={1920}
+                  height={1080}
+                  style={{ maxWidth: '100%', height: 'auto' }}
                 />
 
                 {/* Title */}

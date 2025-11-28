@@ -230,13 +230,12 @@ export default function ArtCollections() {
                           src={image.src}
                           alt={`Art collection piece ${image.uniqueId || image.id}`}
                           fill
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
                           quality={75}
                           className="object-cover transition-transform duration-500 group-hover:scale-110 relative"
                           style={{ zIndex: 30 }}
-                          loading="lazy"
+                          loading={index < 12 ? "eager" : "lazy"}
                           priority={index < 6}
-                          unoptimized={true}
                           onError={(e) => {
                             console.error(`❌ Failed to load image: ${image.src}`);
                             console.error(`Image ID: ${image.id}`);

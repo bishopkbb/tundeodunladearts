@@ -397,8 +397,10 @@ export default function ShopPage() {
                             src={artwork.image}
                             alt={artwork.title}
                             fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            quality={90}
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                            quality={85}
+                            loading={index < 12 ? "eager" : "lazy"}
+                            priority={index < 4}
                             className="object-cover group-hover:scale-110 transition-transform duration-500"
                             onError={(e) => {
                               console.error(`Failed to load image: ${artwork.image}`, e);
@@ -530,8 +532,9 @@ export default function ShopPage() {
                       src={selectedArtwork.image}
                       alt={selectedArtwork.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, 80vw"
-                      quality={90}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
+                      quality={85}
+                      loading="lazy"
                       className="object-cover"
                     />
                   </div>

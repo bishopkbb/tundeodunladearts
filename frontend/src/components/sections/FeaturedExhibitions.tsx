@@ -192,9 +192,10 @@ export default function FeaturedExhibitions() {
                       src={exhibit.image}
                       alt={exhibit.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      quality={90}
-                      className="object-cover group-hover:scale-110 transition-transform duration-300 will-change-transform"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      quality={85}
+                      loading="lazy"
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                     {/* Type Badge */}
                     <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${badge.bg} ${badge.textColor} shadow-lg`}>
@@ -282,8 +283,9 @@ export default function FeaturedExhibitions() {
                   src={selectedExhibition.image}
                   alt={selectedExhibition.title}
                   fill
-                  sizes="(max-width: 768px) 100vw, 80vw"
-                  quality={90}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+                  quality={85}
+                  loading="eager"
                   className="object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />

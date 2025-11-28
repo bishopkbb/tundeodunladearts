@@ -3,16 +3,15 @@ const nextConfig = {
   // Enable React strict mode for better error detection
   reactStrictMode: true,
 
-  // Image optimization configuration - High quality settings
+  // Image optimization configuration - Enhanced for performance
   images: {
-    formats: ['image/webp', 'image/avif'],
+    formats: ['image/avif', 'image/webp'], // AVIF first (better compression, ~50% smaller)
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 31536000, // 1 year cache for optimized images
     // Required for Next.js 15+ - define allowed quality values
-    // Quality is set per-image via the `quality` prop (defaults to 90 in our components)
-    qualities: [75, 90, 100],
-    // Enable high quality optimization
+    qualities: [75, 85, 90, 100],
+    // Enable automatic optimization
     unoptimized: false,
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
