@@ -252,22 +252,7 @@ export default function FeaturedExhibitions() {
       {/* Exhibition Detail Modal */}
       <AnimatePresence>
         {selectedExhibition && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-md"
-              onClick={() => setSelectedExhibition(null)}
-              style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-              }}
-            />
-            <motion.div
+          <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
