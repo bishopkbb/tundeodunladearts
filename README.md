@@ -292,14 +292,23 @@ backend/
 ```
 cms/
 ├── schemas/
-│   ├── artwork.ts               # Artwork schema
-│   ├── exhibition.ts            # Exhibition schema
+│   ├── artwork.ts               # Artwork schema (for shop & gallery)
+│   ├── exhibition.ts            # Exhibition schema (with tags, badges, prices, dates)
 │   ├── event.ts                 # Event schema
 │   ├── artist.ts                # Artist schema
 │   ├── pressPost.ts             # Press post schema
 │   └── siteConfig.ts            # Site configuration schema
-└── sanity.config.ts             # Sanity Studio configuration
+├── sanity.config.ts             # Sanity Studio configuration (role-based access)
+└── SANITY_CMS_SETUP_GUIDE.md    # Complete CMS setup and role configuration guide
 ```
+
+**CMS Access & Roles:**
+- **Gallery Staff Panel** (`/admin`): For managing artworks, exhibitions, gallery images
+- **Press Panel** (`/press-admin`): For managing press content (Super Admin only)
+- **Gallery Staff** (adeola@, elizabeth@): Can manage gallery, shop, exhibitions
+- **Super Admin** (tunde@): Full access to all content including press
+
+See [`cms/SANITY_CMS_SETUP_GUIDE.md`](./cms/SANITY_CMS_SETUP_GUIDE.md) for complete setup instructions.
 
 ## ✨ Features
 
