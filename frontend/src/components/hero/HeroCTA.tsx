@@ -62,30 +62,29 @@ function HeroCTA() {
             fontWeight: 700,
           }}
         >
-            {displayedText}
-            {showCursor && (
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{
-                  duration: 0.8,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-                className="inline-block ml-1"
-                style={{
-                  width: '0.08em',
-                  height: '1em',
-                  backgroundColor: '#C17C2E',
-                  verticalAlign: 'baseline',
-                }}
-                aria-hidden="true"
-              >
-                |
-              </motion.span>
-            )}
-          </h1>
-        </div>
+          {displayedText}
+          {showCursor && (
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0, 1, 0] }}
+              transition={{
+                duration: 0.8,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="inline-block ml-1"
+              style={{
+                width: '0.08em',
+                height: '1em',
+                backgroundColor: '#C17C2E',
+                verticalAlign: 'baseline',
+              }}
+              aria-hidden="true"
+            >
+              |
+            </motion.span>
+          )}
+        </h1>
 
         {/* Decorative Pen/Ink Splash Effect - Smaller for mobile */}
         <motion.div
