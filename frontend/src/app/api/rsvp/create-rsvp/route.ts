@@ -53,8 +53,8 @@ export async function POST(request: NextRequest) {
       email: validatedData.email,
       phone: validatedData.phone,
       guest_count: validatedData.guestCount || 1,
-      dietary_requirements: validatedData.dietaryRequirements || null,
-      special_requests: validatedData.specialRequests || null,
+      dietary_requirements: validatedData.dietaryRequirements || undefined,
+      special_requests: validatedData.specialRequests || undefined,
       status: 'pending',
       created_at: new Date(),
     };

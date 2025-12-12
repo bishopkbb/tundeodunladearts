@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Orders, CartItem } from '@/lib/mongodb-models';
+import { Orders } from '@/lib/mongodb-models';
 import { z } from 'zod';
 
 const cartItemSchema = z.object({
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       shipping_cost: validatedData.shippingCost,
       tax: validatedData.tax,
       total: validatedData.total,
-      payment_transaction_id: validatedData.paymentTransactionId || null,
+      payment_transaction_id: validatedData.paymentTransactionId || undefined,
       payment_provider: validatedData.paymentProvider || 'flutterwave',
       payment_status: (validatedData.paymentTransactionId ? 'completed' : 'pending') as const,
       order_status: (validatedData.paymentTransactionId ? 'confirmed' : 'pending') as const,

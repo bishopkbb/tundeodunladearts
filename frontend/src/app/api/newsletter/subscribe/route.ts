@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
           $set: {
             status: 'active',
             subscribed_at: new Date(),
-            unsubscribed_at: null,
+            unsubscribed_at: undefined,
           },
         },
         { returnDocument: 'after' }
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     console.log('➕ Creating new subscription...');
     const subscriptionData = {
       email: normalizedEmail,
-      name: validatedData.name || null,
+      name: validatedData.name || undefined,
       source: validatedData.source || 'website',
       status: 'active' as const,
       subscribed_at: new Date(),

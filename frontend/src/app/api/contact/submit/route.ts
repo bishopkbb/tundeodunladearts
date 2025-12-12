@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const submissionData = {
       name: validatedData.name,
       email: validatedData.email,
-      phone: validatedData.phone || null,
+      phone: validatedData.phone || undefined,
       subject: validatedData.subject,
       message: validatedData.message,
       status: 'new',
