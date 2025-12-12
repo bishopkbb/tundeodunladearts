@@ -1,6 +1,15 @@
 import { getDb } from './mongodb';
 import { ObjectId } from 'mongodb';
 
+// Cart item type
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  [key: string]: unknown; // Allow additional properties
+}
+
 // Types matching your Supabase schema
 export interface Order {
   _id?: ObjectId;
@@ -22,7 +31,7 @@ export interface Order {
     zipCode: string;
     country: string;
   };
-  cart_items: any[];
+  cart_items: CartItem[];
   subtotal: number;
   shipping_cost: number;
   tax: number;

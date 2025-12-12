@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Orders } from '@/lib/mongodb-models';
+import { Orders, CartItem } from '@/lib/mongodb-models';
 import { z } from 'zod';
+
+const cartItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  price: z.number(),
+  quantity: z.number(),
+}).passthrough(); // Allow additional properties
 
 const orderSchema = z.object({
   orderId: z.string(),
@@ -15,7 +22,7 @@ const orderSchema = z.object({
     country: z.string(),
   }),
   billingAddress: z.object({}).optional(),
-  cartItems: z.array(z.any()),
+  cartItems: z.array(cartItemSchema),
   subtotal: z.number().positive(),
   shippingCost: z.number().min(0),
   tax: z.number().min(0),
