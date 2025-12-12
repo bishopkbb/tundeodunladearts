@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { Orders } from '@/lib/mongodb-models';
 
 export async function GET(request: NextRequest) {
   try {
+    // Check MongoDB configuration first
+    if (!process.env.MONGODB_URI) {
+      console.error('❌ MONGODB_URI is not configured');
+      return NextResponse.json(
+        { 
+          error: 'Server configuration error', 
+          details: 'MongoDB connection string not configured. Please add MONGODB_URI to .env.local',
+          code: 'MISSING_CONFIG'
+        },
+        { status: 500 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const orderId = searchParams.get('orderId');
 
@@ -13,32 +26,54 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .eq('order_id', orderId)
-      .single();
-
-    if (error) {
-      if (error.code === 'PGRST116') {
-        return NextResponse.json(
-          { error: 'Order not found' },
-          { status: 404 }
-        );
-      }
+    let collection;
+    try {
+      collection = await Orders.collection();
+    } catch (dbError) {
+      console.error('❌ MongoDB connection error:', dbError);
       return NextResponse.json(
-        { error: 'Failed to fetch order', details: error.message },
+        { 
+          error: 'Database connection error', 
+          details: dbError instanceof Error ? dbError.message : 'Failed to connect to MongoDB',
+          code: 'DB_CONNECTION_ERROR'
+        },
         { status: 500 }
       );
     }
+    const order = await collection.findOne({ order_id: orderId });
 
-    return NextResponse.json({ order: data }, { status: 200 });
+    if (!order) {
+      return NextResponse.json(
+        { error: 'Order not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ order }, { status: 200 });
   } catch (error: unknown) {
+    // Check for MongoDB-specific errors
+    if (error instanceof Error) {
+      console.error('Error fetching order:', error.message);
+      if (error.message.includes('MONGODB_URI') || error.message.includes('Mongo')) {
+        return NextResponse.json(
+          { 
+            error: 'Database connection error', 
+            details: error.message,
+            code: 'DB_ERROR'
+          },
+          { status: 500 }
+        );
+      }
+    }
+
     console.error('Unexpected error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error', 
+        details: error instanceof Error ? error.message : 'Unknown error',
+        code: 'INTERNAL_ERROR'
+      },
       { status: 500 }
     );
   }
 }
-
