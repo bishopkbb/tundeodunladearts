@@ -21,7 +21,13 @@ const orderSchema = z.object({
     zipCode: z.string(),
     country: z.string(),
   }),
-  billingAddress: z.object({}).optional(),
+  billingAddress: z.object({
+    address: z.string(),
+    city: z.string(),
+    state: z.string(),
+    zipCode: z.string(),
+    country: z.string(),
+  }).optional(),
   cartItems: z.array(cartItemSchema),
   subtotal: z.number().positive(),
   shippingCost: z.number().min(0),
@@ -65,13 +71,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Handle billing address - use shipping address if billing is not provided
+    const billingAddress = validatedData.billingAddress || validatedData.shippingAddress;
+
     const orderData = {
       order_id: validatedData.orderId,
       customer_email: validatedData.customerEmail,
       customer_name: validatedData.customerName,
       customer_phone: validatedData.customerPhone,
       shipping_address: validatedData.shippingAddress,
-      billing_address: validatedData.billingAddress || validatedData.shippingAddress,
+      billing_address: billingAddress,
       cart_items: validatedData.cartItems,
       subtotal: validatedData.subtotal,
       shipping_cost: validatedData.shippingCost,
