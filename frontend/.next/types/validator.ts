@@ -209,15 +209,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../src/app/api/test-supabase/route.ts
-{
-  type __IsExpected<Specific extends RouteHandlerConfig<"/api/test-supabase">> = Specific
-  const handler = {} as typeof import("../../src/app/api/test-supabase/route.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 
 
 

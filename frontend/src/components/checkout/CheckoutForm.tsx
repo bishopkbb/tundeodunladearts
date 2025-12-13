@@ -252,17 +252,25 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
                   paymentProvider: 'flutterwave',
                 };
 
-                const orderResponse = await fetch('/api/orders/create-order', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(orderPayload),
-                });
+                try {
+                  const orderResponse = await fetch('/api/orders/create-order', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderPayload),
+                  });
 
-                if (!orderResponse.ok) {
-                  console.error('Failed to save order to database');
-                  // Still proceed with order but log the error
+                  if (!orderResponse.ok) {
+                    const errorData = await orderResponse.json().catch(() => ({}));
+                    console.error('Failed to save order to database:', errorData);
+                    // Still proceed with order but log the error
+                  } else {
+                    console.log('✅ Order saved to database successfully');
+                  }
+                } catch (orderError) {
+                  console.error('Error calling order API:', orderError);
+                  // Still proceed with order completion
                 }
 
                 // Also save to session storage as backup
@@ -286,7 +294,12 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
                 // Redirect to confirmation
                 onNext(orderId);
               } catch (dbError) {
-                console.error('Error saving order:', dbError);
+                const errorMessage = dbError instanceof Error 
+                  ? dbError.message.includes('fetch failed') 
+                    ? 'Unable to connect to server to save order. Order saved locally.'
+                    : dbError.message
+                  : 'Error saving order to database';
+                console.error('Error saving order:', errorMessage, dbError);
                 // Still proceed with order completion
                 sessionStorage.setItem(`toacc-order-${orderId}`, JSON.stringify({
                   orderId,

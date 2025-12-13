@@ -10,7 +10,7 @@ export interface CartItem {
   [key: string]: unknown; // Allow additional properties
 }
 
-// Types matching your Supabase schema
+// Types matching the database schema
 export interface Order {
   _id?: ObjectId;
   order_id: string;

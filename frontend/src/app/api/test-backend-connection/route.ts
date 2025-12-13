@@ -1,36 +1,34 @@
 import { NextResponse } from 'next/server';
+import { getDb } from '@/lib/mongodb';
 
 /**
  * Comprehensive backend connection test endpoint
- * Tests Supabase connection, database access, and all tables
+ * Tests MongoDB connection, database access, and all collections
  */
-import type { SupabaseClient } from '@supabase/supabase-js';
 
-interface TableInfo {
+interface CollectionInfo {
   exists: boolean;
   accessible: boolean;
   recordCount: number;
   error: {
     code?: string;
     message?: string;
-    hint?: string;
   } | null;
 }
 
 interface DatabaseInfo {
   connected: boolean;
-  tables: Record<string, TableInfo>;
+  collections: Record<string, CollectionInfo>;
   errors: string[];
 }
 
 interface Results {
   timestamp: string;
   environment: {
-    supabaseUrl: boolean;
-    supabaseAnonKey: boolean;
-    supabaseServiceRoleKey: boolean;
+    mongodbUri: boolean;
+    mongodbDbName: boolean;
   };
-  supabaseClient: {
+  mongodbClient: {
     initialized: boolean;
   };
   database: DatabaseInfo;
@@ -53,43 +51,19 @@ interface Results {
 }
 
 export async function GET() {
-  // Declare supabaseAdmin in outer scope so it's accessible in catch block
-  let supabaseAdmin: SupabaseClient | null = null;
-  
   try {
-    // Import supabaseAdmin inside try-catch to handle import errors
-    try {
-      const supabaseModule = await import('@/lib/supabase');
-      supabaseAdmin = supabaseModule.supabaseAdmin;
-    } catch (importError) {
-      return NextResponse.json(
-        {
-          timestamp: new Date().toISOString(),
-          error: 'Failed to import Supabase client',
-          details: importError instanceof Error ? importError.message : 'Unknown import error',
-          environment: {
-            supabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-            supabaseAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-            supabaseServiceRoleKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-          },
-        },
-        { status: 200 }
-      );
-    }
-
     const results: Results = {
       timestamp: new Date().toISOString(),
       environment: {
-        supabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-        supabaseAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        supabaseServiceRoleKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        mongodbUri: !!process.env.MONGODB_URI,
+        mongodbDbName: !!process.env.MONGODB_DB_NAME,
       },
-      supabaseClient: {
-        initialized: !!supabaseAdmin,
+      mongodbClient: {
+        initialized: false,
       },
       database: {
         connected: false,
-        tables: {},
+        collections: {},
         errors: [],
       },
       apiRoutes: {
@@ -105,91 +79,102 @@ export async function GET() {
       },
     };
 
-    // Test Supabase configuration
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      results.database.errors.push('NEXT_PUBLIC_SUPABASE_URL is missing');
-      return NextResponse.json(results, { status: 200 }); // Return 200 with errors, not 500
+    // Test MongoDB configuration
+    if (!process.env.MONGODB_URI) {
+      results.database.errors.push('MONGODB_URI is missing');
+      results.summary = {
+        status: '❌ Configuration Missing',
+        message: 'MongoDB connection string not configured',
+        recommendations: ['Add MONGODB_URI to your environment variables'],
+      };
+      return NextResponse.json(results, { status: 200 });
     }
 
-    if (!supabaseAdmin) {
-      results.database.errors.push('Supabase admin client not initialized (SUPABASE_SERVICE_ROLE_KEY missing)');
-      return NextResponse.json(results, { status: 200 }); // Return 200 with errors, not 500
-    }
+    try {
+      // Test MongoDB connection
+      const db = await getDb();
+      results.mongodbClient.initialized = true;
 
-    // Test database connection and tables
-    const tables = [
-      'newsletter_subscriptions',
-      'orders',
-      'rsvps',
-      'contact_submissions',
-      'artwork_requests',
-    ];
+      // Test database connection and collections
+      const collections = [
+        'newsletter_subscriptions',
+        'orders',
+        'rsvps',
+        'contact_submissions',
+        'artwork_requests',
+      ];
 
-    for (const table of tables) {
-      try {
-        const { error, count } = await supabaseAdmin
-          .from(table)
-          .select('*', { count: 'exact', head: true })
-          .limit(1);
-
-        results.database.tables[table] = {
-          exists: !error || error.code !== '42P01',
-          accessible: !error,
-          recordCount: count || 0,
-          error: error ? {
-            code: error.code,
-            message: error.message,
-            hint: error.hint,
-          } : null,
-        };
-
-        if (error && error.code === '42P01') {
-          results.database.errors.push(`Table '${table}' does not exist. Run migrations.`);
-        } else if (error) {
-          results.database.errors.push(`Table '${table}': ${error.message}`);
+      for (const collectionName of collections) {
+        try {
+          const collection = db.collection(collectionName);
+          const count = await collection.countDocuments();
+          
+          results.database.collections[collectionName] = {
+            exists: true,
+            accessible: true,
+            recordCount: count,
+            error: null,
+          };
+        } catch (error: unknown) {
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+          results.database.collections[collectionName] = {
+            exists: false,
+            accessible: false,
+            recordCount: 0,
+            error: {
+              message: errorMessage,
+            },
+          };
+          results.database.errors.push(`Error accessing '${collectionName}': ${errorMessage}`);
         }
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        results.database.tables[table] = {
-          exists: false,
-          accessible: false,
-          recordCount: 0,
-          error: {
-            message: errorMessage,
-          },
-        };
-        results.database.errors.push(`Error accessing '${table}': ${errorMessage}`);
       }
+
+      // Overall connection status
+      results.database.connected = results.database.errors.length === 0;
+
+      // Summary
+      results.summary = {
+        status: results.database.connected ? '✅ Connected' : '❌ Issues Found',
+        message: results.database.connected
+          ? 'Backend is properly connected to MongoDB database'
+          : `Found ${results.database.errors.length} issue(s). Check errors array.`,
+        recommendations: [] as string[],
+      };
+
+      if (!process.env.MONGODB_URI) {
+        results.summary.recommendations.push('Add MONGODB_URI to your environment variables');
+      }
+
+      if (!process.env.MONGODB_DB_NAME) {
+        results.summary.recommendations.push('Add MONGODB_DB_NAME to your environment variables (optional, defaults to "toacc")');
+      }
+
+      const missingCollections = Object.entries(results.database.collections)
+        .filter(([, info]) => !info.exists)
+        .map(([collection]) => collection);
+
+      if (missingCollections.length > 0) {
+        results.summary.recommendations.push(
+          `Collections will be created automatically on first use. Missing: ${missingCollections.join(', ')}`
+        );
+      }
+
+      // Always return 200, errors are in the response
+      return NextResponse.json(results, { status: 200 });
+    } catch (dbError: unknown) {
+      const errorMessage = dbError instanceof Error ? dbError.message : 'Unknown error';
+      results.database.errors.push(`MongoDB connection failed: ${errorMessage}`);
+      results.summary = {
+        status: '❌ Connection Failed',
+        message: 'Failed to connect to MongoDB',
+        recommendations: [
+          'Check MONGODB_URI is correct',
+          'Verify MongoDB Atlas network access allows your IP',
+          'Check MongoDB cluster is running (not paused)',
+        ],
+      };
+      return NextResponse.json(results, { status: 200 });
     }
-
-    // Overall connection status
-    results.database.connected = results.database.errors.length === 0 && supabaseAdmin !== null;
-
-    // Summary
-    results.summary = {
-      status: results.database.connected ? '✅ Connected' : '❌ Issues Found',
-      message: results.database.connected
-        ? 'Backend is properly connected to Supabase database'
-        : `Found ${results.database.errors.length} issue(s). Check errors array.`,
-      recommendations: [] as string[],
-    };
-
-    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-      results.summary.recommendations.push('Add SUPABASE_SERVICE_ROLE_KEY to frontend/.env.local');
-    }
-
-    const missingTables = Object.entries(results.database.tables)
-      .filter(([, info]) => !info.exists)
-      .map(([table]) => table);
-
-    if (missingTables.length > 0) {
-      results.summary.recommendations.push(
-        `Run migrations: cd backend && npx supabase db push (Missing tables: ${missingTables.join(', ')})`
-      );
-    }
-
-    // Always return 200, errors are in the response
-    return NextResponse.json(results, { status: 200 });
   } catch (error: unknown) {
     // Catch any unexpected errors
     console.error('❌ Unexpected error in test-backend-connection:', error);
@@ -201,12 +186,8 @@ export async function GET() {
         details: error instanceof Error ? error.message : 'Unknown error',
         stack: error instanceof Error ? error.stack : undefined,
         environment: {
-          supabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
-          supabaseAnonKey: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-          supabaseServiceRoleKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-        },
-        supabaseClient: {
-          initialized: !!supabaseAdmin,
+          mongodbUri: !!process.env.MONGODB_URI,
+          mongodbDbName: !!process.env.MONGODB_DB_NAME,
         },
         message: 'An unexpected error occurred. Check server logs for details.',
       },
@@ -214,4 +195,3 @@ export async function GET() {
     );
   }
 }
-

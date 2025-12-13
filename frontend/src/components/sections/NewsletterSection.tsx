@@ -66,12 +66,17 @@ export default function NewsletterSection() {
         
         // If it's a config error, show helpful message
         if (data.code === 'MISSING_CONFIG') {
-          console.error('⚠️ Supabase configuration is missing!');
+          console.error('⚠️ MongoDB configuration is missing!');
         }
       }
     } catch (error: unknown) {
       console.error('Newsletter subscription error:', error);
-      setMessage({ type: 'error', text: 'An error occurred. Please try again later.' });
+      const errorMessage = error instanceof Error 
+        ? error.message.includes('fetch failed') 
+          ? 'Unable to connect to server. Please check your connection and try again.'
+          : error.message
+        : 'An error occurred. Please try again later.';
+      setMessage({ type: 'error', text: errorMessage });
     } finally {
       setIsSubmitting(false);
       // Clear message after 5 seconds

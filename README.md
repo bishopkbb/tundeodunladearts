@@ -6,7 +6,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.5-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat-square&logo=supabase)](https://supabase.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Sanity](https://img.shields.io/badge/Sanity-CMS-F03E2F?style=flat-square&logo=sanity)](https://www.sanity.io/)
 
 ## 🌐 Live Website
@@ -69,11 +69,9 @@ tunde-arts-connexions/
 │   │   ├── lib/      # Utilities and configurations
 │   │   └── types/    # TypeScript type definitions
 │   └── public/       # Static assets
-├── backend/          # Supabase database and migrations
-│   ├── supabase/
-│   │   └── migrations/   # Database schema migrations
+├── backend/          # MongoDB database configuration
 │   └── src/
-│       └── lib/      # Supabase client configuration
+│       └── lib/      # MongoDB client configuration (legacy, see frontend)
 └── cms/              # Sanity.io CMS configuration
     └── schemas/      # Sanity content schemas
 ```
@@ -108,7 +106,7 @@ tunde-arts-connexions/
       ┌───────────┼───────────┐
       ▼           ▼           ▼
 ┌──────────┐ ┌──────────┐ ┌──────────┐
-│ Supabase │ │  Sanity  │ │Flutterwave│
+│ MongoDB  │ │  Sanity  │ │Flutterwave│
 │ Database │ │   CMS    │ │ Payments  │
 └──────────┘ └──────────┘ └──────────┘
 ```
@@ -134,9 +132,9 @@ tunde-arts-connexions/
 
 | Technology | Purpose |
 |------------|---------|
-| **Supabase (PostgreSQL)** | Database, authentication, and real-time subscriptions |
+| **MongoDB Atlas** | Cloud database for orders, newsletter, RSVPs, and contact submissions |
 | **Next.js API Routes** | Serverless API endpoints |
-| **Row Level Security (RLS)** | Database-level security policies |
+| **MongoDB Collections** | Document-based data storage |
 
 ### CMS
 
@@ -150,7 +148,7 @@ tunde-arts-connexions/
 | Service | Purpose |
 |---------|---------|
 | **Vercel** | Hosting and deployment platform |
-| **Supabase Cloud** | Managed PostgreSQL database |
+| **MongoDB Atlas** | Managed MongoDB database |
 | **Flutterwave** | Payment processing |
 
 ## 🚀 Getting Started
@@ -160,7 +158,7 @@ tunde-arts-connexions/
 - **Node.js** ≥ 18.0.0
 - **npm** ≥ 9.0.0 or **pnpm** ≥ 8.0.0 (recommended)
 - **Git** ≥ 2.30.0
-- **Supabase CLI** (for local development) - Optional
+- **MongoDB Atlas Account** (for database) - Required
 
 ### Installation
 
@@ -178,10 +176,10 @@ tunde-arts-connexions/
    pnpm install
    ```
 
-   **Backend (optional, for local Supabase):**
+   **Backend (optional, for local development):**
    ```bash
    cd ../backend
-   pnpm install
+   npm install
    ```
 
    **CMS (optional):**
@@ -200,14 +198,16 @@ tunde-arts-connexions/
 
    Add required variables (see [Environment Configuration](#environment-configuration))
 
-4. **Run database migrations**
+4. **Configure MongoDB**
 
-   ```bash
-   cd backend
-   npx supabase db push
-   ```
-
-   Or manually run migrations in Supabase Dashboard → SQL Editor
+   - Create a MongoDB Atlas account at https://www.mongodb.com/cloud/atlas
+   - Create a free cluster
+   - Get your connection string
+   - Add to `frontend/.env.local`:
+     ```
+     MONGODB_URI=your_mongodb_connection_string
+     MONGODB_DB_NAME=toacc
+     ```
 
 5. **Start development server**
 
@@ -254,7 +254,8 @@ frontend/
 │   │   ├── useReducedMotion.ts  # Accessibility hook
 │   │   └── useScrollAnimation.ts # Scroll-based animations
 │   ├── lib/
-│   │   ├── supabase.ts          # Supabase client configuration
+│   │   ├── mongodb.ts           # MongoDB client configuration
+│   │   ├── mongodb-models.ts    # MongoDB data models and collections
 │   │   ├── sanity.ts            # Sanity CMS client
 │   │   ├── cmsData.ts           # CMS data fetching utilities
 │   │   ├── artworksData.ts      # Static artwork data (fallback)
@@ -276,16 +277,11 @@ frontend/
 
 ```
 backend/
-├── supabase/
-│   ├── migrations/
-│   │   ├── 20240101000000_initial_schema.sql        # Initial database schema
-│   │   └── 20240101000001_add_newsletter_select_policy.sql  # RLS policies
-│   ├── seed.sql                 # Optional seed data
-│   └── config.toml              # Supabase local configuration
 └── src/
-    └── lib/
-        └── supabase.ts          # Supabase client (legacy, see frontend)
+    └── lib/                     # Legacy backend files (not used in production)
 ```
+
+**Note:** Database is now managed via MongoDB Atlas. All API routes are in `frontend/src/app/api/`.
 
 ### CMS (`cms/`)
 
@@ -330,7 +326,7 @@ See [`cms/SANITY_CMS_SETUP_GUIDE.md`](./cms/SANITY_CMS_SETUP_GUIDE.md) for compl
   - USSD
   - Account transfer
 - **Order Management**: Complete order tracking and history
-- **Order Persistence**: Orders saved to Supabase database
+- **Order Persistence**: Orders saved to MongoDB database
 
 #### 📧 Newsletter & Communications
 - **Newsletter Subscription**: Email subscription with validation
@@ -395,7 +391,7 @@ See [`cms/SANITY_CMS_SETUP_GUIDE.md`](./cms/SANITY_CMS_SETUP_GUIDE.md) for compl
 - **Production**: `https://your-domain.vercel.app/api`
 
 ### Authentication
-All API routes use Supabase authentication. Admin operations require `SUPABASE_SERVICE_ROLE_KEY`.
+All API routes use MongoDB for data storage. No authentication required for public endpoints (newsletter, contact, RSVP, orders).
 
 ### Endpoints
 
@@ -527,103 +523,118 @@ Returns comprehensive connection status and database table accessibility.
 
 ## 🗄️ Database Schema
 
-### Tables
+### MongoDB Collections
 
 #### `orders`
 Order records with payment and shipping information.
 
-```sql
-- id (UUID, primary key)
-- order_id (TEXT, unique)
-- customer_email (TEXT)
-- customer_name (TEXT)
-- customer_phone (TEXT, nullable)
-- shipping_address (JSONB)
-- billing_address (JSONB, nullable)
-- cart_items (JSONB)
-- subtotal (DECIMAL)
-- shipping_cost (DECIMAL)
-- tax (DECIMAL)
-- total (DECIMAL)
-- payment_status (ENUM: pending, processing, completed, failed, refunded)
-- payment_provider (TEXT, nullable)
-- payment_transaction_id (TEXT, nullable)
-- order_status (ENUM: pending, processing, confirmed, shipped, delivered, cancelled)
-- shipping_status (TEXT, default: 'not_shipped')
-- notes (TEXT, nullable)
-- created_at (TIMESTAMP WITH TIME ZONE)
-- updated_at (TIMESTAMP WITH TIME ZONE)
+```typescript
+{
+  _id: ObjectId,
+  order_id: string (unique),
+  customer_email: string,
+  customer_name: string,
+  customer_phone?: string,
+  shipping_address: {
+    address: string,
+    city: string,
+    state: string,
+    zipCode: string,
+    country: string
+  },
+  billing_address?: { ... },
+  cart_items: CartItem[],
+  subtotal: number,
+  shipping_cost: number,
+  tax: number,
+  total: number,
+  payment_status: 'pending' | 'processing' | 'completed' | 'failed' | 'refunded',
+  payment_provider?: string,
+  payment_transaction_id?: string,
+  order_status: 'pending' | 'processing' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled',
+  shipping_status?: string,
+  notes?: string,
+  created_at: Date,
+  updated_at: Date
+}
 ```
 
 #### `newsletter_subscriptions`
 Newsletter subscriber list.
 
-```sql
-- id (UUID, primary key)
-- email (TEXT, unique)
-- name (TEXT, nullable)
-- status (TEXT, default: 'active')
-- source (TEXT, nullable)
-- subscribed_at (TIMESTAMP WITH TIME ZONE)
-- unsubscribed_at (TIMESTAMP WITH TIME ZONE, nullable)
+```typescript
+{
+  _id: ObjectId,
+  email: string (unique),
+  name?: string,
+  status: 'active' | 'inactive',
+  source?: string,
+  subscribed_at: Date,
+  unsubscribed_at?: Date
+}
 ```
 
 #### `rsvps`
 Event and exhibition RSVPs.
 
-```sql
-- id (UUID, primary key)
-- event_id (TEXT)
-- event_type (TEXT: 'exhibition' | 'event')
-- name (TEXT)
-- email (TEXT)
-- phone (TEXT, nullable)
-- guest_count (INTEGER, default: 1)
-- dietary_requirements (TEXT, nullable)
-- special_requests (TEXT, nullable)
-- status (TEXT, default: 'pending')
-- created_at (TIMESTAMP WITH TIME ZONE)
+```typescript
+{
+  _id: ObjectId,
+  event_id: string,
+  event_type: 'exhibition' | 'event',
+  name: string,
+  email: string,
+  phone?: string,
+  guest_count: number,
+  dietary_requirements?: string,
+  special_requests?: string,
+  status: string,
+  created_at: Date
+}
 ```
 
 #### `contact_submissions`
 Contact form submissions.
 
-```sql
-- id (UUID, primary key)
-- name (TEXT)
-- email (TEXT)
-- phone (TEXT, nullable)
-- subject (TEXT)
-- message (TEXT)
-- status (TEXT, default: 'new')
-- responded_at (TIMESTAMP WITH TIME ZONE, nullable)
-- created_at (TIMESTAMP WITH TIME ZONE)
+```typescript
+{
+  _id: ObjectId,
+  name: string,
+  email: string,
+  phone?: string,
+  subject: string,
+  message: string,
+  status: string,
+  responded_at?: Date,
+  created_at: Date
+}
 ```
 
 #### `artwork_requests`
 Requests for unavailable artworks.
 
-```sql
-- id (UUID, primary key)
-- artwork_id (TEXT)
-- name (TEXT)
-- email (TEXT)
-- phone (TEXT, nullable)
-- message (TEXT, nullable)
-- request_type (TEXT, nullable)
-- status (TEXT, default: 'pending')
-- created_at (TIMESTAMP WITH TIME ZONE)
+```typescript
+{
+  _id: ObjectId,
+  artwork_id: string,
+  name: string,
+  email: string,
+  phone?: string,
+  message?: string,
+  status: string,
+  created_at: Date
+}
 ```
 
-### Row Level Security (RLS)
+### Indexes
 
-All tables have RLS enabled with the following policies:
+Recommended indexes for performance:
+- `orders`: `order_id` (unique), `customer_email`, `created_at`
+- `newsletter_subscriptions`: `email` (unique), `status`
+- `rsvps`: `event_id`, `email`
+- `contact_submissions`: `status`, `created_at`
 
-- **Public INSERT**: Allow public to create records (subscriptions, orders, RSVPs, contact)
-- **User SELECT**: Users can view their own records
-- **Admin SELECT**: Admin users can view all records
-
-See `backend/supabase/migrations/` for complete schema and policies.
+See `frontend/src/lib/mongodb-indexes.ts` for index creation helper.
 
 ## ⚙️ Environment Configuration
 
@@ -632,10 +643,9 @@ See `backend/supabase/migrations/` for complete schema and policies.
 Create `frontend/.env.local`:
 
 ```env
-# Supabase Configuration (REQUIRED)
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+# MongoDB Configuration (REQUIRED)
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/toacc?retryWrites=true&w=majority
+MONGODB_DB_NAME=toacc
 
 # Sanity CMS (Optional - for dynamic content)
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-sanity-project-id
@@ -647,13 +657,7 @@ NEXT_PUBLIC_FLW_PUBLIC_KEY=FLWPUBK-your-public-key
 
 ### Backend Environment Variables
 
-Create `backend/.env` (for local Supabase development):
-
-```env
-SUPABASE_URL=http://localhost:54321
-SUPABASE_ANON_KEY=your-local-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-local-service-role-key
-```
+Backend now uses MongoDB. All configuration is in `frontend/.env.local` (see above).
 
 ### CMS Environment Variables
 
@@ -667,11 +671,13 @@ SANITY_API_TOKEN=your-api-token
 
 ### Getting Credentials
 
-**Supabase:**
-1. Go to [Supabase Dashboard](https://app.supabase.com)
-2. Select your project
-3. Settings → API
-4. Copy Project URL, anon key, and service_role key
+**MongoDB Atlas:**
+1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Create a free cluster
+3. Database Access → Create database user
+4. Network Access → Add IP address (or `0.0.0.0/0` for testing)
+5. Connect → Get connection string
+6. Replace `<password>` with your database user password
 
 **Sanity:**
 1. Go to [Sanity Dashboard](https://www.sanity.io/manage)
@@ -708,15 +714,8 @@ pnpm lint             # Run ESLint
 
 #### Backend
 
-```bash
-cd backend
-
-# Supabase CLI
-npx supabase start    # Start local Supabase
-npx supabase stop     # Stop local Supabase
-npx supabase db push  # Push migrations to remote
-npx supabase gen types typescript --local > types/database.types.ts  # Generate types
-```
+Backend is now integrated into the frontend. All API routes are in `frontend/src/app/api/`.
+No separate backend commands needed.
 
 #### CMS
 
@@ -745,18 +744,11 @@ pnpm deploy           # Deploy Sanity Studio
    git push origin feature/your-feature-name
    ```
 
-2. **Database Migrations**
+2. **Database Setup**
    ```bash
-   # Create migration
-   cd backend
-   npx supabase migration new your_migration_name
-   
-   # Edit migration file
-   # Test locally
-   npx supabase db reset
-   
-   # Push to remote
-   npx supabase db push
+   # MongoDB collections are created automatically on first insert
+   # To create indexes, use MongoDB Compass or run:
+   # See frontend/src/lib/mongodb-indexes.ts for index creation
    ```
 
 3. **Testing API Routes**
@@ -812,7 +804,7 @@ See [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md) for comprehensi
 
 3. **Configure Environment Variables in Vercel**
    - Project Settings → Environment Variables
-   - Add all required Supabase variables
+   - Add `MONGODB_URI` and `MONGODB_DB_NAME`
    - Set for Production, Preview, and Development
 
 4. **Deploy and Test**
@@ -820,16 +812,13 @@ See [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md) for comprehensi
    - Test live site
    - Verify API endpoints work
 
-### Database Migrations
+### Database Setup
 
-**Before deploying, ensure migrations are run:**
+**MongoDB collections are created automatically on first insert.**
 
-```bash
-cd backend
-npx supabase db push
-```
-
-Or manually in Supabase Dashboard → SQL Editor
+To create indexes for better performance:
+- Use MongoDB Compass to run index creation
+- Or see `frontend/src/lib/mongodb-indexes.ts` for helper function
 
 ### Post-Deployment
 
@@ -840,7 +829,7 @@ Or manually in Supabase Dashboard → SQL Editor
    - Checkout flow
    - API endpoints
 3. **Monitor Logs** in Vercel dashboard
-4. **Check Supabase** for data integrity
+4. **Check MongoDB Atlas** for data integrity
 
 ## ⚡ Performance
 
@@ -895,15 +884,15 @@ Or manually in Supabase Dashboard → SQL Editor
    - Rotate keys regularly
 
 2. **Database Security**
-   - Row Level Security (RLS) on all tables
-   - Service role key only used server-side
-   - Public anon key for client-side operations
+   - MongoDB connection string secured in environment variables
+   - Network access restricted via MongoDB Atlas IP whitelist
    - Input validation on all API routes
+   - No sensitive data exposed in client-side code
 
 3. **API Security**
    - Rate limiting (via Vercel)
    - Input validation with Zod
-   - SQL injection protection (via Supabase)
+   - MongoDB injection protection (via parameterized queries)
    - XSS protection with Content Security Policy
 
 4. **Payment Security**
@@ -914,7 +903,7 @@ Or manually in Supabase Dashboard → SQL Editor
 ### Security Checklist
 
 - [ ] All environment variables secured
-- [ ] RLS policies configured
+- [ ] MongoDB Atlas network access configured
 - [ ] API routes validate inputs
 - [ ] HTTPS enforced in production
 - [ ] No sensitive data in client-side code
@@ -938,17 +927,17 @@ Or manually in Supabase Dashboard → SQL Editor
 
 ### API Testing
 
-Use `/api/test-backend-connection` to verify:
+Use `/api/test-backend-connection` or `/api/test-mongodb` to verify:
 - Environment variables are set
-- Supabase connection works
-- All database tables are accessible
+- MongoDB connection works
+- All database collections are accessible
 
 ## 📚 Documentation
 
 - [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md) - Complete Vercel deployment guide
 - [`QUICK_VERCEL_DEPLOY.md`](./QUICK_VERCEL_DEPLOY.md) - Quick deployment steps
 - [`SETUP_ENV_LOCAL.md`](./SETUP_ENV_LOCAL.md) - Environment variable setup
-- [`SUPABASE_DASHBOARD_SETUP.md`](./SUPABASE_DASHBOARD_SETUP.md) - Supabase configuration
+- [`MONGODB_MIGRATION_CHECKLIST.md`](./MONGODB_MIGRATION_CHECKLIST.md) - MongoDB migration checklist
 - [`backend/README.md`](./backend/README.md) - Backend-specific documentation
 
 ## 🤝 Contributing
@@ -979,13 +968,13 @@ This is a private project. Unauthorized copying, modification, distribution, or 
 **Ajibade Tosin** (@bishopkbb)
 
 - Fullstack Developer
-- Technologies: React • Next.js • TypeScript • Supabase • Sanity
+- Technologies: React • Next.js • TypeScript • MongoDB • Sanity
 - LinkedIn: [Your LinkedIn Profile]
 
 ## 🙏 Acknowledgments
 
 - **Tunde Odunlade** - For the vision and artistic inspiration
-- **Supabase** - For the excellent backend infrastructure
+- **MongoDB Atlas** - For the excellent database infrastructure
 - **Vercel** - For seamless deployment and hosting
 - **Sanity** - For the powerful CMS platform
 - **Flutterwave** - For reliable payment processing

@@ -79,7 +79,12 @@ export default function Footer() {
       }
     } catch (error: unknown) {
       console.error('Newsletter subscription error:', error);
-      alert('An error occurred. Please try again later.');
+      const errorMessage = error instanceof Error 
+        ? error.message.includes('fetch failed') 
+          ? 'Unable to connect to server. Please check your connection and try again.'
+          : error.message
+        : 'An error occurred. Please try again later.';
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

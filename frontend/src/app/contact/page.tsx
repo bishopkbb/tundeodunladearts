@@ -46,7 +46,14 @@ export default function ContactPage() {
       }
     } catch (error: unknown) {
       console.error('Contact form submission error:', error);
+      const errorMessage = error instanceof Error 
+        ? error.message.includes('fetch failed') 
+          ? 'Unable to connect to server. Please check your connection and try again.'
+          : error.message
+        : 'An error occurred. Please try again later.';
       setSubmitStatus('error');
+      // Show error message to user
+      console.error('Contact form error details:', errorMessage);
       setTimeout(() => setSubmitStatus('idle'), 5000);
     } finally {
       setIsSubmitting(false);
