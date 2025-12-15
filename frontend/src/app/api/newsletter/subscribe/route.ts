@@ -16,14 +16,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { 
           error: 'Server configuration error', 
-          details: 'MongoDB connection string not configured. Please add MONGODB_URI to .env.local',
+          details: 'MongoDB connection string not configured. Please add MONGODB_URI to environment variables.',
           code: 'MISSING_CONFIG'
         },
         { status: 500 }
       );
     }
 
-    const body = await request.json();
+    let body;
+    try {
+      body = await request.json();
+    } catch (parseError) {
+      console.error('❌ Failed to parse request body:', parseError);
+      return NextResponse.json(
+        { 
+          error: 'Invalid request', 
+          details: 'Request body is not valid JSON',
+          code: 'INVALID_REQUEST'
+        },
+        { status: 400 }
+      );
+    }
     console.log('📧 Newsletter subscription request:', body);
     
     const validatedData = subscribeSchema.parse(body);

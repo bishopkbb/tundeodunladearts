@@ -9,8 +9,9 @@ if (!process.env.MONGODB_URI) {
 const uri = process.env.MONGODB_URI;
 const options = {
   maxPoolSize: 10,
-  serverSelectionTimeoutMS: 5000,
+  serverSelectionTimeoutMS: 10000, // Increased to 10 seconds
   socketTimeoutMS: 45000,
+  connectTimeoutMS: 10000, // Connection timeout
 };
 
 let client: MongoClient;

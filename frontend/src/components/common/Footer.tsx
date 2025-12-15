@@ -65,6 +65,7 @@ export default function Footer() {
           email,
           source: 'website',
         }),
+        signal: AbortSignal.timeout(10000), // 10 second timeout
       });
 
       const data = await response.json();
@@ -79,11 +80,18 @@ export default function Footer() {
       }
     } catch (error: unknown) {
       console.error('Newsletter subscription error:', error);
-      const errorMessage = error instanceof Error 
-        ? error.message.includes('fetch failed') 
-          ? 'Unable to connect to server. Please check your connection and try again.'
-          : error.message
-        : 'An error occurred. Please try again later.';
+      let errorMessage = 'An error occurred. Please try again later.';
+      
+      if (error instanceof Error) {
+        if (error.name === 'AbortError' || error.message.includes('timeout')) {
+          errorMessage = 'Request timed out. Please check your connection and try again.';
+        } else if (error.message.includes('fetch failed') || error.message.includes('Failed to fetch')) {
+          errorMessage = 'Unable to connect to server. This may be a temporary issue. Please try again in a moment.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
       alert(errorMessage);
     } finally {
       setIsSubmitting(false);

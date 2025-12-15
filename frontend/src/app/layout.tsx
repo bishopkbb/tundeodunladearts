@@ -151,7 +151,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="512x512" />
         <link rel="apple-touch-icon" href="/Assets/logo.png" sizes="180x180" />
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="manifest" href="https://www.tundeodunladearts.com/manifest.json" />
+        <link rel="manifest" href="/manifest.webmanifest" />
         {/* Structured Data */}
         <script
           type="application/ld+json"
