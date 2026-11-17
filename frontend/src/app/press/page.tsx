@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useState } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
+import SmartImage from '@/components/ui/SmartImage';
 
 // Press articles data
 const pressArticles = [
@@ -215,10 +215,9 @@ export default function PressPage() {
                 >
                   <div className="bg-gradient-to-br from-[#F5EFE7] to-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-[#D4AF37]">
                     <div className="relative h-56 overflow-hidden">
-                      <Image
+                      <SmartImage
                         src={article.image}
                         alt={article.title}
-                        fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         quality={90}
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -297,10 +296,9 @@ export default function PressPage() {
                 >
                   <div className="bg-white/90 backdrop-blur-sm rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
                     <div className="relative h-48 overflow-hidden">
-                      <Image
+                      <SmartImage
                         src={article.image}
                         alt={article.title}
-                        fill
                         sizes="(max-width: 768px) 100vw, 50vw"
                         quality={90}
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -354,10 +352,9 @@ export default function PressPage() {
 
               {/* Article Image */}
               <div className="relative h-72">
-                <Image
+                <SmartImage
                   src={selectedArticle.image}
                   alt={selectedArticle.title}
-                  fill
                   sizes="(max-width: 768px) 100vw, 80vw"
                   quality={90}
                   className="object-cover"

@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Skeleton, SkeletonMasonry } from '@/components/ui/Skeleton';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
+import SmartImage from '@/components/ui/SmartImage';
 
 interface CollectionImage {
   src: string;
@@ -226,10 +226,9 @@ export default function ArtCollections() {
                     {/* Image Container */}
                     <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#F5EFE7] to-white p-1" style={{ zIndex: 20 }}>
                       <div className="relative w-full h-full rounded-sm overflow-hidden bg-white">
-                        <Image
+                        <SmartImage
                           src={image.src}
                           alt={`Art collection piece ${image.uniqueId || image.id}`}
-                          fill
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
                           quality={75}
                           className="object-cover transition-transform duration-500 group-hover:scale-110 relative"
@@ -392,10 +391,9 @@ export default function ArtCollections() {
 
               {/* Image Container - Scrollable */}
               <div className="relative w-full flex-shrink-0 h-[40vh] xs:h-[45vh] sm:h-[50vh] md:h-[55vh] lg:h-[60vh] xl:h-[65vh] overflow-hidden bg-gradient-to-br from-[#F5EFE7] to-white">
-                <Image
+                <SmartImage
                   src={selectedImage.src}
                   alt={`Art collection piece ${selectedImage.uniqueId || selectedImage.id}`}
-                  fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, (max-width: 1280px) 80vw, 70vw"
                   quality={95}
                   className="object-contain"

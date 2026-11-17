@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRef, useState, useEffect } from 'react';
+import SmartImage from '@/components/ui/SmartImage';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -115,10 +115,9 @@ export default function AboutSection() {
               ) : (
                 // Placeholder with poster image while video loads
                 <div className="relative w-full h-full">
-                  <Image
+                  <SmartImage
                     src="/Assets/cover1.jpg"
                     alt="TOACC Gallery Video Preview"
-                    fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     quality={85}
                     className="object-cover"

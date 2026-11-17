@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
+import SmartImage from '@/components/ui/SmartImage';
 
 interface Exhibition {
   id: number;
@@ -188,10 +188,9 @@ export default function FeaturedExhibitions() {
               >
                 <div>
                   <div className="relative h-72 md:h-80 overflow-hidden rounded-xl mb-4 shadow-lg group-hover:shadow-2xl transition-shadow duration-200 border-4 border-[#D4AF37]">
-                    <Image
+                    <SmartImage
                       src={exhibit.image}
                       alt={exhibit.title}
-                      fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       quality={85}
                       loading="lazy"
@@ -279,10 +278,9 @@ export default function FeaturedExhibitions() {
 
               {/* Exhibition Hero Image */}
               <div className="relative h-64 xs:h-72 sm:h-80 md:h-96">
-                <Image
+                <SmartImage
                   src={selectedExhibition.image}
                   alt={selectedExhibition.title}
-                  fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
                   quality={85}
                   loading="eager"

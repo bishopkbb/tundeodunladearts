@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
@@ -9,6 +8,7 @@ import CartSidebar from '@/components/cart/CartSidebar';
 import { useCart } from '@/contexts/CartContext';
 import { allArtworks, type Artwork } from '@/lib/artworksData';
 import { fetchArtworks } from '@/lib/cmsData';
+import SmartImage from '@/components/ui/SmartImage';
 
 // Static fallback artworks
 const staticArtworks: Artwork[] = allArtworks;
@@ -393,25 +393,14 @@ export default function ShopPage() {
                           className="relative h-64 overflow-hidden cursor-pointer"
                           onClick={() => setSelectedArtwork(artwork)}
                         >
-                          {/* Placeholder shown behind the image until it has loaded */}
-                          <div className="absolute inset-0 bg-[#E8DCC8]/70 motion-safe:animate-pulse" aria-hidden="true" />
-                          <Image
+<SmartImage
                             src={artwork.image}
                             alt={artwork.title}
-                            fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                             quality={85}
                             loading={index < 12 ? "eager" : "lazy"}
                             priority={index < 4}
                             className="object-cover group-hover:scale-110 transition-transform duration-500"
-                            onError={(e) => {
-                              console.error(`Failed to load image: ${artwork.image}`, e);
-                              // Fallback to a placeholder or handle error
-                              const target = e.target as HTMLImageElement;
-                              if (target && target.parentElement) {
-                                target.src = '/Assets/logo-256.png'; // Lightweight fallback image
-                              }
-                            }}
                           />
                           {/* Badges */}
                           <div className="absolute top-3 left-3 flex flex-col gap-2">
@@ -530,10 +519,9 @@ export default function ShopPage() {
                 <div className="grid md:grid-cols-2">
                   {/* Image */}
                   <div className="relative h-64 xs:h-80 sm:h-96 md:h-full min-h-[250px]">
-                    <Image
+                    <SmartImage
                       src={selectedArtwork.image}
                       alt={selectedArtwork.title}
-                      fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
                       quality={85}
                       loading="lazy"

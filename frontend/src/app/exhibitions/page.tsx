@@ -1,7 +1,6 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 import { useState, useEffect, useMemo } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
@@ -10,6 +9,7 @@ import { calculateExhibitionStatus, getStatusText, getStatusColor, type Exhibiti
 import { fetchExhibitions } from '@/lib/cmsData';
 import { shareToFacebook, shareToTwitter, shareToLinkedIn, shareToWhatsApp, shareViaEmail, shareToPinterest, copyToClipboard, getAbsoluteUrl } from '@/lib/shareUtils';
 import Link from 'next/link';
+import SmartImage from '@/components/ui/SmartImage';
 
 interface Exhibition {
   id: number;
@@ -354,10 +354,9 @@ export default function ExhibitionsPage() {
                   >
                     {/* Image */}
                     <div className="relative h-64 overflow-hidden">
-                      <Image
+                      <SmartImage
                         src={exhibition.image}
                         alt={exhibition.title}
-                        fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         quality={85}
                         loading="lazy"
@@ -462,10 +461,9 @@ export default function ExhibitionsPage() {
 
                 {/* Exhibition Hero Image */}
                 <div className="relative h-80 md:h-96">
-                  <Image
+                  <SmartImage
                     src={selectedExhibition.image}
                     alt={selectedExhibition.title}
-                    fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
                     quality={85}
                     loading="eager"

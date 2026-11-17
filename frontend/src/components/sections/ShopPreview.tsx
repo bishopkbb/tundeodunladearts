@@ -1,8 +1,8 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
+import SmartImage from '@/components/ui/SmartImage';
 
 // Featured artworks for landing page preview
 const featuredArtworks = [
@@ -71,10 +71,9 @@ export default function ShopPreview() {
             >
               {/* Image */}
               <div className="relative h-72 overflow-hidden">
-                <Image
+                <SmartImage
                   src={artwork.image}
                   alt={artwork.title}
-                  fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   quality={85}
                   loading={index < 4 ? "eager" : "lazy"}

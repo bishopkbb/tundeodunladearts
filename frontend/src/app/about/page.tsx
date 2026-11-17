@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useState } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
+import SmartImage from '@/components/ui/SmartImage';
 
 // Artist data
 const artists = [
@@ -271,10 +271,9 @@ export default function AboutPage() {
                   className="group cursor-pointer"
                 >
                   <div className="relative h-80 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-4 border-[#D4AF37]">
-                    <Image
+                    <SmartImage
                       src={artist.image}
                       alt={artist.name}
-                      fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       quality={90}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -328,10 +327,9 @@ export default function AboutPage() {
 
               {/* Artist Image */}
               <div className="relative h-64 md:h-80">
-                <Image
+                <SmartImage
                   src={selectedArtist.image}
                   alt={selectedArtist.name}
-                  fill
                   sizes="(max-width: 768px) 100vw, 80vw"
                   quality={90}
                   className="object-cover"

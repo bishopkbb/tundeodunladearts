@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { useState } from 'react';
 import { useCart } from '@/contexts/CartContext';
+import SmartImage from '@/components/ui/SmartImage';
 
 // Sample artworks - will be replaced with CMS data later
 const artworks = [
@@ -189,10 +189,9 @@ export default function ShopSection() {
             >
               {/* Image */}
               <div className="relative h-80 overflow-hidden">
-                <Image
+                <SmartImage
                   src={artwork.image}
                   alt={artwork.title}
-                  fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   quality={90}
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
