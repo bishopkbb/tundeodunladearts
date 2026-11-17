@@ -10,6 +10,7 @@ import { fetchExhibitions } from '@/lib/cmsData';
 import { shareToFacebook, shareToTwitter, shareToLinkedIn, shareToWhatsApp, shareViaEmail, shareToPinterest, copyToClipboard, getAbsoluteUrl } from '@/lib/shareUtils';
 import Link from 'next/link';
 import SmartImage from '@/components/ui/SmartImage';
+import { useEscapeKey } from '@/hooks/useEscapeKey';
 
 interface Exhibition {
   id: number;
@@ -114,6 +115,7 @@ const exhibitionsData: Exhibition[] = [
 export default function ExhibitionsPage() {
   const [filter, setFilter] = useState<ExhibitionStatus | 'all'>('all');
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition & { status: ExhibitionStatus } | null>(null);
+  useEscapeKey(!!selectedExhibition, () => setSelectedExhibition(null));
   const [exhibitions, setExhibitions] = useState<Exhibition[]>(exhibitionsData);
   const [, setIsLoading] = useState(true);
   const [showShareMenu, setShowShareMenu] = useState(false);
@@ -382,7 +384,7 @@ export default function ExhibitionsPage() {
                       <h3 className="text-2xl font-bold text-[#3D2817] mb-2 group-hover:text-[#C17C2E] transition-colors font-serif">
                         {exhibition.title}
                       </h3>
-                      <p className="text-sm text-[#C17C2E] font-semibold mb-3">{exhibition.artist}</p>
+                      <p className="text-sm text-[#9A5B1F] font-semibold mb-3">{exhibition.artist}</p>
                       <p className="text-sm text-[#6B4423] mb-4 line-clamp-2">
                         {exhibition.description}
                       </p>

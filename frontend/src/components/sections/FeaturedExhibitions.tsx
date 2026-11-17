@@ -222,7 +222,7 @@ export default function FeaturedExhibitions() {
                     {exhibit.subtitle && (
                       <p className="text-sm text-[#8B4513] italic mb-1">{exhibit.subtitle}</p>
                     )}
-                    <p className="text-sm text-[#C17C2E] font-semibold mb-2">{exhibit.artist}</p>
+                    <p className="text-sm text-[#9A5B1F] font-semibold mb-2">{exhibit.artist}</p>
                     <p className="text-xs text-[#6B4423] line-clamp-2">{exhibit.category}</p>
                     <p className="text-xs text-[#8B4513] mt-2 line-clamp-1">📍 {exhibit.venue}</p>
                   </div>

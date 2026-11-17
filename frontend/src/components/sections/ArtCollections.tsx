@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Skeleton, SkeletonMasonry } from '@/components/ui/Skeleton';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -63,6 +63,28 @@ export default function ArtCollections() {
       console.error('Failed to copy to clipboard:', error);
     }
   };
+
+  // Lightbox navigation: previous / next with wrap-around, via buttons, arrow keys or swipe.
+  const currentIndex = selectedImage ? images.findIndex((i) => i.id === selectedImage.id) : -1;
+  const showAt = useCallback(
+    (index: number) => {
+      if (images.length === 0) return;
+      setSelectedImage(images[(index + images.length) % images.length]);
+    },
+    [images]
+  );
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    if (!selectedImage) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedImage(null);
+      else if (e.key === 'ArrowRight') showAt(currentIndex + 1);
+      else if (e.key === 'ArrowLeft') showAt(currentIndex - 1);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [selectedImage, currentIndex, showAt]);
 
   useEffect(() => {
     // Load collection images from API
@@ -377,6 +399,18 @@ export default function ArtCollections() {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="relative w-full max-w-[95vw] xs:max-w-[90vw] sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl max-h-[95vh] sm:max-h-[90vh] bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl flex flex-col"
               onClick={(e) => e.stopPropagation()}
+              onTouchStart={(e) => {
+                touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+              }}
+              onTouchEnd={(e) => {
+                const start = touchStart.current;
+                touchStart.current = null;
+                if (!start) return;
+                const dx = e.changedTouches[0].clientX - start.x;
+                const dy = e.changedTouches[0].clientY - start.y;
+                // Only a clearly horizontal swipe changes the image (vertical drags scroll the details).
+                if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) showAt(currentIndex + (dx < 0 ? 1 : -1));
+              }}
             >
               {/* Close Button */}
               <button
@@ -388,6 +422,33 @@ export default function ArtCollections() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
+
+              {/* Previous / next + position */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => showAt(currentIndex - 1)}
+                    className="absolute left-2 top-[28%] z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-[#3D2817] flex items-center justify-center shadow-lg touch-manipulation"
+                    aria-label="Previous artwork"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => showAt(currentIndex + 1)}
+                    className="absolute right-2 top-[28%] z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-[#3D2817] flex items-center justify-center shadow-lg touch-manipulation"
+                    aria-label="Next artwork"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                  <span className="absolute top-3 left-3 z-10 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold text-white" aria-live="polite">
+                    {currentIndex + 1} / {images.length}
+                  </span>
+                </>
+              )}
 
               {/* Image Container - Scrollable */}
               <div className="relative w-full flex-shrink-0 h-[40vh] xs:h-[45vh] sm:h-[50vh] md:h-[55vh] lg:h-[60vh] xl:h-[65vh] overflow-hidden bg-gradient-to-br from-[#F5EFE7] to-white">

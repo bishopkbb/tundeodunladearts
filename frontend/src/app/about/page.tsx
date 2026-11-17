@@ -6,6 +6,7 @@ import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
 import SmartImage from '@/components/ui/SmartImage';
+import { useEscapeKey } from '@/hooks/useEscapeKey';
 
 // Artist data
 const artists = [
@@ -105,6 +106,7 @@ Through his art, Olalekan strives to celebrate his cultural heritage and inspire
 
 export default function AboutPage() {
   const [selectedArtist, setSelectedArtist] = useState<typeof artists[0] | null>(null);
+  useEscapeKey(!!selectedArtist, () => setSelectedArtist(null));
 
   return (
     <>

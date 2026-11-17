@@ -6,6 +6,7 @@ import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
 import SmartImage from '@/components/ui/SmartImage';
+import { useEscapeKey } from '@/hooks/useEscapeKey';
 
 // Press articles data
 const pressArticles = [
@@ -96,6 +97,7 @@ const pressCategories = ['All', 'Exhibition', 'Collection', 'Cultural Event', 'A
 export default function PressPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedArticle, setSelectedArticle] = useState<typeof pressArticles[0] | null>(null);
+  useEscapeKey(!!selectedArticle, () => setSelectedArticle(null));
 
   const filteredArticles = selectedCategory === 'All' 
     ? pressArticles 
@@ -229,7 +231,7 @@ export default function PressPage() {
                       </div>
                     </div>
                     <div className="p-6">
-                      <p className="text-xs text-[#C17C2E] font-semibold mb-2">{article.date}</p>
+                      <p className="text-xs text-[#9A5B1F] font-semibold mb-2">{article.date}</p>
                       <h3 className="text-xl font-bold text-[#3D2817] mb-3 line-clamp-2 group-hover:text-[#D4AF37] transition-colors">
                         {article.title}
                       </h3>
@@ -306,7 +308,7 @@ export default function PressPage() {
                     </div>
                     <div className="p-5">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-[#C17C2E] font-semibold">{article.date}</span>
+                        <span className="text-xs text-[#9A5B1F] font-semibold">{article.date}</span>
                         <span className="px-2 py-1 bg-[#F5EFE7] text-[#8B4513] text-xs font-bold rounded">
                           {article.category}
                         </span>
@@ -369,7 +371,7 @@ export default function PressPage() {
 
               {/* Article Content */}
               <div className="p-4 xs:p-6 sm:p-8 md:p-10">
-                <p className="text-sm text-[#C17C2E] font-semibold mb-2">{selectedArticle.date}</p>
+                <p className="text-sm text-[#9A5B1F] font-semibold mb-2">{selectedArticle.date}</p>
                 <h2 className="text-3xl md:text-4xl font-bold text-[#3D2817] mb-4 font-serif">
                   {selectedArticle.title}
                 </h2>

@@ -119,7 +119,7 @@ export default function CartSidebar() {
                         </h3>
                         <p className="text-xs text-[#6B4423] mb-2">{item.artist}</p>
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-bold text-[#C17C2E]">
+                          <p className="text-sm font-bold text-[#9A5B1F]">
                             {formatPrice(item.price)}
                           </p>
 

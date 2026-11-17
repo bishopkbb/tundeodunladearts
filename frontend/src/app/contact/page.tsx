@@ -233,13 +233,13 @@ export default function ContactPage() {
                     <div className="space-y-2">
                       <a 
                         href="tel:+2348160082118" 
-                        className="block text-sm xs:text-base text-[#C17C2E] hover:text-[#8B4513] transition-colors font-semibold break-all"
+                        className="block text-sm xs:text-base text-[#9A5B1F] hover:text-[#8B4513] transition-colors font-semibold break-all"
                       >
                         📞 +234 816 008 2118
                       </a>
                       <a 
                         href="mailto:info@tundeodunladearts.com" 
-                        className="block text-sm xs:text-base text-[#C17C2E] hover:text-[#8B4513] transition-colors font-semibold break-all"
+                        className="block text-sm xs:text-base text-[#9A5B1F] hover:text-[#8B4513] transition-colors font-semibold break-all"
                       >
                         ✉️ info@tundeodunladearts.com
                       </a>

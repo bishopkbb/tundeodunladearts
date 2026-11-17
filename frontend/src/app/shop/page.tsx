@@ -9,6 +9,7 @@ import { useCart } from '@/contexts/CartContext';
 import { allArtworks, type Artwork } from '@/lib/artworksData';
 import { fetchArtworks } from '@/lib/cmsData';
 import SmartImage from '@/components/ui/SmartImage';
+import { useEscapeKey } from '@/hooks/useEscapeKey';
 
 // Static fallback artworks
 const staticArtworks: Artwork[] = allArtworks;
@@ -34,6 +35,7 @@ export default function ShopPage() {
   const [sortBy, setSortBy] = useState('featured');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+  useEscapeKey(!!selectedArtwork, () => setSelectedArtwork(null));
   const { addToCart, isInCart } = useCart();
 
   // Fetch artworks from CMS on mount
@@ -244,7 +246,7 @@ export default function ShopPage() {
                 {/* Reset */}
                 <button
                   onClick={resetFilters}
-                  className="px-4 py-2 text-sm font-medium text-[#C17C2E] hover:text-[#8B4513] underline"
+                  className="px-4 py-2 text-sm font-medium text-[#9A5B1F] hover:text-[#8B4513] underline"
                 >
                   Reset All
                 </button>
@@ -428,7 +430,7 @@ export default function ShopPage() {
                           <h3 className="text-lg font-bold text-[#3D2817] mb-1 line-clamp-1 group-hover:text-[#C17C2E] transition-colors">
                             {artwork.title}
                           </h3>
-                          <p className="text-sm text-[#C17C2E] font-semibold mb-3">{artwork.artist}</p>
+                          <p className="text-sm text-[#9A5B1F] font-semibold mb-3">{artwork.artist}</p>
                           
                           <div className="flex items-center justify-between mb-4">
                             <span className="text-xl font-bold text-[#8B4513]">

@@ -290,3 +290,8 @@ img {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+/* Keyboard focus: a clear ring on everything interactive (mouse clicks are unaffected). */
+:where(a, button, [role='button'], summary, select, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #c17c2e;
+  outline-offset: 2px;
+}

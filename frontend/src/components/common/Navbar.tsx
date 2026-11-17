@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback, memo } from 'react';
+import { useState, useEffect, useCallback, useRef, memo } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,6 +22,11 @@ function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount, openCart } = useCart();
+  const pathname = usePathname();
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
 
   // Optimized scroll handler with throttling for better performance
   useEffect(() => {
@@ -37,6 +43,39 @@ function Navbar() {
   const toggleMobileMenu = useCallback(() => {
     setIsMobileMenuOpen((prev) => !prev);
   }, []);
+
+  // Dialog behaviour for the mobile menu: focus moves in, Tab stays inside,
+  // Escape closes, and focus returns to the menu button when it closes.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const panel = panelRef.current;
+    const opener = menuBtnRef.current;
+    panel?.querySelector<HTMLElement>('[aria-label="Close menu"]')?.focus();
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab' || !panel) return;
+      const focusable = panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      opener?.focus();
+    };
+  }, [isMobileMenuOpen]);
 
   // Lock page scroll while the menu is open. Plain overflow:hidden avoids the
   // full-page re-layout that `position: fixed` on <body> forced on every tap.
@@ -101,10 +140,17 @@ function Navbar() {
                 >
                   <Link
                     href={link.href}
-                    className="text-sm font-medium text-[#6B4423] hover:text-[#C17C2E] transition-colors duration-200 relative group"
+                    aria-current={isActive(link.href) ? 'page' : undefined}
+                    className={`text-sm font-medium hover:text-[#C17C2E] transition-colors duration-200 relative group ${
+                      isActive(link.href) ? 'text-[#8B4513] font-semibold' : 'text-[#6B4423]'
+                    }`}
                   >
                     {link.label}
-                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#C17C2E] transition-all duration-300 group-hover:w-full" />
+                    <span
+                      className={`absolute -bottom-1 left-0 h-0.5 bg-[#C17C2E] transition-all duration-300 ${
+                        isActive(link.href) ? 'w-full' : 'w-0 group-hover:w-full'
+                      }`}
+                    />
                   </Link>
                 </motion.div>
               ))}
@@ -177,10 +223,12 @@ function Navbar() {
 
               {/* Mobile Menu Button - Stable click handler */}
               <button
+                ref={menuBtnRef}
                 onClick={toggleMobileMenu}
                 className="p-2.5 text-[#8B4513] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle menu"
                 aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu-panel"
                 style={{ 
                   WebkitTapHighlightColor: 'transparent',
                   touchAction: 'manipulation',
@@ -219,31 +267,33 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay - Instant display, zero animations */}
-      {/* Always mounted (toggled with `hidden`) so opening never has to mount a tree or fetch images */}
-      <div className={isMobileMenuOpen ? 'lg:hidden' : 'hidden'}>
+      {/* Mobile menu: always mounted and toggled with classes, so opening never mounts a tree or
+          fetches images. The slide is a 150ms GPU transform that starts on the tap itself. */}
+      <div className="lg:hidden">
         <>
           {/* Backdrop - Click to close */}
           <div
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            aria-hidden="true"
+            className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-150 motion-reduce:transition-none ${
+              isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
             onClick={toggleMobileMenu}
-            style={{ 
+            style={{
               WebkitTapHighlightColor: 'transparent',
               touchAction: 'manipulation',
             }}
           />
 
-          {/* Menu Panel - Instant appearance, no animations, GPU accelerated */}
+          {/* Menu Panel */}
           <div
-            className="fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 lg:hidden overflow-y-auto touch-manipulation"
-            style={{
-              transform: 'translateX(0)',
-              backfaceVisibility: 'hidden',
-              animation: 'none',
-              transition: 'none',
-              opacity: 1,
-              willChange: 'auto',
-            }}
+            id="mobile-menu-panel"
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
+            className={`fixed top-0 right-0 bottom-0 w-full sm:w-80 max-w-[90vw] sm:max-w-[85vw] bg-white shadow-2xl z-50 overflow-y-auto touch-manipulation transition-[transform,visibility] duration-150 ease-out motion-reduce:transition-none ${
+              isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full invisible'
+            }`}
           >
               {/* Menu Header */}
               <div className="p-6 border-b border-[#D4A574]/30">
@@ -293,7 +343,10 @@ function Navbar() {
                   <div key={link.href}>
                     <Link
                       href={link.href}
-                      className="block px-4 py-3 text-base font-medium text-[#6B4423] hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-h-[48px] sm:min-h-[44px] flex items-center"
+                      aria-current={isActive(link.href) ? 'page' : undefined}
+                      className={`block px-4 py-3 text-base font-medium hover:text-[#C17C2E] hover:bg-[#F5EFE7] active:bg-[#E8DCC8] rounded-lg touch-manipulation min-h-[48px] sm:min-h-[44px] flex items-center ${
+                        isActive(link.href) ? 'text-[#8B4513] font-semibold bg-[#F5EFE7] border-l-4 border-[#C17C2E]' : 'text-[#6B4423]'
+                      }`}
                       onClick={toggleMobileMenu}
                       style={{ 
                         transition: 'none',

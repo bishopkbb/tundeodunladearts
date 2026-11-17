@@ -67,7 +67,7 @@ export default function OrderSummary({ items, total, itemCount }: OrderSummaryPr
               <p className="text-xs text-[#6B4423] mb-1">{item.artist}</p>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-[#8B4513]">Qty: {item.quantity}</span>
-                <span className="text-sm font-bold text-[#C17C2E]">
+                <span className="text-sm font-bold text-[#9A5B1F]">
                   {formatPrice(item.price * item.quantity)}
                 </span>
               </div>

@@ -3,6 +3,8 @@ import { Inter, Playfair_Display, Dancing_Script, Kalam } from 'next/font/google
 import './globals.css';
 import { CartProvider } from '@/contexts/CartContext';
 import { ToastProvider } from '@/components/ui/Toast';
+import RouteProgress from '@/components/ui/RouteProgress';
+import OfflineBanner from '@/components/ui/OfflineBanner';
 import { structuredData } from '@/lib/seo-config';
 
 const inter = Inter({ 
@@ -161,6 +163,8 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} ${kalam.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300 antialiased w-full max-w-full overflow-x-hidden`}
       >
         <ToastProvider>
+          <RouteProgress />
+          <OfflineBanner />
           <CartProvider>
             {children}
           </CartProvider>
