@@ -69,11 +69,10 @@ tunde-arts-connexions/
 │   │   ├── lib/      # Utilities and configurations
 │   │   └── types/    # TypeScript type definitions
 │   └── public/       # Static assets
-├── backend/          # MongoDB database configuration
-│   └── src/
-│       └── lib/      # MongoDB client configuration (legacy, see frontend)
-└── cms/              # Sanity.io CMS configuration
-    └── schemas/      # Sanity content schemas
+├── cms/              # Sanity.io CMS configuration
+│   └── schemas/      # Sanity content schemas
+└── docs/             # Setup, deployment and migration guides
+    └── archive/      # Superseded (Supabase-era) guides
 ```
 
 ### System Architecture
@@ -176,12 +175,6 @@ tunde-arts-connexions/
    pnpm install
    ```
 
-   **Backend (optional, for local development):**
-   ```bash
-   cd ../backend
-   npm install
-   ```
-
    **CMS (optional):**
    ```bash
    cd ../cms
@@ -273,15 +266,9 @@ frontend/
 └── tsconfig.json                # TypeScript configuration
 ```
 
-### Backend (`backend/`)
+### Backend
 
-```
-backend/
-└── src/
-    └── lib/                     # Legacy backend files (not used in production)
-```
-
-**Note:** Database is now managed via MongoDB Atlas. All API routes are in `frontend/src/app/api/`.
+There is no separate backend package. The database is MongoDB Atlas, and all API routes live in `frontend/src/app/api/`.
 
 ### CMS (`cms/`)
 
@@ -786,7 +773,7 @@ pnpm deploy           # Deploy Sanity Studio
 
 ### Vercel Deployment
 
-See [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions.
+See [`VERCEL_DEPLOYMENT_GUIDE.md`](./docs/VERCEL_DEPLOYMENT_GUIDE.md) for comprehensive deployment instructions.
 
 **Quick Steps:**
 
@@ -934,11 +921,10 @@ Use `/api/test-backend-connection` or `/api/test-mongodb` to verify:
 
 ## 📚 Documentation
 
-- [`VERCEL_DEPLOYMENT_GUIDE.md`](./VERCEL_DEPLOYMENT_GUIDE.md) - Complete Vercel deployment guide
-- [`QUICK_VERCEL_DEPLOY.md`](./QUICK_VERCEL_DEPLOY.md) - Quick deployment steps
-- [`SETUP_ENV_LOCAL.md`](./SETUP_ENV_LOCAL.md) - Environment variable setup
-- [`MONGODB_MIGRATION_CHECKLIST.md`](./MONGODB_MIGRATION_CHECKLIST.md) - MongoDB migration checklist
-- [`backend/README.md`](./backend/README.md) - Backend-specific documentation
+- [`VERCEL_DEPLOYMENT_GUIDE.md`](./docs/VERCEL_DEPLOYMENT_GUIDE.md) - Complete Vercel deployment guide
+- [`QUICK_VERCEL_DEPLOY.md`](./docs/QUICK_VERCEL_DEPLOY.md) - Quick deployment steps
+- [`SETUP_ENV_LOCAL.md`](./docs/SETUP_ENV_LOCAL.md) - Environment variable setup
+- [`MONGODB_MIGRATION_CHECKLIST.md`](./docs/MONGODB_MIGRATION_CHECKLIST.md) - MongoDB migration checklist
 
 ## 🤝 Contributing
 
