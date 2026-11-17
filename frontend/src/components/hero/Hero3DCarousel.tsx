@@ -6,13 +6,15 @@ import { OrbitControls, useTexture } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
+// `src` is the full-size image (used in the enlarged view); `texture` is a
+// 1024px copy used on the 3D frames so phones don't decode 3600px textures.
 const heroImages = [
-  { src: '/Assets/hero1.jpg', title: 'Cultural Heritage' },
-  { src: '/Assets/hero2.jpg', title: 'Happy Mother and Child' },
-  { src: '/Assets/hero3.jpg', title: 'Head' },
-  { src: '/Assets/hero5.jpg', title: 'Traditional Wisdom' },
-  { src: '/Assets/hero 4.jpg', title: 'The Missing Link' },
-  { src: '/Assets/hero10.jpg', title: 'The Melody Maker' },
+  { src: '/Assets/hero1.jpg', texture: '/Assets/hero-3d/hero1.jpg', title: 'Cultural Heritage' },
+  { src: '/Assets/hero2.jpg', texture: '/Assets/hero-3d/hero2.jpg', title: 'Happy Mother and Child' },
+  { src: '/Assets/hero3.jpg', texture: '/Assets/hero-3d/hero3.jpg', title: 'Head' },
+  { src: '/Assets/hero5.jpg', texture: '/Assets/hero-3d/hero5.jpg', title: 'Traditional Wisdom' },
+  { src: '/Assets/hero 4.jpg', texture: '/Assets/hero-3d/hero4.jpg', title: 'The Missing Link' },
+  { src: '/Assets/hero10.jpg', texture: '/Assets/hero-3d/hero10.jpg', title: 'The Melody Maker' },
 ];
 
 const ORBIT_RADIUS = 5.5;
@@ -42,7 +44,7 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
     loadedTexture.colorSpace = THREE.SRGBColorSpace;
     loadedTexture.minFilter = THREE.LinearFilter;
     loadedTexture.magFilter = THREE.LinearFilter;
-    loadedTexture.anisotropy = 16;
+    loadedTexture.anisotropy = 4;
     loadedTexture.generateMipmaps = true;
   });
 
@@ -295,7 +297,7 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
             key={i}
             position={[x, 0, z]}
             rotation={[0, rotationY, 0]}
-            imagePath={img.src}
+            imagePath={img.texture}
             onClick={() => onFrameClick(i)}
             isPaused={isPaused}
             mobileScale={mobileScale}
@@ -372,7 +374,6 @@ function Lights({ isMobile }: { isMobile: boolean }) {
 
 export default function Hero3DCarousel() {
   const [isMounted, setIsMounted] = useState(false);
-  const [loadError, setLoadError] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -399,40 +400,12 @@ export default function Hero3DCarousel() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    const checkImages = async () => {
-      try {
-        const checks = heroImages.map(async (img) => {
-          const response = await fetch(img.src, { method: 'HEAD' });
-          if (!response.ok) {
-            console.error(`❌ Image not found: ${img.src}`);
-          }
-        });
-        await Promise.all(checks);
-      } catch (error: unknown) {
-        console.error('Error checking images:', error);
-        setLoadError(true);
-      }
-    };
-    
-    checkImages();
-    
     return () => {
       window.removeEventListener('resize', checkMobile);
     };
   }, []);
 
   if (!isMounted) return null;
-
-  if (loadError) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="text-center text-white">
-          <p className="text-xl mb-2">Unable to load 3D carousel</p>
-          <p className="text-sm opacity-70">Please check image files in /public/Assets/</p>
-        </div>
-      </div>
-    );
-  }
 
   // Responsive scaling for mobile - even smaller for very small screens
   const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 768;

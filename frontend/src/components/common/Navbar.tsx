@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef, memo } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,7 +21,6 @@ function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { cartCount, openCart } = useCart();
-  const isTogglingRef = useRef(false);
 
   // Optimized scroll handler with throttling for better performance
   useEffect(() => {
@@ -33,54 +32,34 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Stable mobile menu toggle - prevents glitching with ref guard
+  // Pure state toggle: the tap only flips a boolean, so the menu opens on the
+  // very next frame. Side effects (scroll lock) live in the effect below.
   const toggleMobileMenu = useCallback(() => {
-    // Prevent double-firing with ref guard
-    if (isTogglingRef.current) return;
-    isTogglingRef.current = true;
-    
-    // Get current state and toggle
-    setIsMobileMenuOpen(prev => {
-      const newState = !prev;
-      
-      // Update DOM synchronously with the state change
-      if (newState) {
-        // Opening menu - lock scroll
-        const scrollY = window.scrollY;
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
-        document.body.style.touchAction = 'none';
-      } else {
-        // Closing menu - unlock scroll
-        const scrollY = document.body.style.top;
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.overflow = '';
-        document.body.style.touchAction = '';
-        if (scrollY) {
-          window.scrollTo(0, parseInt(scrollY || '0') * -1);
-        }
-      }
-      
-      // Reset toggle guard after a brief delay
-      setTimeout(() => {
-        isTogglingRef.current = false;
-      }, 100);
-      
-      return newState;
-    });
+    setIsMobileMenuOpen((prev) => !prev);
   }, []);
+
+  // Lock page scroll while the menu is open. Plain overflow:hidden avoids the
+  // full-page re-layout that `position: fixed` on <body> forced on every tap.
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const html = document.documentElement;
+    const prevHtml = html.style.overflow;
+    const prevBody = document.body.style.overflow;
+    html.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = prevHtml;
+      document.body.style.overflow = prevBody;
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-lg'
-            : 'bg-white/90 backdrop-blur-sm shadow-md'
+            ? 'bg-white/95 lg:backdrop-blur-md shadow-lg'
+            : 'bg-white/90 lg:backdrop-blur-sm shadow-md'
         }`}
       >
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
@@ -89,7 +68,7 @@ function Navbar() {
             <Link href="/" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden ring-2 ring-[#D4AF37] group-hover:ring-4 transition-all duration-300 flex-shrink-0">
                 <Image
-                  src="/Assets/logo.png"
+                  src="/Assets/logo-256.png"
                   alt="TOACC Logo"
                   fill
                   sizes="(max-width: 640px) 120px, 150px"
@@ -241,7 +220,8 @@ function Navbar() {
       </nav>
 
       {/* Mobile Menu Overlay - Instant display, zero animations */}
-      {isMobileMenuOpen && (
+      {/* Always mounted (toggled with `hidden`) so opening never has to mount a tree or fetch images */}
+      <div className={isMobileMenuOpen ? 'lg:hidden' : 'hidden'}>
         <>
           {/* Backdrop - Click to close */}
           <div
@@ -271,7 +251,7 @@ function Navbar() {
                   <Link href="/" className="flex items-center gap-3 group" onClick={toggleMobileMenu}>
                     <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-[#D4AF37] flex-shrink-0">
                       <Image
-                        src="/Assets/logo.png"
+                        src="/Assets/logo-256.png"
                         alt="TOACC Logo"
                         fill
                         sizes="(max-width: 640px) 120px, 150px"
@@ -341,7 +321,7 @@ function Navbar() {
               </div>
             </div>
           </>
-        )}
+      </div>
     </>
   );
 }
