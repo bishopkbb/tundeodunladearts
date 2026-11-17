@@ -321,7 +321,7 @@ export default function ExhibitionsPage() {
                   whileTap={{ scale: 0.98 }}
                   className={`px-8 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 ${
                     filter === status
-                      ? 'bg-[#C17C2E] text-white shadow-lg'
+                      ? 'bg-[#A8651F] text-white shadow-lg'
                       : 'bg-white/90 text-[#6B4423] border-2 border-[#D4A574] hover:border-[#C17C2E] hover:text-[#C17C2E]'
                   }`}
                 >
@@ -419,7 +419,7 @@ export default function ExhibitionsPage() {
                 <p className="text-2xl text-[#6B4423] mb-4">No {filter} exhibitions found</p>
                 <button
                   onClick={() => setFilter('all')}
-                  className="px-6 py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-colors"
+                  className="px-6 py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-colors"
                 >
                   View All Exhibitions
                 </button>
@@ -526,7 +526,7 @@ export default function ExhibitionsPage() {
                   <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 mt-6 xs:mt-8 sm:mt-10 relative">
                     <Link
                       href="/contact"
-                      className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-200 shadow-lg touch-manipulation flex items-center justify-center"
+                      className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-[#A8651F] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-200 shadow-lg touch-manipulation flex items-center justify-center"
                       onClick={() => {
                         setSelectedExhibition(null);
                         setShowShareMenu(false);

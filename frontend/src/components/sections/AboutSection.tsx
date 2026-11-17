@@ -166,7 +166,7 @@ export default function AboutSection() {
               >
                 <Link
                   href="/about"
-                  className="inline-block px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-block px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Learn More About Us
                 </Link>

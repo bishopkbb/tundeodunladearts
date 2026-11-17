@@ -578,7 +578,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               className={`w-full py-4 rounded-lg font-bold text-lg transition-all duration-300 ${
                 isSubmitting
                   ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                  : 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-lg hover:shadow-xl'
+                  : 'bg-[#A8651F] hover:bg-[#8B4513] text-white shadow-lg hover:shadow-xl'
               }`}
             >
               {isSubmitting ? 'Processing...' : `Pay ${formatPrice(finalTotal)}`}
@@ -911,7 +911,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
-          className="w-full py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+          className="w-full py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
         >
           Continue to Payment
         </motion.button>

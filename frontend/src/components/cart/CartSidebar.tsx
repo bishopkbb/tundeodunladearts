@@ -83,7 +83,7 @@ export default function CartSidebar() {
                   <p className="text-[#6B4423] mb-6">Discover beautiful artworks in our gallery</p>
                   <button
                     onClick={closeCart}
-                    className="px-6 py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-colors"
+                    className="px-6 py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-colors"
                   >
                     Browse Gallery
                   </button>
@@ -165,7 +165,7 @@ export default function CartSidebar() {
                   onClick={handleCheckout}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="w-full py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   Proceed to Checkout
                 </motion.button>

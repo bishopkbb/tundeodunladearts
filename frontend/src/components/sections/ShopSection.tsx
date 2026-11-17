@@ -164,7 +164,7 @@ export default function ShopSection() {
               onClick={() => setSelectedCategory(category)}
               className={`px-6 py-2 rounded-full font-semibold transition-all duration-300 ${
                 selectedCategory === category
-                  ? 'bg-[#C17C2E] text-white shadow-lg'
+                  ? 'bg-[#A8651F] text-white shadow-lg'
                   : 'bg-white text-[#6B4423] border-2 border-[#D4A574] hover:border-[#C17C2E] hover:text-[#C17C2E]'
               }`}
             >
@@ -235,7 +235,7 @@ export default function ShopSection() {
                       artwork.available
                         ? isInCart(artwork.id)
                           ? 'bg-white border-2 border-[#C17C2E] text-[#8B4513] hover:bg-[#F5EFE7]'
-                          : 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
+                          : 'bg-[#A8651F] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
                   >
@@ -273,7 +273,7 @@ export default function ShopSection() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            className="px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Request Custom Artwork
           </motion.button>

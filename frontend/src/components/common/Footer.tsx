@@ -172,7 +172,7 @@ export default function Footer() {
                   disabled={isSubmitting}
                   whileHover={isSubmitting ? {} : { scale: 1.05 }}
                   whileTap={isSubmitting ? {} : { scale: 0.98 }}
-                  className="w-full xs:w-auto px-6 py-2.5 xs:py-2 text-sm xs:text-base bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+                  className="w-full xs:w-auto px-6 py-2.5 xs:py-2 text-sm xs:text-base bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
                 >
                   {isSubmitting ? 'Subscribing...' : 'Subscribe'}
                 </motion.button>
@@ -297,7 +297,7 @@ export default function Footer() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowSuccessModal(false)}
-                  className="w-full py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg"
+                  className="w-full py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg"
                 >
                   Continue Browsing
                 </motion.button>

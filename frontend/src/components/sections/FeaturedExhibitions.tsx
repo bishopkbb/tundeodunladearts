@@ -137,7 +137,7 @@ export default function FeaturedExhibitions() {
 
   const getTypeBadge = (type: string) => {
     const badges: Record<string, { text: string; bg: string; textColor: string }> = {
-      exhibition: { text: 'Exhibition', bg: 'bg-[#C17C2E]', textColor: 'text-white' },
+      exhibition: { text: 'Exhibition', bg: 'bg-[#A8651F]', textColor: 'text-white' },
       festival: { text: 'Festival', bg: 'bg-[#D4AF37]', textColor: 'text-[#3D2817]' },
       awards: { text: 'Awards', bg: 'bg-[#8B4513]', textColor: 'text-white' },
       event: { text: 'Event', bg: 'bg-[#6B4423]', textColor: 'text-white' },
@@ -210,7 +210,7 @@ export default function FeaturedExhibitions() {
                           <p className="text-xs mt-1">📍 {exhibit.openingTime}</p>
                         )}
                       </div>
-                      <span className="text-white text-sm font-semibold px-6 py-2 bg-[#C17C2E] rounded-full">
+                      <span className="text-white text-sm font-semibold px-6 py-2 bg-[#A8651F] rounded-full">
                         View Details →
                       </span>
                     </div>
@@ -242,7 +242,7 @@ export default function FeaturedExhibitions() {
         >
           <Link
             href="/exhibitions"
-            className="inline-block px-10 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl text-lg"
+            className="inline-block px-10 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl text-lg"
           >
             View All Exhibitions
           </Link>
@@ -345,7 +345,7 @@ export default function FeaturedExhibitions() {
                 <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 mt-6 xs:mt-8 sm:mt-10">
                   <Link
                     href="/contact"
-                    className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-200 shadow-lg touch-manipulation flex items-center justify-center"
+                    className="w-full sm:w-auto px-6 xs:px-8 py-3 xs:py-4 bg-[#A8651F] hover:bg-[#8B4513] active:bg-[#6B3410] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-200 shadow-lg touch-manipulation flex items-center justify-center"
                     onClick={() => setSelectedExhibition(null)}
                   >
                     Plan Your Visit

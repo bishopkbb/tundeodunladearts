@@ -8,6 +8,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        xs: ['0.8125rem', { lineHeight: '1.25rem' }], // 13px (was 12)
+        sm: ['0.9375rem', { lineHeight: '1.45rem' }], // 15px (was 14)
+        base: ['1.0625rem', { lineHeight: '1.7rem' }], // 17px (was 16)
+        lg: ['1.1875rem', { lineHeight: '1.8rem' }], // 19px (was 18)
+        xl: ['1.375rem', { lineHeight: '1.95rem' }], // 22px (was 20)
+        '2xl': ['1.625rem', { lineHeight: '2.15rem' }], // 26px (was 24)
+        '3xl': ['2rem', { lineHeight: '2.4rem' }], // 32px (was 30)
+        '4xl': ['2.5rem', { lineHeight: '2.8rem' }], // 40px (was 36)
+      },
       screens: {
         'xs': '475px',
         'sm': '640px',

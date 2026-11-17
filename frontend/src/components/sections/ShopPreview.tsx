@@ -111,7 +111,7 @@ export default function ShopPreview() {
         >
           <Link
             href="/shop"
-            className="inline-flex items-center gap-3 px-10 py-5 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group"
+            className="inline-flex items-center gap-3 px-10 py-5 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group"
           >
             Browse Full Collection
             <svg 

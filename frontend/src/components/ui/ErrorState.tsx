@@ -36,7 +36,7 @@ export default function ErrorState({
             <button
               type="button"
               onClick={onRetry}
-              className="px-6 py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-semibold rounded-lg shadow-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]"
+              className="px-6 py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-semibold rounded-lg shadow-lg transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]"
             >
               Try again
             </button>

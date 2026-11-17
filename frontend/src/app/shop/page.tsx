@@ -209,7 +209,7 @@ export default function ShopPage() {
               {/* Mobile Filter Toggle */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="md:hidden w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#C17C2E] text-white font-semibold rounded-lg"
+                className="md:hidden w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#A8651F] text-white font-semibold rounded-lg"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -295,7 +295,7 @@ export default function ShopPage() {
                         onClick={() => setSelectedCategory(cat)}
                         className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
                           selectedCategory === cat
-                            ? 'bg-[#C17C2E] text-white'
+                            ? 'bg-[#A8651F] text-white'
                             : 'bg-white border-2 border-[#D4A574] text-[#6B4423]'
                         }`}
                       >
@@ -359,7 +359,7 @@ export default function ShopPage() {
                   </button>
                   <button
                     onClick={() => setShowFilters(false)}
-                    className="flex-1 px-4 py-3 bg-[#C17C2E] text-white font-semibold rounded-lg"
+                    className="flex-1 px-4 py-3 bg-[#A8651F] text-white font-semibold rounded-lg"
                   >
                     Apply Filters
                   </button>
@@ -451,7 +451,7 @@ export default function ShopPage() {
                               artwork.available
                                 ? isInCart(artwork.id)
                                   ? 'bg-white border-2 border-[#C17C2E] text-[#8B4513] hover:bg-[#F5EFE7]'
-                                  : 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
+                                  : 'bg-[#A8651F] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}
                           >
@@ -484,7 +484,7 @@ export default function ShopPage() {
                   <p className="text-[#6B4423] mb-6">Try adjusting your filters to see more results</p>
                   <button
                     onClick={resetFilters}
-                    className="px-8 py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors"
+                    className="px-8 py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors"
                   >
                     Reset Filters
                   </button>
@@ -581,7 +581,7 @@ export default function ShopPage() {
                           selectedArtwork.available
                             ? isInCart(selectedArtwork.id)
                               ? 'bg-white border-2 border-[#C17C2E] text-[#8B4513] hover:bg-[#F5EFE7]'
-                              : 'bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white shadow-lg'
+                              : 'bg-[#A8651F] hover:bg-[#8B4513] active:bg-[#6B3410] text-white shadow-lg'
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                       >

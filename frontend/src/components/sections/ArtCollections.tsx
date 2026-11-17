@@ -327,7 +327,7 @@ export default function ArtCollections() {
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="w-full px-4 py-2.5 bg-[#C17C2E] hover:bg-[#8B4513] text-white text-sm font-semibold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                          className="w-full px-4 py-2.5 bg-[#A8651F] hover:bg-[#8B4513] text-white text-sm font-semibold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -374,7 +374,7 @@ export default function ArtCollections() {
               href="mailto:info@tundeodunladearts.com?subject=General Inquiry about Art Collections"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-block px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
+              className="inline-block px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl"
             >
               Contact Us for Inquiries
             </motion.a>
@@ -517,7 +517,7 @@ export default function ArtCollections() {
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white text-sm xs:text-base font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 touch-manipulation min-h-[48px]"
+                      className="w-full px-6 xs:px-8 py-3 xs:py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white text-sm xs:text-base font-bold rounded-lg transition-colors duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 touch-manipulation min-h-[48px]"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

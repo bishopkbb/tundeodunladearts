@@ -273,7 +273,7 @@ export default function GalleryHighlights() {
             >
               <a
                 href="/gallery"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
               >
                 Explore Full Gallery
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -33,7 +33,7 @@ export default function HeroStatic() {
         >
           <Link
             href="/exhibitions"
-            className="inline-block px-8 py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-block px-8 py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Explore the Collection
           </Link>

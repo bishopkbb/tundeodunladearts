@@ -40,6 +40,8 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  font-size: 1.0625rem;
+  line-height: 1.7;
   /* Performance optimizations */
   text-rendering: optimizeLegibility;
   -webkit-font-feature-settings: 'kern' 1;

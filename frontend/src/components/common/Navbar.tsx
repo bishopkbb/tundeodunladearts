@@ -120,10 +120,10 @@ function Navbar() {
                 <p className="text-sm xs:text-base sm:text-xl font-bold text-[#8B4513] leading-tight group-hover:text-[#C17C2E] transition-colors whitespace-nowrap">
                   T<span className="text-[#C17C2E]">O</span>ACC
                 </p>
-                <p className="text-[10px] xs:text-xs sm:text-base text-[#6B4423] leading-tight tracking-wide whitespace-nowrap">
+                <p className="text-[11px] xs:text-xs sm:text-base text-[#6B4423] leading-tight tracking-wide whitespace-nowrap">
                   Tunde Odunlade
                 </p>
-                <p className="text-[10px] xs:text-xs sm:text-base text-[#6B4423] leading-tight tracking-wide whitespace-nowrap">
+                <p className="text-[11px] xs:text-xs sm:text-base text-[#6B4423] leading-tight tracking-wide whitespace-nowrap">
                   Arts & Culture Connexions
                 </p>
               </div>
@@ -184,7 +184,7 @@ function Navbar() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       exit={{ scale: 0 }}
-                      className="absolute -top-1 -right-1 w-5 h-5 bg-[#C17C2E] text-white text-xs font-bold rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-[#A8651F] text-white text-xs font-bold rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
                     >
                       {cartCount}
                     </motion.span>
@@ -215,7 +215,7 @@ function Navbar() {
                   />
                 </svg>
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#C17C2E] text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#A8651F] text-white text-xs font-bold rounded-full flex items-center justify-center">
                     {cartCount}
                   </span>
                 )}

@@ -105,7 +105,7 @@ export default function CheckoutPage() {
                           isCompleted
                             ? 'bg-green-500 text-white'
                             : isActive
-                            ? 'bg-[#C17C2E] text-white scale-110'
+                            ? 'bg-[#A8651F] text-white scale-110'
                             : 'bg-gray-300 text-gray-600'
                         }`}
                       >
@@ -219,7 +219,7 @@ export default function CheckoutPage() {
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => router.push('/')}
-                          className="px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg"
+                          className="px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg"
                         >
                           Continue Shopping
                         </motion.button>

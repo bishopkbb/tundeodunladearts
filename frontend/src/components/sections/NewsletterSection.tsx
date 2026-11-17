@@ -164,7 +164,7 @@ export default function NewsletterSection() {
             disabled={isSubmitting}
             whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
             whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-            className="w-full sm:w-auto px-8 py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Subscribing...' : 'Subscribe'}
           </motion.button>
@@ -329,7 +329,7 @@ export default function NewsletterSection() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowSuccessModal(false)}
-                  className="w-full py-3 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg"
+                  className="w-full py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold rounded-lg transition-colors duration-300 shadow-lg"
                 >
                   Continue Browsing
                 </motion.button>

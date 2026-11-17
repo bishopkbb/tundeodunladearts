@@ -255,7 +255,7 @@ export default function ContactPage() {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center gap-2 xs:gap-3 px-6 xs:px-8 py-3 xs:py-4 bg-[#C17C2E] hover:bg-[#8B4513] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto justify-center min-h-[44px]"
+                  className="inline-flex items-center gap-2 xs:gap-3 px-6 xs:px-8 py-3 xs:py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-base xs:text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl w-full sm:w-auto justify-center min-h-[44px]"
                 >
                   <svg className="w-5 h-5 xs:w-6 xs:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
@@ -424,7 +424,7 @@ export default function ContactPage() {
                       className={`w-full py-3 xs:py-4 rounded-lg font-bold text-base xs:text-lg transition-all duration-300 flex items-center justify-center gap-2 xs:gap-3 min-h-[44px] ${
                         isSubmitting
                           ? 'bg-gray-400 cursor-not-allowed'
-                          : 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-lg hover:shadow-xl'
+                          : 'bg-[#A8651F] hover:bg-[#8B4513] text-white shadow-lg hover:shadow-xl'
                       }`}
                     >
                       {isSubmitting ? (
