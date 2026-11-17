@@ -4,14 +4,20 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 
 type ToastVariant = 'success' | 'error' | 'info';
 
+interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
+
 interface ToastItem {
   id: number;
   message: string;
   variant: ToastVariant;
+  action?: ToastAction;
 }
 
 interface ToastApi {
-  show: (message: string, variant?: ToastVariant, durationMs?: number) => void;
+  show: (message: string, variant?: ToastVariant, durationMs?: number, action?: ToastAction) => void;
   success: (message: string) => void;
   error: (message: string) => void;
   info: (message: string) => void;
@@ -44,6 +50,18 @@ function Toast({ toast, onDismiss }: { toast: ToastItem; onDismiss: (id: number)
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={variantIcons[toast.variant]} />
       </svg>
       <p className="flex-1 text-sm leading-snug">{toast.message}</p>
+      {toast.action && (
+        <button
+          type="button"
+          onClick={() => {
+            toast.action?.onClick();
+            onDismiss(toast.id);
+          }}
+          className="text-sm font-bold text-[#D4AF37] underline underline-offset-2 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#D4AF37]"
+        >
+          {toast.action.label}
+        </button>
+      )}
       <button
         type="button"
         onClick={() => onDismiss(toast.id)}
@@ -71,9 +89,9 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const show = useCallback(
-    (message: string, variant: ToastVariant = 'info', durationMs = variant === 'error' ? 7000 : 4000) => {
+    (message: string, variant: ToastVariant = 'info', durationMs = variant === 'error' ? 7000 : 4000, action?: ToastAction) => {
       const id = nextId.current++;
-      setToasts((prev) => [...prev.slice(-(MAX_TOASTS - 1)), { id, message, variant }]);
+      setToasts((prev) => [...prev.slice(-(MAX_TOASTS - 1)), { id, message, variant, action }]);
       timers.current.set(id, setTimeout(() => dismiss(id), durationMs));
     },
     [dismiss]

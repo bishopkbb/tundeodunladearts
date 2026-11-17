@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useToast } from '@/components/ui/Toast';
 
 export interface CartItem {
   id: string;
@@ -17,7 +18,9 @@ interface CartContextType {
   cartItems: CartItem[];
   cartCount: number;
   cartTotal: number;
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
+  /** Returns true when the item was added, false when it was already in the cart. */
+  addToCart: (item: Omit<CartItem, 'quantity'>) => boolean;
+  isInCart: (id: string) => boolean;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
@@ -31,39 +34,52 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const toast = useToast();
 
   // Load cart from memory on mount
   useEffect(() => {
-    const savedCart = sessionStorage.getItem('toacc-cart');
-    if (savedCart) {
-      try {
-        setCartItems(JSON.parse(savedCart));
-      } catch (error: unknown) {
-        console.error('Error loading cart:', error);
-      }
+    try {
+      const savedCart = sessionStorage.getItem('toacc-cart');
+      if (savedCart) setCartItems(JSON.parse(savedCart));
+    } catch (error: unknown) {
+      // Storage can be blocked (private mode) or hold bad JSON; start with an empty cart.
+      console.error('Error loading cart:', error);
     }
   }, []);
 
   // Save cart to memory whenever it changes
   useEffect(() => {
-    sessionStorage.setItem('toacc-cart', JSON.stringify(cartItems));
+    try {
+      sessionStorage.setItem('toacc-cart', JSON.stringify(cartItems));
+    } catch {
+      // Ignore: the cart still works for this page view without persistence.
+    }
   }, [cartItems]);
 
+  const isInCart = (id: string) => cartItems.some((i) => i.id === id);
+
   const addToCart = (item: Omit<CartItem, 'quantity'>) => {
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
-      // Custom pieces - limit to 1 per artwork
-      if (existingItem) {
-        // Item already in cart, don't add more (custom pieces are unique)
-        return prevItems;
-      }
-      return [...prevItems, { ...item, quantity: 1 }];
-    });
-    setIsCartOpen(true); // Auto-open cart when item added
+    // Custom pieces are unique: limit to 1 per artwork.
+    const alreadyInCart = isInCart(item.id);
+    if (!alreadyInCart) {
+      setCartItems((prevItems) =>
+        prevItems.some((i) => i.id === item.id) ? prevItems : [...prevItems, { ...item, quantity: 1 }]
+      );
+    }
+    setIsCartOpen(true); // Auto-open the cart: it is the "added" feedback
+    return !alreadyInCart;
   };
 
   const removeFromCart = (id: string) => {
+    const removed = cartItems.find((item) => item.id === id);
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    if (removed) {
+      toast.show(`Removed "${removed.title}" from your cart`, 'info', 6000, {
+        label: 'Undo',
+        onClick: () =>
+          setCartItems((prevItems) => (prevItems.some((i) => i.id === removed.id) ? prevItems : [...prevItems, removed])),
+      });
+    }
   };
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -99,6 +115,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cartCount,
         cartTotal,
         addToCart,
+        isInCart,
         removeFromCart,
         updateQuantity,
         clearCart,

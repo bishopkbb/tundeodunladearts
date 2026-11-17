@@ -99,7 +99,7 @@ const itemVariants = {
 
 export default function ShopSection() {
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
 
   const filteredArtworks = selectedCategory === 'All'
     ? artworks
@@ -233,7 +233,9 @@ export default function ShopSection() {
                     whileTap={artwork.available ? { scale: 0.98 } : {}}
                     className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
                       artwork.available
-                        ? 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
+                        ? isInCart(artwork.id)
+                          ? 'bg-white border-2 border-[#C17C2E] text-[#8B4513] hover:bg-[#F5EFE7]'
+                          : 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
                   >
@@ -242,7 +244,7 @@ export default function ShopSection() {
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
-                        Add to Cart
+                        {isInCart(artwork.id) ? 'In Cart · View' : 'Add to Cart'}
                       </span>
                     ) : (
                       'Sold Out'

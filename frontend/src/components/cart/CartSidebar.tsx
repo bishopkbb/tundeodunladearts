@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 // import Link from 'next/link'; // Not currently used
@@ -9,6 +10,16 @@ import { useCart } from '@/contexts/CartContext';
 export default function CartSidebar() {
   const router = useRouter();
   const { cartItems, cartCount, cartTotal, removeFromCart, isCartOpen, closeCart } = useCart();
+
+  // Escape closes the cart, like any dialog.
+  useEffect(() => {
+    if (!isCartOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeCart();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isCartOpen, closeCart]);
 
   const handleCheckout = () => {
     closeCart();
@@ -126,7 +137,7 @@ export default function CartSidebar() {
                       <button
                         onClick={() => removeFromCart(item.id)}
                         className="self-start p-1 text-[#C17C2E] hover:text-[#8B4513] transition-colors"
-                        aria-label="Remove item"
+                        aria-label={`Remove ${item.title} from cart`}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

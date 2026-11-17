@@ -34,7 +34,7 @@ export default function ShopPage() {
   const [sortBy, setSortBy] = useState('featured');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
 
   // Fetch artworks from CMS on mount
   useEffect(() => {
@@ -447,7 +447,9 @@ export default function ShopPage() {
                             whileTap={artwork.available ? { scale: 0.98 } : {}}
                             className={`w-full py-3 rounded-lg font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 ${
                               artwork.available
-                                ? 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
+                                ? isInCart(artwork.id)
+                                  ? 'bg-white border-2 border-[#C17C2E] text-[#8B4513] hover:bg-[#F5EFE7]'
+                                  : 'bg-[#C17C2E] hover:bg-[#8B4513] text-white shadow-md hover:shadow-lg'
                                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                             }`}
                           >
@@ -456,7 +458,7 @@ export default function ShopPage() {
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                 </svg>
-                                Add to Cart
+                                {isInCart(artwork.id) ? 'In Cart · View' : 'Add to Cart'}
                               </>
                             ) : (
                               'Sold Out'
@@ -575,7 +577,9 @@ export default function ShopPage() {
                         whileTap={selectedArtwork.available ? { scale: 0.98 } : {}}
                         className={`w-full py-3 xs:py-4 rounded-lg font-bold text-base xs:text-lg transition-all duration-300 flex items-center justify-center gap-2 touch-manipulation ${
                           selectedArtwork.available
-                            ? 'bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white shadow-lg'
+                            ? isInCart(selectedArtwork.id)
+                              ? 'bg-white border-2 border-[#C17C2E] text-[#8B4513] hover:bg-[#F5EFE7]'
+                              : 'bg-[#C17C2E] hover:bg-[#8B4513] active:bg-[#6B3410] text-white shadow-lg'
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                       >
@@ -584,7 +588,7 @@ export default function ShopPage() {
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                             </svg>
-                            Add to Cart
+                            {isInCart(selectedArtwork.id) ? 'In Cart · View' : 'Add to Cart'}
                           </>
                         ) : (
                           'Sold Out'
