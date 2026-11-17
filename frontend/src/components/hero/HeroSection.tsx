@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import HeroStatic from './HeroStatic';
+import HeroHeadline from './HeroHeadline';
 
 const HeroPlaceholder = () => (
   <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-[#8B4513] to-[#6B3410]">
@@ -52,6 +53,7 @@ export default function HeroSection() {
           </Suspense>
         </>
       )}
+      <HeroHeadline />
     </section>
   );
 }

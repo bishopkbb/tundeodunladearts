@@ -1,12 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import Image from 'next/image';
 
 export default function HeroStatic() {
   return (
-    <div className="relative w-full h-screen overflow-hidden pt-20">
+    <div className="relative w-full h-screen overflow-hidden pt-[12rem] sm:pt-[13rem]">
       {/* Batik Pattern Background */}
       <div
         className="absolute inset-0 opacity-20"
@@ -19,35 +18,14 @@ export default function HeroStatic() {
 
       {/* Content */}
       <motion.div
-        className="relative h-full flex flex-col items-center justify-center px-4 md:px-8 py-10"
+        className="relative h-full flex flex-col items-center justify-center px-4 md:px-8 pb-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        {/* CTA Buttons */}
-        <motion.div
-          className="flex flex-col sm:flex-row gap-4 mb-12 z-10"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <Link
-            href="/exhibitions"
-            className="inline-block px-8 py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            Explore the Collection
-          </Link>
-          <Link
-            href="/gallery"
-            className="inline-block px-8 py-3 bg-[#3D2817] hover:bg-[#2C1810] text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-          >
-            Visit the gallery
-          </Link>
-        </motion.div>
-
         {/* Static Hero Image */}
         <motion.div
-          className="relative w-full max-w-4xl h-96 md:h-[500px] rounded-xl overflow-hidden shadow-2xl border-8 border-[#D4AF37]"
+          className="relative w-full max-w-4xl h-64 md:h-[360px] rounded-xl overflow-hidden shadow-2xl border-8 border-[#D4AF37]"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.4 }}

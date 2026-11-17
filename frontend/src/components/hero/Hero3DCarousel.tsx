@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, type ThreeEvent } from '@react-three/fiber';
-import { OrbitControls, useTexture } from '@react-three/drei';
+import { Environment, Lightformer, OrbitControls, useTexture } from '@react-three/drei';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -19,11 +19,39 @@ const heroImages = [
 
 const ORBIT_RADIUS = 5.5;
 const ROTATION_SPEED = 0.15;
-const FRAME_WIDTH = 3.6;
-const FRAME_HEIGHT = 4.8;
+// Each artwork is fitted inside this slot while keeping its own proportions (no stretching).
+const SLOT_MAX_WIDTH = 4.6;
+const SLOT_MAX_HEIGHT = 4.8;
 const FRAME_DEPTH = 0.12;
 const FRAME_THICKNESS = 0.18;
 const STAND_HEIGHT = 5.2;
+
+// Polished gold. Real metal needs something to reflect, so on phones (no environment map) it falls back to a
+// lighter, slightly self-lit gold that still reads as gold.
+function goldMaterial(lowEnd: boolean) {
+  return lowEnd
+    ? { color: '#D9B440', metalness: 0.5, roughness: 0.38, emissive: '#4a3706', emissiveIntensity: 0.35 }
+    : { color: '#D4AF37', metalness: 0.95, roughness: 0.24, envMapIntensity: 1.5 };
+}
+
+// Soft radial gradient used for the light pool on the floor and the contact shadows under each frame.
+function makeRadialTexture(inner: string, outer: string) {
+  const size = 256;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    g.addColorStop(0, inner);
+    g.addColorStop(1, outer);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
 
 interface FrameProps {
   position: [number, number, number];
@@ -36,8 +64,6 @@ interface FrameProps {
 
 function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobileScale = 1 }: FrameProps) {
   // Scale frame dimensions for mobile
-  const scaledFrameWidth = FRAME_WIDTH * mobileScale;
-  const scaledFrameHeight = FRAME_HEIGHT * mobileScale;
   const scaledFrameDepth = FRAME_DEPTH * mobileScale;
   const scaledFrameThickness = FRAME_THICKNESS * mobileScale;
   const texture = useTexture(imagePath, (loadedTexture) => {
@@ -48,6 +74,7 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
     loadedTexture.generateMipmaps = true;
   });
 
+  const shadowTexture = useMemo(() => makeRadialTexture('rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'), []);
   const meshRef = useRef<THREE.Mesh>(null);
   const tapStartTime = useRef<number>(0);
   const tapStartPosition = useRef<{ x: number; y: number } | null>(null);
@@ -55,6 +82,20 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
   if (!texture || !texture.image) {
     return null;
   }
+
+  // Fit the artwork inside the slot using its real proportions, so landscape pieces are no longer squashed.
+  const image = texture.image as { width: number; height: number };
+  const aspect = image.width / image.height;
+  const fitsWidth = aspect >= SLOT_MAX_WIDTH / SLOT_MAX_HEIGHT;
+  const scaledFrameWidth = (fitsWidth ? SLOT_MAX_WIDTH : SLOT_MAX_HEIGHT * aspect) * mobileScale;
+  const scaledFrameHeight = (fitsWidth ? SLOT_MAX_WIDTH / aspect : SLOT_MAX_HEIGHT) * mobileScale;
+
+  const lowEnd = mobileScale < 1;
+  const gold = goldMaterial(lowEnd);
+  // Gold wires hang the frame from the top ring and steady it from the bottom ring.
+  const ringY = (STAND_HEIGHT / 2 + 0.3) * mobileScale;
+  const wireLength = ringY - (scaledFrameHeight / 2 + scaledFrameThickness);
+  const wireXs = scaledFrameWidth > 3.4 * mobileScale ? [-0.28 * scaledFrameWidth, 0.28 * scaledFrameWidth] : [0];
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     tapStartTime.current = Date.now();
@@ -108,6 +149,7 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
           metalness={0.1}
           roughness={0.8}
           transparent={false}
+          envMapIntensity={0}
         />
       </mesh>
 
@@ -120,47 +162,32 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
           metalness={0.1}
           roughness={0.8}
           transparent={false}
+          envMapIntensity={0}
         />
       </mesh>
 
       {/* Gold Frame - Top */}
       <mesh position={[0, scaledFrameHeight / 2 + scaledFrameThickness / 2, 0]}>
         <boxGeometry args={[scaledFrameWidth + scaledFrameThickness * 2, scaledFrameThickness, scaledFrameDepth]} />
-        <meshStandardMaterial 
-          color="#D4AF37"
-          metalness={0.7}
-          roughness={0.3}
-        />
+        <meshStandardMaterial {...gold} />
       </mesh>
 
       {/* Gold Frame - Bottom */}
       <mesh position={[0, -scaledFrameHeight / 2 - scaledFrameThickness / 2, 0]}>
         <boxGeometry args={[scaledFrameWidth + scaledFrameThickness * 2, scaledFrameThickness, scaledFrameDepth]} />
-        <meshStandardMaterial 
-          color="#D4AF37"
-          metalness={0.7}
-          roughness={0.3}
-        />
+        <meshStandardMaterial {...gold} />
       </mesh>
 
       {/* Gold Frame - Left */}
       <mesh position={[-scaledFrameWidth / 2 - scaledFrameThickness / 2, 0, 0]}>
         <boxGeometry args={[scaledFrameThickness, scaledFrameHeight + scaledFrameThickness * 2, scaledFrameDepth]} />
-        <meshStandardMaterial 
-          color="#D4AF37"
-          metalness={0.7}
-          roughness={0.3}
-        />
+        <meshStandardMaterial {...gold} />
       </mesh>
 
       {/* Gold Frame - Right */}
       <mesh position={[scaledFrameWidth / 2 + scaledFrameThickness / 2, 0, 0]}>
         <boxGeometry args={[scaledFrameThickness, scaledFrameHeight + scaledFrameThickness * 2, scaledFrameDepth]} />
-        <meshStandardMaterial 
-          color="#D4AF37"
-          metalness={0.7}
-          roughness={0.3}
-        />
+        <meshStandardMaterial {...gold} />
       </mesh>
 
       {/* Inner Cream Mat - Top */}
@@ -203,28 +230,24 @@ function ElegantFrame({ position, rotation, imagePath, onClick, isPaused, mobile
         />
       </mesh>
 
-      {/* Vertical Silver Support Poles - Only show on larger screens */}
-      {mobileScale >= 0.8 && (
-        <>
-          <mesh position={[0, -scaledFrameHeight / 2 - scaledFrameThickness - 0.25 * mobileScale, 0]}>
-            <cylinderGeometry args={[0.04 * mobileScale, 0.04 * mobileScale, 0.5 * mobileScale, 16]} />
-            <meshStandardMaterial 
-              color="#C0C0C0"
-              metalness={0.9}
-              roughness={0.1}
-            />
-          </mesh>
+      {/* Gold hanging wires: top ring to frame, and bottom ring to frame */}
+      {wireLength > 0.05 &&
+        wireXs.flatMap((x) => [
+          <mesh key={`top-${x}`} position={[x, scaledFrameHeight / 2 + scaledFrameThickness + wireLength / 2, 0]}>
+            <cylinderGeometry args={[0.022 * mobileScale, 0.022 * mobileScale, wireLength, 8]} />
+            <meshStandardMaterial {...gold} />
+          </mesh>,
+          <mesh key={`bottom-${x}`} position={[x, -(scaledFrameHeight / 2 + scaledFrameThickness + wireLength / 2), 0]}>
+            <cylinderGeometry args={[0.022 * mobileScale, 0.022 * mobileScale, wireLength, 8]} />
+            <meshStandardMaterial {...gold} />
+          </mesh>,
+        ])}
 
-          <mesh position={[0, scaledFrameHeight / 2 + scaledFrameThickness + 0.25 * mobileScale, 0]}>
-            <cylinderGeometry args={[0.04 * mobileScale, 0.04 * mobileScale, 0.5 * mobileScale, 16]} />
-            <meshStandardMaterial 
-              color="#C0C0C0"
-              metalness={0.9}
-              roughness={0.1}
-            />
-          </mesh>
-        </>
-      )}
+      {/* Soft contact shadow on the floor under the frame */}
+      <mesh position={[0, -(STAND_HEIGHT / 2 + 0.47) * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[scaledFrameWidth * 1.3, scaledFrameDepth + 1.4 * mobileScale]} />
+        <meshBasicMaterial map={shadowTexture} transparent depthWrite={false} opacity={0.55} toneMapped={false} />
+      </mesh>
     </group>
   );
 }
@@ -243,6 +266,8 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
   // Scale values for mobile
   const scaledOrbitRadius = ORBIT_RADIUS * mobileScale;
   const scaledStandHeight = STAND_HEIGHT * mobileScale;
+  const gold = goldMaterial(mobileScale < 1);
+  const glowTexture = useMemo(() => makeRadialTexture('rgba(245,239,231,0.55)', 'rgba(245,239,231,0)'), []);
 
   useEffect(() => {
     const handleVisibility = () => {
@@ -265,24 +290,16 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
       onPointerEnter={() => setIsRotating(false)}
       onPointerLeave={() => isTabActive.current && setIsRotating(true)}
     >
-      {/* Top Silver Ring */}
+      {/* Top Gold Ring */}
       <mesh position={[0, scaledStandHeight / 2 + 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[scaledOrbitRadius, 0.08 * mobileScale, 16, mobileScale < 1 ? 32 : 64]} />
-        <meshStandardMaterial
-          color="#E8E8E8"
-          metalness={0.95}
-          roughness={0.05}
-        />
+        <meshStandardMaterial {...gold} />
       </mesh>
 
-      {/* Bottom Silver Ring */}
+      {/* Bottom Gold Ring */}
       <mesh position={[0, -scaledStandHeight / 2 - 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <torusGeometry args={[scaledOrbitRadius, 0.08 * mobileScale, 16, mobileScale < 1 ? 32 : 64]} />
-        <meshStandardMaterial
-          color="#E8E8E8"
-          metalness={0.95}
-          roughness={0.05}
-        />
+        <meshStandardMaterial {...gold} />
       </mesh>
 
       {/* Artwork Frames */}
@@ -305,27 +322,10 @@ function CarouselGroup({ isPaused, onFrameClick, mobileScale = 1 }: CarouselGrou
         );
       })}
 
-      {/* Reflective Floor */}
-      <mesh position={[0, -scaledStandHeight / 2 - 0.5 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={mobileScale >= 1}>
-        <circleGeometry args={[scaledOrbitRadius * 1.8, mobileScale < 1 ? 32 : 64]} />
-        <meshStandardMaterial
-          color="#F5F5F5"
-          metalness={0.7}
-          roughness={0.1}
-          envMapIntensity={1.2}
-        />
-      </mesh>
-
-      {/* Floor Shadow */}
-      <mesh position={[0, -scaledStandHeight / 2 - 0.48 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow={mobileScale >= 1}>
-        <circleGeometry args={[scaledOrbitRadius * 1.85, mobileScale < 1 ? 32 : 64]} />
-        <meshStandardMaterial
-          color="#E8E8E8"
-          metalness={0.3}
-          roughness={0.6}
-          transparent={true}
-          opacity={0.4}
-        />
+      {/* Warm pool of light on the floor (replaces the flat white disc) */}
+      <mesh position={[0, -scaledStandHeight / 2 - 0.5 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[scaledOrbitRadius * 1.9, 48]} />
+        <meshBasicMaterial map={glowTexture} transparent depthWrite={false} opacity={0.5} toneMapped={false} />
       </mesh>
     </group>
   );
@@ -434,14 +434,19 @@ export default function Hero3DCarousel() {
         {/* Batik / adire pattern (oniko rosettes) */}
         <div
           className="absolute inset-0"
-          style={{ backgroundImage: 'url(/patterns/oniko.webp)', backgroundSize: '240px 240px', opacity: 0.55 }}
+          style={{ backgroundImage: 'url(/patterns/oniko.webp)', backgroundSize: '240px 240px', opacity: 0.4 }}
         />
 
         <div 
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 0%, rgba(75, 40, 16, 0.3) 100%)',
+            background: 'radial-gradient(ellipse at center 60%, transparent 30%, rgba(42, 22, 8, 0.55) 100%)',
           }}
+        />
+        {/* Soft scrim behind the title: keeps contrast without a heavy dark band */}
+        <div
+          className="absolute inset-x-0 top-0 h-[34%]"
+          style={{ background: 'linear-gradient(to bottom, rgba(42, 22, 8, 0.5) 0%, rgba(42, 22, 8, 0.22) 60%, transparent 100%)' }}
         />
         <div 
           className="absolute bottom-0 left-0 right-0 h-1/3"
@@ -453,7 +458,7 @@ export default function Hero3DCarousel() {
 
       {/* Canvas with 3D Carousel - Wrapped to allow mobile scrolling */}
       <div 
-        className={`relative z-10 w-full h-full ${selectedImage !== null ? 'pointer-events-none' : ''}`}
+        className={`absolute inset-x-0 bottom-[76px] sm:bottom-[88px] top-[150px] sm:top-[160px] lg:top-[150px] z-10 ${selectedImage !== null ? 'pointer-events-none' : ''}`}
         style={{ 
           touchAction: selectedImage === null ? 'pan-y' : 'none', // Allow vertical scrolling when modal closed
         }}
@@ -479,6 +484,15 @@ export default function Hero3DCarousel() {
           }}
         >
         <Lights isMobile={isMobile} />
+        {/* Procedural studio lighting (no download) so the gold rings and frames have something to reflect */}
+        {!isMobile && (
+          <Environment resolution={128}>
+            <Lightformer form="rect" intensity={2.4} color="#FFF1CF" position={[0, 7, 8]} scale={[16, 3, 1]} />
+            <Lightformer form="rect" intensity={1.6} color="#FFD58A" position={[-10, 1, 3]} rotation={[0, Math.PI / 2, 0]} scale={[9, 6, 1]} />
+            <Lightformer form="rect" intensity={1.6} color="#FFD58A" position={[10, 1, 3]} rotation={[0, -Math.PI / 2, 0]} scale={[9, 6, 1]} />
+            <Lightformer form="ring" intensity={1.2} color="#FFF8E7" position={[0, 2, -10]} scale={8} />
+          </Environment>
+        )}
         <CarouselGroup 
           isPaused={selectedImage !== null} 
           onFrameClick={setSelectedImage}
