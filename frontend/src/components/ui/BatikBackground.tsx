@@ -21,7 +21,7 @@ interface BatikBackgroundProps {
 }
 
 const gradients = {
-  page: 'linear-gradient(135deg, #8B4513 0%, #A0522D 25%, #8B6914 50%, #6B4423 75%, #4A2810 100%)',
+  page: 'linear-gradient(135deg, #8B4513 0%, #6B3410 55%, #4A2810 100%)', // brand browns only
   home: 'linear-gradient(to bottom, #8B4513 0%, #6B3410 50%, #4A2810 100%)',
 } as const;
 

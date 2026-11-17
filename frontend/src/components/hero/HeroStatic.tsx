@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export default function HeroStatic() {
   return (
-    <div className="relative w-full h-screen overflow-hidden pt-[12rem] sm:pt-[13rem]">
+    <div className="relative w-full h-screen overflow-hidden pt-24">
       {/* Batik Pattern Background */}
       <div
         className="absolute inset-0 opacity-20"
