@@ -151,7 +151,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
         customizations: {
           title: 'TOACC Gallery',
           description: `Purchase of ${cartItems.length} artwork(s)`,
-          logo: `${window.location.origin}/Assets/logo.png`,
+          logo: `${window.location.origin}/icons/icon-512.png`,
         },
         meta: {
           order_id: orderId,

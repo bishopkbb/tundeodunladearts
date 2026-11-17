@@ -130,7 +130,7 @@ export default function Footer() {
               <Link href="/" className="inline-flex items-center gap-3 mb-3 group">
                 <div className="relative w-12 h-12 ring-2 ring-[#D4AF37] rounded-full overflow-hidden group-hover:ring-4 transition-all">
                   <Image
-                    src="/Assets/logo.png"
+                    src="/Assets/logo-256.png"
                     alt="TOACC Logo"
                     fill
                     sizes="(max-width: 640px) 120px, 150px"

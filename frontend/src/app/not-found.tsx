@@ -27,7 +27,7 @@ export default function NotFound() {
         >
           <div className="relative w-24 h-24 rounded-full overflow-hidden ring-4 ring-[#D4AF37]">
             <Image
-              src="/Assets/logo.png"
+              src="/Assets/logo-256.png"
               alt="TOACC Logo"
               fill
               sizes="(max-width: 640px) 200px, 300px"
