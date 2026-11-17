@@ -8,6 +8,7 @@ import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
 import { useToast } from '@/components/ui/Toast';
 import BatikBackground from '@/components/ui/BatikBackground';
+import PageHero from '@/components/ui/PageHero';
 
 // Turn an API error body (string or Zod issue list) into one readable sentence.
 function describeApiError(data: { error?: string; details?: unknown }): string {
@@ -101,24 +102,7 @@ export default function ContactPage() {
         <Navbar />
 
         {/* Hero Section */}
-        <section className="py-12 xs:py-16 md:py-24 px-4 xs:px-6 md:px-8">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              className="text-center mb-10 xs:mb-12"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1 className="text-3xl xs:text-4xl md:text-5xl lg:text-6xl font-bold text-[#3D2817] mb-4 xs:mb-6 font-serif px-4">
-                Visit & Contact Us
-              </h1>
-              <div className="w-24 xs:w-32 h-1 bg-[#D4AF37] mx-auto mb-6 xs:mb-8 rounded-full" />
-              <p className="text-base xs:text-lg md:text-xl text-[#6B4423] max-w-3xl mx-auto leading-relaxed px-4">
-                Experience art in the heart of Ibadan. We&apos;d love to hear from you!
-              </p>
-            </motion.div>
-          </div>
-        </section>
+        <PageHero title="Visit & Contact Us" subtitle="Experience art in the heart of Ibadan. We&apos;d love to hear from you!" titleClassName="text-3xl xs:text-4xl md:text-5xl lg:text-6xl" />
 
         {/* Gallery Image */}
         <section className="py-6 xs:py-8 px-4 xs:px-6 md:px-8">

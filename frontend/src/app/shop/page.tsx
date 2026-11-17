@@ -11,6 +11,7 @@ import { fetchArtworks } from '@/lib/cmsData';
 import SmartImage from '@/components/ui/SmartImage';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
 import BatikBackground from '@/components/ui/BatikBackground';
+import PageHero from '@/components/ui/PageHero';
 
 // Static fallback artworks
 const staticArtworks: Artwork[] = allArtworks;
@@ -169,24 +170,7 @@ export default function ShopPage() {
         <Navbar />
 
         {/* Hero Section */}
-        <section className="py-12 md:py-20 px-4 md:px-8">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              className="text-center mb-8"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <h1 className="text-4xl md:text-6xl font-bold text-[#3D2817] mb-4 font-serif">
-                Art Shop
-              </h1>
-              <div className="w-32 h-1 bg-[#D4AF37] mx-auto mb-6 rounded-full" />
-              <p className="text-lg md:text-xl text-[#6B4423] max-w-3xl mx-auto">
-                Own authentic African art from our curated collection
-              </p>
-            </motion.div>
-          </div>
-        </section>
+        <PageHero title="Art Shop" subtitle="Own authentic African art from our curated collection" compact />
 
         {/* Filters & Sort Bar */}
         <section className="sticky top-20 z-40 bg-white/90 backdrop-blur-md border-y-2 border-[#D4AF37]/30 shadow-lg">
