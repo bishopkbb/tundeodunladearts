@@ -4,5 +4,11 @@
     "files": [
       "static/chunks/_app-pages-browser_node_modules_pnpm_next_15_5_5_react-dom_19_1_0_react_19_1_0__react_19_1_0_-9d7c95.js"
     ]
+  },
+  "components\\hero\\HeroSection.tsx -> ./Hero3DCarousel": {
+    "id": "components\\hero\\HeroSection.tsx -> ./Hero3DCarousel",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_hero_Hero3DCarousel_tsx.js"
+    ]
   }
 }
