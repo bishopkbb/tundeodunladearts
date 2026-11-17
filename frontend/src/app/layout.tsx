@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, Playfair_Display, Dancing_Script, Kalam } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/contexts/CartContext';
+import { ToastProvider } from '@/components/ui/Toast';
 import { structuredData } from '@/lib/seo-config';
 
 const inter = Inter({ 
@@ -30,6 +31,13 @@ const kalam = Kalam({
   weight: ['300', '400', '700'],
   display: 'swap',
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.tundeodunladearts.com'),
@@ -140,18 +148,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-        {/* Favicon - Using Tunde Odunlade Logo */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32" />
-        <link rel="icon" type="image/png" href="/favicon.png" sizes="16x16" />
-        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="192x192" />
-        <link rel="icon" type="image/png" href="/Assets/logo.png" sizes="512x512" />
-        <link rel="apple-touch-icon" href="/Assets/logo.png" sizes="180x180" />
-        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="manifest" href="/manifest.webmanifest" />
         {/* Structured Data */}
         <script
           type="application/ld+json"
@@ -163,9 +160,11 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} ${kalam.variable} font-sans bg-[#FAF8F5] text-slate-900 transition-colors duration-300 antialiased w-full max-w-full overflow-x-hidden`}
       >
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <ToastProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </ToastProvider>
       </body>
     </html>
   );

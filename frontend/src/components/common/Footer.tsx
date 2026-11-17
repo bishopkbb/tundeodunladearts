@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { useToast } from '@/components/ui/Toast';
 
 const footerLinks = [
   { label: 'Home', href: '/' },
@@ -46,6 +47,7 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const toast = useToast();
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -76,7 +78,7 @@ export default function Footer() {
         setShowSuccessModal(true);
       } else {
         console.error('Newsletter subscription failed:', data);
-        alert(data.details || data.error || 'Failed to subscribe. Please try again.');
+        toast.error(data.details || data.error || 'Failed to subscribe. Please try again.');
       }
     } catch (error: unknown) {
       console.error('Newsletter subscription error:', error);
@@ -92,7 +94,7 @@ export default function Footer() {
         }
       }
       
-      alert(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
