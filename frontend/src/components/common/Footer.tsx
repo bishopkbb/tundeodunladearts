@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
+import AdireDivider from '@/components/ui/AdireDivider';
 
 const footerLinks = [
   { label: 'Home', href: '/' },
@@ -102,6 +103,7 @@ export default function Footer() {
 
   return (
     <footer className="relative text-[#3D2817] overflow-hidden border-t-4 border-[#D4AF37]">
+      <AdireDivider className="relative z-10" />
       {/* Simplified Background */}
       <div className="absolute inset-0 z-0">
         <div 
@@ -111,11 +113,8 @@ export default function Footer() {
           }}
         />
         <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A574' fill-opacity='0.3'%3E%3Ccircle cx='60' cy='60' r='25'/%3E%3Ccircle cx='0' cy='0' r='25'/%3E%3Ccircle cx='120' cy='0' r='25'/%3E%3Ccircle cx='0' cy='120' r='25'/%3E%3Ccircle cx='120' cy='120' r='25'/%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '120px 120px',
-          }}
+          className="absolute inset-0"
+          style={{ backgroundImage: 'url(/patterns/alabere.webp)', backgroundSize: '240px 240px', opacity: 0.4 }}
         />
         <div className="absolute inset-0 bg-black/40" />
       </div>

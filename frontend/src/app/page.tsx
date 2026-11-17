@@ -5,6 +5,8 @@ import HeroSection from '@/components/hero/HeroSection';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
 import { SectionSkeleton } from '@/components/ui/Skeleton';
+import BatikBackground from '@/components/ui/BatikBackground';
+import AdireDivider from '@/components/ui/AdireDivider';
 
 // Dynamic imports for heavy components - load after initial render
 const FeaturedExhibitions = dynamic(() => import('@/components/sections/FeaturedExhibitions'), {
@@ -46,26 +48,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      {/* Optimized Background Pattern - Reduced layers for performance */}
-      <div
-        className="fixed inset-0 z-0"
-        style={{
-          background: 'linear-gradient(to bottom, #8B4513 0%, #6B3410 50%, #4A2810 100%)',
-        }}
-      >
-        {/* Single optimized pattern layer */}
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A574' fill-opacity='0.35' fill-rule='evenodd'%3E%3Ccircle cx='100' cy='100' r='40'/%3E%3Ccircle cx='0' cy='0' r='40'/%3E%3Ccircle cx='200' cy='0' r='40'/%3E%3Ccircle cx='0' cy='200' r='40'/%3E%3Ccircle cx='200' cy='200' r='40'/%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '200px 200px',
-            willChange: 'auto',
-          }}
-        />
-
-        {/* Cream Overlay */}
-        <div className="absolute inset-0 bg-[#F5EFE7]/50" />
-      </div>
+      {/* Batik / adire background (oniko rosettes) */}
+      <BatikBackground motif="oniko" variant="home" strength={0.5} overlay={0.5} />
 
       {/* Main Content - Above background */}
       <main className="relative z-10 w-full min-h-screen max-w-full overflow-x-hidden">
@@ -74,6 +58,9 @@ export default function Home() {
 
         {/* Hero Section */}
         <HeroSection />
+
+        {/* Indigo adire divider */}
+        <AdireDivider />
 
         {/* Featured Exhibitions */}
         <FeaturedExhibitions />

@@ -10,6 +10,7 @@ import { allArtworks, type Artwork } from '@/lib/artworksData';
 import { fetchArtworks } from '@/lib/cmsData';
 import SmartImage from '@/components/ui/SmartImage';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
+import BatikBackground from '@/components/ui/BatikBackground';
 
 // Static fallback artworks
 const staticArtworks: Artwork[] = allArtworks;
@@ -162,22 +163,7 @@ export default function ShopPage() {
   return (
     <>
       {/* Background Pattern */}
-      <div className="fixed inset-0 z-0">
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(135deg, #8B4513 0%, #A0522D 25%, #8B6914 50%, #6B4423 75%, #4A2810 100%)',
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-60"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23D4A574' fill-opacity='0.35' fill-rule='evenodd'%3E%3Ccircle cx='100' cy='100' r='40'/%3E%3Ccircle cx='0' cy='0' r='40'/%3E%3Ccircle cx='200' cy='0' r='40'/%3E%3Ccircle cx='0' cy='200' r='40'/%3E%3Ccircle cx='200' cy='200' r='40'/%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '200px 200px',
-          }}
-        />
-        <div className="absolute inset-0 bg-[#F5EFE7]/30" />
-      </div>
+      <BatikBackground motif="cowrie" />
 
       <main className="relative z-10 min-h-screen pt-20">
         <Navbar />

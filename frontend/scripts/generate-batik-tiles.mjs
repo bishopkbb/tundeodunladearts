@@ -203,7 +203,7 @@ const motifs = {
 };
 
 // Wax-crackle: fine random hairlines, drawn over the motif at low opacity.
-function crackle(seed, ink) {
+function crackle(seed, ink, alpha = 0.5) {
   const r = rng(seed);
   return wrapped(() => {
     let g = '';
@@ -220,7 +220,7 @@ function crackle(seed, ink) {
         y += Math.sin(a) * (8 + r2() * 14);
         pts.push([x, y]);
       }
-      g += `<path d="${poly(pts)}" fill="none" stroke="${ink}" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>`;
+      g += `<path d="${poly(pts)}" fill="none" stroke="${ink}" stroke-width="0.9" stroke-linecap="round" opacity="${alpha}"/>`;
     }
     void r;
     return g;
@@ -228,17 +228,16 @@ function crackle(seed, ink) {
 }
 
 // ---------------------------------------------------------------- tile rendering
-export function tileSvg({ motif, ground, ink, opacity = 1, cracks = true, size = TILE }) {
+export function tileSvg({ motif, ground, ink, opacity = 1, cracks = true, crackleAlpha = 0.5, size = TILE }) {
   const shapes = motifs[motif](ink);
-  const cr = cracks ? crackle(7 + motif.length, ink) : '';
+  const cr = cracks ? crackle(7 + motif.length, ink, crackleAlpha) : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${TILE} ${TILE}" color="${ink}">
-  <rect width="${TILE}" height="${TILE}" fill="${ground}"/>
+  ${ground ? `<rect width="${TILE}" height="${TILE}" fill="${ground}"/>` : ''}
   <g fill="none" stroke="${ink}" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity}">${shapes}</g>
   ${cr}
 </svg>`;
 }
 
-const render = (svg, scale = 1) => sharp(Buffer.from(svg), { density: 72 * scale }).png().toBuffer();
 
 // ---------------------------------------------------------------- preview sheets
 async function preview(outDir) {
@@ -335,21 +334,23 @@ async function preview(outDir) {
 }
 
 // ---------------------------------------------------------------- production tiles
+// Line-work only (transparent background) so the tiles sit on the site's existing brown gradients and
+// the page tone does not change. Opacity is controlled in CSS by <BatikBackground>.
 async function build() {
   const outDir = path.join(root, 'public', 'patterns');
   fs.mkdirSync(outDir, { recursive: true });
-  const jobs = [];
-  for (const motif of Object.keys(motifs)) {
-    jobs.push([`${motif}-dark`, { motif, ground: palette.kola, ink: palette.tan, opacity: 0.85 }]);
-    jobs.push([`${motif}-light`, { motif, ground: palette.cream, ink: palette.saddle, opacity: 0.32 }]);
-  }
-  for (const [name, opts] of jobs) {
-    const buf = await sharp(Buffer.from(tileSvg({ ...opts, size: 480 })))
-      .webp({ quality: 80 })
-      .toBuffer();
+  const write = async (name, svg, extractTop) => {
+    let img = sharp(Buffer.from(svg));
+    if (extractTop) img = sharp(await img.png().toBuffer()).extract({ left: 0, top: 0, width: 480, height: extractTop });
+    const buf = await img.webp({ quality: 70, alphaQuality: 55, effort: 6, smartSubsample: true }).toBuffer();
     fs.writeFileSync(path.join(outDir, `${name}.webp`), buf);
-    console.log(name.padEnd(18), (buf.length / 1024).toFixed(1) + ' KB');
+    console.log(name.padEnd(16), (buf.length / 1024).toFixed(1) + ' KB');
+  };
+  for (const motif of Object.keys(motifs)) {
+    await write(motif, tileSvg({ motif, ground: null, ink: palette.tan, crackleAlpha: 0.35, size: 480 }));
   }
+  // Indigo adire divider strip: cream resist lines on indigo, 480x112 (shown at 240x56)
+  await write('adire-strip', tileSvg({ motif: 'alabere', ground: palette.indigo, ink: palette.cream, opacity: 0.85, crackleAlpha: 0.45, size: 480 }), 112);
 }
 
 const [cmd, arg] = process.argv.slice(2);
