@@ -440,6 +440,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
         {/* Error Message */}
         {error && (
           <motion.div
+            role="alert"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -660,6 +661,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
       {/* Error Message */}
       {error && (
         <motion.div
+          role="alert"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
@@ -695,6 +697,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               <input
                 id="firstName"
                 type="text"
+                aria-invalid={errors.firstName ? 'true' : 'false'}
                 {...register('firstName', { required: 'First name is required' })}
                 className={`w-full px-4 py-3 rounded-lg border-2 ${
                   errors.firstName ? 'border-red-500' : 'border-[#D4A574]'
@@ -713,6 +716,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               <input
                 id="lastName"
                 type="text"
+                aria-invalid={errors.lastName ? 'true' : 'false'}
                 {...register('lastName', { required: 'Last name is required' })}
                 className={`w-full px-4 py-3 rounded-lg border-2 ${
                   errors.lastName ? 'border-red-500' : 'border-[#D4A574]'
@@ -733,6 +737,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               <input
                 id="email"
                 type="email"
+                aria-invalid={errors.email ? 'true' : 'false'}
                 {...register('email', {
                   required: 'Email is required',
                   pattern: {
@@ -757,6 +762,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               <input
                 id="phone"
                 type="tel"
+                aria-invalid={errors.phone ? 'true' : 'false'}
                 {...register('phone', {
                   required: 'Phone number is required',
                   pattern: {
@@ -787,6 +793,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
             <input
               id="address"
               type="text"
+              aria-invalid={errors.address ? 'true' : 'false'}
               {...register('address', { required: 'Address is required' })}
               className={`w-full px-4 py-3 rounded-lg border-2 ${
                 errors.address ? 'border-red-500' : 'border-[#D4A574]'
@@ -806,6 +813,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               <input
                 id="city"
                 type="text"
+                aria-invalid={errors.city ? 'true' : 'false'}
                 {...register('city', { required: 'City is required' })}
                 className={`w-full px-4 py-3 rounded-lg border-2 ${
                   errors.city ? 'border-red-500' : 'border-[#D4A574]'
@@ -824,6 +832,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               <input
                 id="state"
                 type="text"
+                aria-invalid={errors.state ? 'true' : 'false'}
                 {...register('state', { required: 'State is required' })}
                 className={`w-full px-4 py-3 rounded-lg border-2 ${
                   errors.state ? 'border-red-500' : 'border-[#D4A574]'
@@ -842,6 +851,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
               <input
                 id="zipCode"
                 type="text"
+                aria-invalid={errors.zipCode ? 'true' : 'false'}
                 {...register('zipCode', { required: 'ZIP code is required' })}
                 className={`w-full px-4 py-3 rounded-lg border-2 ${
                   errors.zipCode ? 'border-red-500' : 'border-[#D4A574]'
@@ -860,6 +870,7 @@ export default function CheckoutForm({ onNext, isPaymentStep = false }: Checkout
             </label>
             <select
               id="country"
+              aria-invalid={errors.country ? 'true' : 'false'}
               {...register('country', { required: 'Country is required' })}
               className={`w-full px-4 py-3 rounded-lg border-2 ${
                 errors.country ? 'border-red-500' : 'border-[#D4A574]'

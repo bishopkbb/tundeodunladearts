@@ -173,6 +173,7 @@ export default function NewsletterSection() {
         {/* Message Display */}
         {message && (
           <motion.div
+            role={message.type === 'error' ? 'alert' : 'status'}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}

@@ -6,8 +6,26 @@ import { useState } from 'react';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
+import { useToast } from '@/components/ui/Toast';
+
+// Turn an API error body (string or Zod issue list) into one readable sentence.
+function describeApiError(data: { error?: string; details?: unknown }): string {
+  if (Array.isArray(data.details)) {
+    const fields = Array.from(
+      new Set(
+        data.details
+          .map((d) => (d && typeof d === 'object' && 'path' in d ? String((d as { path: unknown[] }).path?.[0] ?? '') : ''))
+          .filter(Boolean)
+      )
+    );
+    if (fields.length > 0) return `Please check these fields: ${fields.join(', ')}.`;
+  }
+  if (typeof data.details === 'string' && data.details) return data.details;
+  return data.error || 'We could not send your message. Please try again.';
+}
 
 export default function ContactPage() {
+  const toast = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,11 +35,13 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
+    setErrorMessage('');
     
     try {
       const response = await fetch('/api/contact/submit', {
@@ -38,11 +58,15 @@ export default function ContactPage() {
       if (response.ok) {
       setSubmitStatus('success');
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+        toast.success("Message sent. We'll get back to you soon.");
         setTimeout(() => setSubmitStatus('idle'), 5000);
       } else {
+        // Keep the typed message so nothing is lost; the error stays until the next attempt.
+        const message = describeApiError(data);
         setSubmitStatus('error');
+        setErrorMessage(message);
+        toast.error(message);
         console.error('Contact form submission failed:', data);
-        setTimeout(() => setSubmitStatus('idle'), 5000);
       }
     } catch (error: unknown) {
       console.error('Contact form submission error:', error);
@@ -52,9 +76,9 @@ export default function ContactPage() {
           : error.message
         : 'An error occurred. Please try again later.';
       setSubmitStatus('error');
-      // Show error message to user
+      setErrorMessage(errorMessage);
+      toast.error(errorMessage);
       console.error('Contact form error details:', errorMessage);
-      setTimeout(() => setSubmitStatus('idle'), 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -259,6 +283,7 @@ export default function ContactPage() {
                   <AnimatePresence>
                     {submitStatus === 'success' && (
                       <motion.div
+                        role="status"
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
@@ -269,6 +294,29 @@ export default function ContactPage() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                           <p className="text-green-800 font-semibold">Thank you! We&apos;ll get back to you soon.</p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Error Message */}
+                  <AnimatePresence>
+                    {submitStatus === 'error' && (
+                      <motion.div
+                        role="alert"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg"
+                      >
+                        <div className="flex items-start gap-3">
+                          <svg className="w-6 h-6 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <div>
+                            <p className="text-red-800 font-semibold">Your message was not sent</p>
+                            <p className="text-red-700 text-sm mt-1">{errorMessage} Your text is still here, so you can try again.</p>
+                          </div>
                         </div>
                       </motion.div>
                     )}
