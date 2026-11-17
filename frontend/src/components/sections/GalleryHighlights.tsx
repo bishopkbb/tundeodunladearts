@@ -5,15 +5,17 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { eventImages } from '@/lib/eventImages.generated';
 
-const photo = (key: 'reception-01' | 'reception-02' | 'reception-03' | 'reception-04' | 'reception-05') => ({
+const photo = (key: 'reception-01' | 'reception-02') => ({
   src: eventImages[key].src,
   width: eventImages[key].width,
   height: eventImages[key].height,
   blurDataURL: eventImages[key].blurDataURL,
 });
 
-// Reception photos supplied by Prince Tunde Odunlade (Nov 2026), all landscape. `fallback` is shown if a photo fails to load.
-// TODO: replace these neutral captions with the real event name once Prince confirms it.
+// Landscape reception photos supplied by Prince Tunde Odunlade (Nov 2026), used at full quality.
+// `fallback` is shown if a photo fails to load.
+// TODO: add more natively landscape, high-resolution photos here, and replace these neutral captions
+// with the real event name once Prince confirms it.
 const galleryImages = [
   {
     id: 1,
@@ -28,27 +30,6 @@ const galleryImages = [
     title: 'Art in Conversation',
     description: 'Collectors and visitors discuss the work',
     fallback: '/Assets/gallery2.jpg',
-  },
-  {
-    id: 3,
-    ...photo('reception-03'),
-    title: 'Opening Night',
-    description: 'An evening of art, culture and community',
-    fallback: '/Assets/gallery3.jpg',
-  },
-  {
-    id: 4,
-    ...photo('reception-04'),
-    title: 'Shared Stories',
-    description: 'Conversations among artists and visitors',
-    fallback: '/Assets/gallery4.jpg',
-  },
-  {
-    id: 5,
-    ...photo('reception-05'),
-    title: 'Outdoor Gathering',
-    description: 'Where the celebration spills out onto the street',
-    fallback: '/Assets/gallery5.jpg',
   },
 ];
 
@@ -177,8 +158,8 @@ export default function GalleryHighlights() {
                     src={getImageSrc(imageIndex)}
                     alt={currentImage.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
-                    quality={85}
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    quality={90}
                     loading="lazy"
                     placeholder="blur"
                     blurDataURL={currentImage.blurDataURL}

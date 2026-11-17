@@ -16,7 +16,7 @@ const OUT = path.join(root, 'public', 'Assets', 'events');
 const GENERATED = path.join(root, 'src', 'lib', 'eventImages.generated.ts');
 
 // kind 'flyer'     -> keep full resolution (small text must stay readable), high quality
-// kind 'highlight' -> photo; cap the long edge so it stays light on slow connections
+// kind 'highlight' -> photo; capped at 2400px on the long edge (sharp on 2x screens, still light)
 //   landscape: true -> portrait source re-cut to landscape (the slider only shows landscape pictures)
 const images = [
   // Upcoming: Itanje, Ireje, Titi Aye (multimedia arts exhibition, opens 19 Nov 2026)
@@ -28,12 +28,9 @@ const images = [
   { slug: 'yoruba-cultural-exchange-chicago-2026', file: 'WhatsApp Image 2026-11-14 at 1.51.06 PM (1).jpeg', kind: 'flyer' },
   { slug: 'bcos-tv-bo-se-n-lo-2026', file: 'WhatsApp Image 2026-11-14 at 1.59.47 PM (1).jpeg', kind: 'flyer' },
   { slug: 'birmingham-five-decades-2026', file: 'WhatsApp Image 2026-11-14 at 1.59.47 PM.jpeg', kind: 'flyer' },
-  // Gallery Highlights slider (reception photos)
+  // Gallery Highlights slider: only natively landscape, high-resolution photos (never upscaled or re-cropped)
   { slug: 'reception-01', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM.jpeg'), kind: 'highlight' },
   { slug: 'reception-02', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM (1).jpeg'), kind: 'highlight' },
-  { slug: 'reception-03', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.27 PM.jpeg'), kind: 'highlight', landscape: true },
-  { slug: 'reception-04', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.36 PM (1).jpeg'), kind: 'highlight', landscape: true, cropTop: 0.22 },
-  { slug: 'reception-05', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.30 PM.jpeg'), kind: 'highlight', landscape: true },
 ];
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -59,9 +56,9 @@ for (const img of images) {
     // Portrait source: re-cut to a 3:2 landscape frame, letting sharp keep the most interesting area.
     pipeline = pipeline.resize({ width: 1600, height: 1067, fit: 'cover', position: sharp.strategy.attention });
   } else if (img.kind === 'highlight') {
-    pipeline = pipeline.resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true });
+    pipeline = pipeline.resize({ width: 2400, height: 2400, fit: 'inside', withoutEnlargement: true });
   }
-  const quality = img.kind === 'flyer' ? 86 : 78;
+  const quality = img.kind === 'flyer' ? 86 : 84;
   await pipeline.jpeg({ quality, mozjpeg: true }).toFile(outFile);
 
   const meta = await sharp(outFile).metadata();
