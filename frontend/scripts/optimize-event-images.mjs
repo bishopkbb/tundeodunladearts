@@ -17,6 +17,7 @@ const GENERATED = path.join(root, 'src', 'lib', 'eventImages.generated.ts');
 
 // kind 'flyer'     -> keep full resolution (small text must stay readable), high quality
 // kind 'highlight' -> photo; cap the long edge so it stays light on slow connections
+//   landscape: true -> portrait source re-cut to landscape (the slider only shows landscape pictures)
 const images = [
   // Upcoming: Itanje, Ireje, Titi Aye (multimedia arts exhibition, opens 19 Nov 2026)
   { slug: 'itanje-ireje-titi-aye-2026', file: 'WhatsApp Image 2026-11-16 at 10.09.23 PM.jpeg', kind: 'flyer' },
@@ -30,9 +31,9 @@ const images = [
   // Gallery Highlights slider (reception photos)
   { slug: 'reception-01', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM.jpeg'), kind: 'highlight' },
   { slug: 'reception-02', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM (1).jpeg'), kind: 'highlight' },
-  { slug: 'reception-03', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.27 PM.jpeg'), kind: 'highlight' },
-  { slug: 'reception-04', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.36 PM (1).jpeg'), kind: 'highlight' },
-  { slug: 'reception-05', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.30 PM.jpeg'), kind: 'highlight' },
+  { slug: 'reception-03', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.27 PM.jpeg'), kind: 'highlight', landscape: true },
+  { slug: 'reception-04', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.36 PM (1).jpeg'), kind: 'highlight', landscape: true, cropTop: 0.22 },
+  { slug: 'reception-05', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.30 PM.jpeg'), kind: 'highlight', landscape: true },
 ];
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -47,7 +48,17 @@ for (const img of images) {
 
   const outFile = path.join(OUT, `${img.slug}.jpg`);
   let pipeline = sharp(input).rotate(); // apply EXIF orientation, then drop metadata
-  if (img.kind === 'highlight') {
+  if (img.kind === 'highlight' && img.landscape && img.cropTop !== undefined) {
+    // Portrait source with a hand-picked frame: a full-width 3:2 band starting `cropTop` (0..1) down the photo.
+    const upright = await pipeline.toBuffer();
+    const m = await sharp(upright).metadata();
+    const height = Math.round(m.width / 1.5);
+    const top = Math.min(Math.round(m.height * img.cropTop), m.height - height);
+    pipeline = sharp(upright).extract({ left: 0, top, width: m.width, height }).resize({ width: 1600 });
+  } else if (img.kind === 'highlight' && img.landscape) {
+    // Portrait source: re-cut to a 3:2 landscape frame, letting sharp keep the most interesting area.
+    pipeline = pipeline.resize({ width: 1600, height: 1067, fit: 'cover', position: sharp.strategy.attention });
+  } else if (img.kind === 'highlight') {
     pipeline = pipeline.resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true });
   }
   const quality = img.kind === 'flyer' ? 86 : 78;

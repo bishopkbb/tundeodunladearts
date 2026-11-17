@@ -12,7 +12,7 @@ const photo = (key: 'reception-01' | 'reception-02' | 'reception-03' | 'receptio
   blurDataURL: eventImages[key].blurDataURL,
 });
 
-// Reception photos supplied by Prince Tunde Odunlade (Nov 2026). `fallback` is shown if a photo fails to load.
+// Reception photos supplied by Prince Tunde Odunlade (Nov 2026), all landscape. `fallback` is shown if a photo fails to load.
 // TODO: replace these neutral captions with the real event name once Prince confirms it.
 const galleryImages = [
   {
@@ -81,8 +81,6 @@ export default function GalleryHighlights() {
 
   const imageIndex = ((page % galleryImages.length) + galleryImages.length) % galleryImages.length;
   const currentImage = galleryImages[imageIndex];
-  // Portrait photos are shown whole over a blurred copy of themselves instead of being cropped.
-  const isPortrait = currentImage.height > currentImage.width;
   
   // Get the image source, using fallback if primary failed
   const getImageSrc = (index: number) => {
@@ -174,16 +172,6 @@ export default function GalleryHighlights() {
                 className="absolute inset-0 cursor-grab active:cursor-grabbing"
               >
                 <div className="relative w-full h-full bg-[#3D2817]">
-                  {isPortrait && (
-                    <Image
-                      src={getImageSrc(imageIndex)}
-                      alt=""
-                      aria-hidden="true"
-                      fill
-                      sizes="64px"
-                      className="object-cover scale-125 blur-2xl opacity-70"
-                    />
-                  )}
                   <Image
                     key={`${imageIndex}-${failedImages.has(imageIndex) ? 'fallback' : 'primary'}`}
                     src={getImageSrc(imageIndex)}
@@ -194,7 +182,7 @@ export default function GalleryHighlights() {
                     loading="lazy"
                     placeholder="blur"
                     blurDataURL={currentImage.blurDataURL}
-                    className={isPortrait && !failedImages.has(imageIndex) ? 'object-contain' : 'object-cover'}
+                    className="object-cover"
                     onError={() => {
                       const currentSrc = getImageSrc(imageIndex);
                       console.error(`❌ Failed to load image: ${currentSrc} (Index: ${imageIndex})`);
