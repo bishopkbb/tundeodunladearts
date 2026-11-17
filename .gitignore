@@ -99,3 +99,6 @@ graphify-out/
 
 # raw source assets (large originals); only optimised copies in public/ are committed
 frontend/raw-assets/
+
+# generated design previews (regenerate with scripts/generate-batik-tiles.mjs preview)
+frontend/design-assets/preview/
