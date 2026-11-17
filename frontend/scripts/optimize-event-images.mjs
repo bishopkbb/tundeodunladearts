@@ -31,6 +31,11 @@ const images = [
   // Gallery Highlights slider: only natively landscape, high-resolution photos (never upscaled or re-cropped)
   { slug: 'reception-01', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM.jpeg'), kind: 'highlight' },
   { slug: 'reception-02', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM (1).jpeg'), kind: 'highlight' },
+  // Existing high-resolution landscape pieces from public/Assets (originals are 2876-3600px wide)
+  { slug: 'gallery-melody-maker', abs: 'public/Assets/hero10.jpg', kind: 'highlight' },
+  { slug: 'gallery-native-doctor', abs: 'public/Assets/native_doctor.jpg', kind: 'highlight' },
+  { slug: 'gallery-leadership', abs: 'public/Assets/leadership.jpg', kind: 'highlight' },
+  { slug: 'gallery-natures-own-making', abs: 'public/Assets/nature-lg.jpg', kind: 'highlight' },
 ];
 
 fs.mkdirSync(OUT, { recursive: true });
@@ -40,7 +45,7 @@ let totalBefore = 0;
 let totalAfter = 0;
 
 for (const img of images) {
-  const input = path.join(SRC, img.file);
+  const input = img.abs ? path.join(root, img.abs) : path.join(SRC, img.file);
   if (!fs.existsSync(input)) throw new Error(`Missing source image: ${input}`);
 
   const outFile = path.join(OUT, `${img.slug}.jpg`);

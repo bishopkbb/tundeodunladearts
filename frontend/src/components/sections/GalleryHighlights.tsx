@@ -5,17 +5,24 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { eventImages } from '@/lib/eventImages.generated';
 
-const photo = (key: 'reception-01' | 'reception-02') => ({
+const photo = (
+  key:
+    | 'reception-01'
+    | 'reception-02'
+    | 'gallery-melody-maker'
+    | 'gallery-native-doctor'
+    | 'gallery-leadership'
+    | 'gallery-natures-own-making'
+) => ({
   src: eventImages[key].src,
   width: eventImages[key].width,
   height: eventImages[key].height,
   blurDataURL: eventImages[key].blurDataURL,
 });
 
-// Landscape reception photos supplied by Prince Tunde Odunlade (Nov 2026), used at full quality.
-// `fallback` is shown if a photo fails to load.
-// TODO: add more natively landscape, high-resolution photos here, and replace these neutral captions
-// with the real event name once Prince confirms it.
+// Only natively landscape, high-resolution pictures (2400px wide), alternating between reception photos
+// supplied by Prince Tunde Odunlade (Nov 2026) and works from the gallery. `fallback` is shown if a photo fails to load.
+// TODO: replace the neutral reception captions with the real event name once Prince confirms it.
 const galleryImages = [
   {
     id: 1,
@@ -26,10 +33,38 @@ const galleryImages = [
   },
   {
     id: 2,
+    ...photo('gallery-native-doctor'),
+    title: 'The Native Doctor',
+    description: 'Yinka Adeyemi, beads on board',
+    fallback: '/Assets/gallery2.jpg',
+  },
+  {
+    id: 3,
     ...photo('reception-02'),
     title: 'Art in Conversation',
     description: 'Collectors and visitors discuss the work',
-    fallback: '/Assets/gallery2.jpg',
+    fallback: '/Assets/gallery3.jpg',
+  },
+  {
+    id: 4,
+    ...photo('gallery-melody-maker'),
+    title: 'Melody Maker',
+    description: 'Adeniyi Dagunro, mixed media',
+    fallback: '/Assets/gallery4.jpg',
+  },
+  {
+    id: 5,
+    ...photo('gallery-leadership'),
+    title: 'Leadership',
+    description: 'Rufus Ogundele, oil on board',
+    fallback: '/Assets/gallery5.jpg',
+  },
+  {
+    id: 6,
+    ...photo('gallery-natures-own-making'),
+    title: "Nature's Own Making",
+    description: 'Tunde Odunlade, batik',
+    fallback: '/Assets/gallery1.jpg',
   },
 ];
 
