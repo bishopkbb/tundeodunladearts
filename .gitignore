@@ -93,3 +93,6 @@ pnpm-debug.log*
 # OS files
 Thumbs.db
 Desktop.ini
+
+# graphify output
+graphify-out/
