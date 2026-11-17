@@ -7,9 +7,12 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01';
 const token = process.env.SANITY_API_TOKEN || '';
 
-// Create a dummy client if project ID is missing to prevent errors
+// Sanity only accepts lowercase letters, digits and dashes in a project ID
+const hasValidProjectId = /^[a-z0-9-]+$/.test(projectId);
+
+// Create a dummy client if project ID is missing or invalid to prevent errors
 const createSafeClient = () => {
-  if (!projectId || projectId.trim() === '') {
+  if (!hasValidProjectId) {
     // Return a mock client that will fail gracefully
     // Cast through unknown first to satisfy TypeScript's strict type checking
     return {
@@ -31,7 +34,7 @@ const createSafeClient = () => {
 export const sanityClient = createSafeClient();
 
 // Sanity client for writing data (requires token)
-export const sanityWriteClient = token
+export const sanityWriteClient = token && hasValidProjectId
   ? createClient({
       projectId,
       dataset,

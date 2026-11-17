@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { fetchExhibitions } from '@/lib/cmsData';
+import { getExhibitions } from '@/lib/exhibitionsServer';
 import { allArtworks } from '@/lib/artworksData';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -55,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch exhibitions dynamically (with fallback)
   let exhibitions: MetadataRoute.Sitemap = [];
   try {
-    const fetchedExhibitions = await fetchExhibitions(false);
+    const { exhibitions: fetchedExhibitions } = await getExhibitions(false);
     if (fetchedExhibitions && fetchedExhibitions.length > 0) {
       exhibitions = fetchedExhibitions.map((exhibition) => ({
         url: `${baseUrl}/exhibitions#exhibition-${exhibition.id}`,
