@@ -3,78 +3,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import SmartImage from '@/components/ui/SmartImage';
+import EventCover from '@/components/ui/EventCover';
+import { selectFeaturedEvents, type SiteEvent } from '@/lib/eventsData';
+import { calculateExhibitionStatus, getStatusColor, getStatusText } from '@/lib/exhibitionUtils';
 
-interface Exhibition {
-  id: number;
-  title: string;
-  subtitle?: string;
-  artist: string;
-  category: string;
-  type: 'exhibition' | 'festival' | 'awards' | 'event';
-  startDate: string;
-  endDate?: string;
-  openingTime?: string;
-  venue: string;
-  address: string;
-  description: string;
-  image: string;
-}
-
-const exhibitions: Exhibition[] = [
-  {
-    id: 1,
-    title: 'Chain of Souls',
-    subtitle: '(ASOPO OKAN)',
-    artist: 'Taofeek Olalekan',
-    category: 'Mixed Media, Fiber/Textile Art, Beadworks & Oil on Canvas',
-    type: 'exhibition',
-    startDate: '2025-12-16',
-    endDate: '2026-01-10',
-    openingTime: '04:00 PM',
-    venue: 'Femi Osofisan Amphitheater',
-    address: 'No 2, Ladoke Akintola, Off Aare Avenue, New Bodija',
-    description: 'An art exhibition of mixed media, fiber/textile art, beadworks, & oil on canvas. A new talent born to celebrate Arewa Odunlade\'s birthday.',
-    image: '/Assets/chain of souls.png',
-  },
-  {
-    id: 2,
-    title: '6TH ORÍKÌ YORÙBÁ FESTIVAL',
-    artist: 'Prince Tunde Odunlade',
-    category: 'Cultural Festival',
-    type: 'festival',
-    startDate: '2025-12-13',
-    openingTime: '9:00 AM',
-    venue: 'Iyaniwura Palace',
-    address: 'Iba town Osun State, Nigeria',
-    description: 'A celebration of Yoruba culture and heritage featuring guest speaker Prince Tunde Odunlade, an accomplished print and textile artist with extensive background in exhibiting, teaching, lecturing, and studying.',
-    image: '/Assets/oriki.jpg',
-  },
-  {
-    id: 3,
-    title: 'Abuja 2025 African Descent Creative Industry Awards & Honours',
-    artist: 'Prince Tunde Odunlade',
-    category: 'Awards Ceremony',
-    type: 'awards',
-    startDate: '2025-12-11',
-    venue: 'Nicon Luxury Abuja',
-    address: 'Abuja, Nigeria',
-    description: 'Creative Arts Promotion Icon Award honoring Prince Tunde Odunlade for his outstanding contributions to African arts and culture.',
-    image: '/Assets/abuja .jpg',
-  },
-  {
-    id: 4,
-    title: 'ARIYA GENGE 2025',
-    artist: 'Iyaniwura Alarinjo Troupe',
-    category: 'Cultural Event',
-    type: 'event',
-    startDate: '2025-12-15',
-    venue: 'Tunde Odunlade Arts Gallery',
-    address: 'No 2, Ladoke Akintola, Off Aare Avenue, New Bodija',
-    description: 'Presented by Iyaniwura Alarinjo Troupe in collaboration with Tunde Odunlade Arts Gallery. A vibrant celebration of traditional Nigerian performing arts and culture.',
-    image: '/Assets/Ariya.jpg',
-  },
-];
+type Exhibition = SiteEvent;
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -98,6 +31,8 @@ const itemVariants = {
 
 export default function FeaturedExhibitions() {
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition | null>(null);
+  // Upcoming events first, then the most recent past ones.
+  const [exhibitions] = useState<Exhibition[]>(() => selectFeaturedEvents(4));
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -188,17 +123,19 @@ export default function FeaturedExhibitions() {
               >
                 <div>
                   <div className="relative h-72 md:h-80 overflow-hidden rounded-xl mb-4 shadow-lg group-hover:shadow-2xl transition-shadow duration-200 border-4 border-[#D4AF37]">
-                    <SmartImage
+                    <EventCover
                       src={exhibit.image}
-                      alt={exhibit.title}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      quality={85}
-                      loading="lazy"
-                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      alt={exhibit.imageAlt ?? exhibit.title}
+                      fit={exhibit.imageFit}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      zoomClassName="group-hover:scale-110 transition-transform duration-300"
                     />
                     {/* Type Badge */}
                     <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold ${badge.bg} ${badge.textColor} shadow-lg`}>
                       {badge.text}
+                    </div>
+                    <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold text-white ${getStatusColor(calculateExhibitionStatus(exhibit.startDate, exhibit.endDate))} shadow-lg`}>
+                      {getStatusText(calculateExhibitionStatus(exhibit.startDate, exhibit.endDate))}
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-end justify-between p-4">
                       <div className="text-right text-white">
@@ -217,13 +154,13 @@ export default function FeaturedExhibitions() {
                   </div>
                   <div>
                     <h3 className="text-lg md:text-xl font-bold text-[#3D2817] mb-1 group-hover:text-[#C17C2E] transition-colors font-serif">
-                      {exhibit.title}
+                      {exhibit.cardTitle ?? exhibit.title}
                     </h3>
                     {exhibit.subtitle && (
                       <p className="text-sm text-[#8B4513] italic mb-1">{exhibit.subtitle}</p>
                     )}
                     <p className="text-sm text-[#9A5B1F] font-semibold mb-2">{exhibit.artist}</p>
-                    <p className="text-xs text-[#6B4423] line-clamp-2">{exhibit.category}</p>
+                    <p className="text-xs text-[#6B4423] line-clamp-2">{exhibit.cardCategory ?? exhibit.category}</p>
                     <p className="text-xs text-[#8B4513] mt-2 line-clamp-1">📍 {exhibit.venue}</p>
                   </div>
                 </div>
@@ -277,16 +214,23 @@ export default function FeaturedExhibitions() {
               </button>
 
               {/* Exhibition Hero Image */}
-              <div className="relative h-64 xs:h-72 sm:h-80 md:h-96">
-                <SmartImage
+              <div
+                className={`relative ${
+                  selectedExhibition.imageFit === 'contain'
+                    ? 'h-[60vh] max-h-[620px] min-h-[320px]'
+                    : 'h-64 xs:h-72 sm:h-80 md:h-96'
+                }`}
+              >
+                <EventCover
                   src={selectedExhibition.image}
-                  alt={selectedExhibition.title}
+                  alt={selectedExhibition.imageAlt ?? selectedExhibition.title}
+                  fit={selectedExhibition.imageFit}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
-                  quality={85}
-                  loading="eager"
-                  className="object-cover"
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                {selectedExhibition.imageFit !== 'contain' && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                )}
                 <div className={`absolute top-2 xs:top-4 sm:top-6 right-2 xs:right-4 sm:right-6 px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 rounded-full text-white text-xs xs:text-sm font-bold ${getTypeBadge(selectedExhibition.type).bg} ${getTypeBadge(selectedExhibition.type).textColor} shadow-lg`}>
                   {getTypeBadge(selectedExhibition.type).text}
                 </div>

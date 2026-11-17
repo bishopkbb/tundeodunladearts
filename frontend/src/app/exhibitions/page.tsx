@@ -9,114 +9,18 @@ import { calculateExhibitionStatus, getStatusText, getStatusColor, type Exhibiti
 import { fetchExhibitions } from '@/lib/cmsData';
 import { shareToFacebook, shareToTwitter, shareToLinkedIn, shareToWhatsApp, shareViaEmail, shareToPinterest, copyToClipboard, getAbsoluteUrl } from '@/lib/shareUtils';
 import Link from 'next/link';
-import SmartImage from '@/components/ui/SmartImage';
+import EventCover from '@/components/ui/EventCover';
+import LiteYouTube from '@/components/ui/LiteYouTube';
+import { events as eventsData, sortEventsForDisplay, type SiteEvent } from '@/lib/eventsData';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
 
-interface Exhibition {
-  id: number;
-  title: string;
-  artist: string;
-  startDate: string;
-  endDate?: string;
-  description: string;
-  longDescription: string;
-  image: string;
-  category: string;
-  location: string;
-  artworks: number;
-  type?: 'exhibition' | 'festival' | 'awards' | 'event';
-  openingTime?: string;
-  address?: string;
-  subtitle?: string;
-}
-
-const exhibitionsData: Exhibition[] = [
-  {
-    id: 1,
-    title: 'Chain of Souls (ASOPO OKAN)',
-    artist: 'Taofeek Olalekan',
-    startDate: '2025-12-16',
-    endDate: '2026-01-10',
-    description: 'An art exhibition of mixed media, fiber/textile art, beadworks, & oil on canvas. A new talent born to celebrate Arewa Odunlade\'s birthday.',
-    longDescription: 'Chain of Souls (ASOPO OKAN) presents a powerful exploration of connection, heritage, and artistic expression through diverse mediums. This groundbreaking exhibition features works by emerging talent Taofeek Olalekan, showcasing innovative approaches to mixed media, fiber/textile art, beadworks, and traditional oil on canvas. The exhibition serves as both a celebration of new artistic voices and a tribute to Arewa Odunlade\'s birthday. Visitors will experience a dynamic interplay between traditional African craft techniques and contemporary artistic practices, with each piece telling a story of cultural continuity and creative evolution. The opening reception promises an intimate encounter with the artist, allowing visitors to meet Taofeek Olalekan live and experience his creative process firsthand.',
-    image: '/Assets/chain of souls.png',
-    category: 'Fiber/Textile Art',
-    location: 'Femi Osofisan Amphitheater, Tunde Odunlade Arts and Culture Gallery, No 2, Ladoke Akintola, Off Aare Avenue, New Bodija',
-    artworks: 30,
-  },
-  {
-    id: 2,
-    title: '6TH ORÍKÌ YORÙBÁ FESTIVAL',
-    artist: 'Prince Tunde Odunlade',
-    startDate: '2025-12-13',
-    endDate: '2025-12-13',
-    description: 'A celebration of Yoruba culture and heritage featuring guest speaker Prince Tunde Odunlade, an accomplished print and textile artist with extensive background in exhibiting, teaching, lecturing, and studying.',
-    longDescription: 'The 6TH ORÍKÌ YORÙBÁ FESTIVAL brings together cultural enthusiasts, artists, and scholars for a day-long celebration of Yoruba heritage and oral traditions. This year\'s festival features Prince Tunde Odunlade as the guest speaker, a highly accomplished print and textile artist whose work bridges traditional African art forms with contemporary expression. Prince Tunde Odunlade brings decades of experience from his studies in Anthropology at Iowa State University and Stillman College in Tuscaloosa, Alabama, where he served as an artist-in-residence in 1986 and 1989. His extensive travels throughout Nigeria, Africa, North America, and Europe have enriched his understanding of global artistic practices while maintaining deep roots in Yoruba cultural traditions. The festival promises engaging discussions, cultural performances, and insights into the preservation and evolution of Yoruba artistic heritage.',
-    image: '/Assets/oriki.jpg',
-    category: 'Cultural Festival',
-    location: 'Iyaniwura Palace, Iba town Osun State, Nigeria',
-    artworks: 0,
-  },
-  {
-    id: 3,
-    title: 'Abuja 2025 African Descent Creative Industry Awards & Honours',
-    artist: 'Prince Tunde Odunlade',
-    startDate: '2025-12-11',
-    endDate: '2025-12-11',
-    description: 'Creative Arts Promotion Icon Award honoring Prince Tunde Odunlade for his outstanding contributions to African arts and culture.',
-    longDescription: 'The Abuja 2025 African Descent Creative Industry Awards & Honours recognizes exceptional individuals who have made significant contributions to the creative arts across the African diaspora. Prince Tunde Odunlade is being honored as the Creative Arts Promotion Icon for his decades of dedication to advancing African artistic expression, cultural preservation, and creative education. This prestigious award acknowledges his role as a bridge between traditional African art forms and contemporary global artistic practices. The ceremony at Nicon Luxury Abuja brings together leaders from across the African creative industry to celebrate excellence, innovation, and cultural impact. Prince Tunde Odunlade\'s recognition highlights the importance of artistic advocacy and the power of creative expression in shaping cultural identity and global understanding.',
-    image: '/Assets/abuja .jpg',
-    category: 'Awards Ceremony',
-    location: 'Nicon Luxury Abuja, Nigeria',
-    artworks: 0,
-  },
-  {
-    id: 4,
-    title: 'ARIYA GENGE 2025',
-    artist: 'Iyaniwura Alarinjo Troupe',
-    startDate: '2025-12-15',
-    endDate: '2025-12-15',
-    description: 'Presented by Iyaniwura Alarinjo Troupe in collaboration with Tunde Odunlade Arts Gallery. A vibrant celebration of traditional Nigerian performing arts and culture.',
-    longDescription: 'ARIYA GENGE 2025 is a spectacular showcase of traditional Nigerian performing arts, presented by the renowned Iyaniwura Alarinjo Troupe in collaboration with Tunde Odunlade Arts Gallery. This vibrant cultural event brings together music, dance, storytelling, and theatrical performances that celebrate the rich heritage of Nigerian and Yoruba traditions. The event transforms the gallery space into a dynamic stage where ancient artistic practices meet contemporary presentation, creating an immersive experience for audiences of all ages. ARIYA GENGE 2025 offers a unique opportunity to witness living cultural traditions and the ongoing evolution of African performing arts, all within the inspiring setting of Tunde Odunlade Arts Gallery.',
-    image: '/Assets/Ariya.jpg',
-    category: 'Cultural Event',
-    location: 'Tunde Odunlade Arts Gallery, No 2, Ladoke Akintola, Off Aare Avenue, New Bodija',
-    artworks: 0,
-  },
-  {
-    id: 5,
-    title: 'Ancestral Threads',
-    artist: 'Prince Tunde Odunlade',
-    startDate: '2025-01-15',
-    endDate: '2025-03-30',
-    description: 'A breathtaking exploration of Yoruba heritage through contemporary batik art, weaving stories of tradition into modern textile masterpieces.',
-    longDescription: 'Ancestral Threads is a profound journey through the rich tapestry of Yoruba culture, where Prince Tunde Odunlade\'s innovative floatography technique brings centuries-old stories to life. This exhibition features over 30 original batik works that bridge the gap between traditional Nigerian art forms and contemporary expression. Each piece is a meditation on identity, heritage, and the enduring power of cultural memory. Through vibrant indigo dyes and intricate patterns, visitors will discover how ancestral wisdom continues to shape modern African artistry.',
-    image: '/Assets/ancestral thread.jpg',
-    category: 'Textile Art',
-    location: 'Main Gallery',
-    artworks: 32,
-  },
-  {
-    id: 6,
-    title: 'Metamorphosis',
-    artist: 'Various Artists',
-    startDate: '2024-09-01',
-    endDate: '2024-12-15',
-    description: 'A transformative journey through change, growth, and evolution depicted through sculpture, painting, and performance art.',
-    longDescription: 'Metamorphosis explored the universal themes of transformation and personal evolution through diverse artistic mediums. Artists examined how individuals, communities, and cultures adapt and transform in response to social change, environmental pressures, and technological advancement. The exhibition featured powerful sculptural works that literally transformed as viewers interacted with them, alongside paintings that documented personal journeys of growth and change. Performance art pieces conducted throughout the exhibition period added a temporal dimension, reminding visitors that transformation is an ongoing process rather than a destination.',
-    image: '/Assets/metamorphosis.jpg',
-    category: 'Sculpture & Performance',
-    location: 'Main Gallery',
-    artworks: 28,
-  },
-  
-];
+type Exhibition = SiteEvent;
 
 export default function ExhibitionsPage() {
   const [filter, setFilter] = useState<ExhibitionStatus | 'all'>('all');
   const [selectedExhibition, setSelectedExhibition] = useState<Exhibition & { status: ExhibitionStatus } | null>(null);
   useEscapeKey(!!selectedExhibition, () => setSelectedExhibition(null));
-  const [exhibitions, setExhibitions] = useState<Exhibition[]>(exhibitionsData);
+  const [exhibitions, setExhibitions] = useState<Exhibition[]>(eventsData);
   const [, setIsLoading] = useState(true);
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [copiedToClipboard, setCopiedToClipboard] = useState(false);
@@ -177,8 +81,9 @@ export default function ExhibitionsPage() {
             image: ex.image,
             category: ex.category,
             location: ex.location,
+            venue: ex.location,
             artworks: ex.artworks,
-            type: ex.type,
+            type: ex.type ?? 'event',
             openingTime: ex.openingTime,
             address: ex.address,
           }));
@@ -186,7 +91,7 @@ export default function ExhibitionsPage() {
         }
       } catch (error: unknown) {
         console.error('Failed to load exhibitions from CMS:', error);
-        setExhibitions(exhibitionsData);
+        setExhibitions(eventsData);
       } finally {
         setIsLoading(false);
       }
@@ -196,7 +101,7 @@ export default function ExhibitionsPage() {
 
   // Calculate status dynamically for all exhibitions
   const exhibitionsWithStatus = useMemo(() => {
-    return exhibitions.map(ex => ({
+    return sortEventsForDisplay(exhibitions).map(ex => ({
       ...ex,
       status: calculateExhibitionStatus(ex.startDate, ex.endDate),
     }));
@@ -356,13 +261,12 @@ export default function ExhibitionsPage() {
                   >
                     {/* Image */}
                     <div className="relative h-64 overflow-hidden">
-                      <SmartImage
+                      <EventCover
                         src={exhibition.image}
-                        alt={exhibition.title}
+                        alt={exhibition.imageAlt ?? exhibition.title}
+                        fit={exhibition.imageFit}
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        quality={85}
-                        loading="lazy"
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        zoomClassName="group-hover:scale-110 transition-transform duration-500"
                       />
                       {/* Status Badge */}
                       <div className={`absolute top-4 right-4 px-4 py-2 rounded-full text-white text-xs font-bold ${getStatusColor(exhibition.status)} shadow-lg`}>
@@ -462,16 +366,21 @@ export default function ExhibitionsPage() {
                 </button>
 
                 {/* Exhibition Hero Image */}
-                <div className="relative h-80 md:h-96">
-                  <SmartImage
+                <div
+                  className={`relative ${
+                    selectedExhibition.imageFit === 'contain' ? 'h-[60vh] max-h-[640px] min-h-[320px]' : 'h-80 md:h-96'
+                  }`}
+                >
+                  <EventCover
                     src={selectedExhibition.image}
-                    alt={selectedExhibition.title}
+                    alt={selectedExhibition.imageAlt ?? selectedExhibition.title}
+                    fit={selectedExhibition.imageFit}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
-                    quality={85}
-                    loading="eager"
-                    className="object-cover"
+                    priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  {selectedExhibition.imageFit !== 'contain' && (
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                  )}
                   <div className={`absolute top-6 right-6 px-6 py-3 rounded-full text-white text-sm font-bold ${getStatusColor(selectedExhibition.status)} shadow-lg`}>
                     {getStatusText(selectedExhibition.status)}
                   </div>
@@ -521,6 +430,17 @@ export default function ExhibitionsPage() {
                       {selectedExhibition.longDescription}
                     </p>
                   </div>
+
+                  {selectedExhibition.videoId && (
+                    <div className="mt-8">
+                      <h3 className="text-2xl font-bold text-[#3D2817] mb-4 font-serif">Watch</h3>
+                      <LiteYouTube
+                        videoId={selectedExhibition.videoId}
+                        title={`${selectedExhibition.title}: video`}
+                        href={selectedExhibition.videoUrl}
+                      />
+                    </div>
+                  )}
 
                   {/* CTA Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 mt-6 xs:mt-8 sm:mt-10 relative">

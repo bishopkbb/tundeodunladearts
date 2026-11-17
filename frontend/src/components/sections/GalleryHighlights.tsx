@@ -3,49 +3,52 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { eventImages } from '@/lib/eventImages.generated';
 
+const photo = (key: 'reception-01' | 'reception-02' | 'reception-03' | 'reception-04' | 'reception-05') => ({
+  src: eventImages[key].src,
+  width: eventImages[key].width,
+  height: eventImages[key].height,
+  blurDataURL: eventImages[key].blurDataURL,
+});
+
+// Reception photos supplied by Prince Tunde Odunlade (Nov 2026). `fallback` is shown if a photo fails to load.
+// TODO: replace these neutral captions with the real event name once Prince confirms it.
 const galleryImages = [
   {
     id: 1,
-    src: '/Assets/hero1.jpg',
-    title: 'Inside the Gallery',
-    description: 'Contemporary African art in a vibrant space',
+    ...photo('reception-01'),
+    title: 'Exhibition Reception',
+    description: 'Guests gather around a large textile artwork',
     fallback: '/Assets/gallery1.jpg',
   },
   {
     id: 2,
-    src: '/Assets/gallery1.jpg',
-    title: 'Cultural Performance',
-    description: 'Live artistic expressions and storytelling',
+    ...photo('reception-02'),
+    title: 'Art in Conversation',
+    description: 'Collectors and visitors discuss the work',
     fallback: '/Assets/gallery2.jpg',
   },
   {
     id: 3,
-    src: '/Assets/gallery5.jpg',
-    title: 'Art Workshop',
-    description: 'Mentorship and creative learning',
+    ...photo('reception-03'),
+    title: 'Opening Night',
+    description: 'An evening of art, culture and community',
     fallback: '/Assets/gallery3.jpg',
   },
   {
     id: 4,
-    src: '/Assets/gallery2.jpg',
-    title: 'Exhibition Opening',
-    description: 'Community gathering and celebration',
+    ...photo('reception-04'),
+    title: 'Shared Stories',
+    description: 'Conversations among artists and visitors',
     fallback: '/Assets/gallery4.jpg',
   },
   {
     id: 5,
-    src: '/Assets/workspace.jpg',
-    title: 'Work Space',
-    description: 'Where arts are brought to life',
-    fallback: '/Assets/gallery1.jpg',
-  },
-  {
-    id: 6,
-    src: '/Assets/dance.jpg',
-    title: 'Dance Performance',
-    description: 'Creating heritage through rhythm and movement',
-    fallback: '/Assets/gallery2.jpg',
+    ...photo('reception-05'),
+    title: 'Outdoor Gathering',
+    description: 'Where the celebration spills out onto the street',
+    fallback: '/Assets/gallery5.jpg',
   },
 ];
 
@@ -78,6 +81,8 @@ export default function GalleryHighlights() {
 
   const imageIndex = ((page % galleryImages.length) + galleryImages.length) % galleryImages.length;
   const currentImage = galleryImages[imageIndex];
+  // Portrait photos are shown whole over a blurred copy of themselves instead of being cropped.
+  const isPortrait = currentImage.height > currentImage.width;
   
   // Get the image source, using fallback if primary failed
   const getImageSrc = (index: number) => {
@@ -168,7 +173,17 @@ export default function GalleryHighlights() {
                 }}
                 className="absolute inset-0 cursor-grab active:cursor-grabbing"
               >
-                <div className="relative w-full h-full">
+                <div className="relative w-full h-full bg-[#3D2817]">
+                  {isPortrait && (
+                    <Image
+                      src={getImageSrc(imageIndex)}
+                      alt=""
+                      aria-hidden="true"
+                      fill
+                      sizes="64px"
+                      className="object-cover scale-125 blur-2xl opacity-70"
+                    />
+                  )}
                   <Image
                     key={`${imageIndex}-${failedImages.has(imageIndex) ? 'fallback' : 'primary'}`}
                     src={getImageSrc(imageIndex)}
@@ -177,7 +192,9 @@ export default function GalleryHighlights() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
                     quality={85}
                     loading="lazy"
-                    className="object-cover"
+                    placeholder="blur"
+                    blurDataURL={currentImage.blurDataURL}
+                    className={isPortrait && !failedImages.has(imageIndex) ? 'object-contain' : 'object-cover'}
                     onError={() => {
                       const currentSrc = getImageSrc(imageIndex);
                       console.error(`❌ Failed to load image: ${currentSrc} (Index: ${imageIndex})`);

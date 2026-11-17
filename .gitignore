@@ -96,3 +96,6 @@ Desktop.ini
 
 # graphify output
 graphify-out/
+
+# raw source assets (large originals); only optimised copies in public/ are committed
+frontend/raw-assets/

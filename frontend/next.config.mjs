@@ -25,6 +25,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.cloudflare.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com', // YouTube thumbnails (lite player)
+      },
     ],
   },
   

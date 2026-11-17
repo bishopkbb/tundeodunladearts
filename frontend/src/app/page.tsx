@@ -23,6 +23,9 @@ const VisitUs = dynamic(() => import('@/components/sections/VisitUs'), {
   loading: () => <SectionSkeleton />,
 });
 
+// Event statuses (upcoming / past) depend on today's date, so refresh the static page hourly.
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'Tunde Odunlade Arts & Culture Connexions | Home',
   description:
