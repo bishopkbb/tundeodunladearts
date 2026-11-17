@@ -4,22 +4,23 @@ import Navbar from '@/components/common/Navbar';
 import HeroSection from '@/components/hero/HeroSection';
 import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
+import { SectionSkeleton } from '@/components/ui/Skeleton';
 
 // Dynamic imports for heavy components - load after initial render
 const FeaturedExhibitions = dynamic(() => import('@/components/sections/FeaturedExhibitions'), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <SectionSkeleton />,
 });
 const AboutSection = dynamic(() => import('@/components/sections/AboutSection'), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <SectionSkeleton />,
 });
 const GalleryHighlights = dynamic(() => import('@/components/sections/GalleryHighlights'), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <SectionSkeleton />,
 });
 const ShopPreview = dynamic(() => import('@/components/sections/ShopPreview'), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <SectionSkeleton />,
 });
 const VisitUs = dynamic(() => import('@/components/sections/VisitUs'), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <SectionSkeleton />,
 });
 
 export const metadata: Metadata = {

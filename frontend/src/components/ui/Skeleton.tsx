@@ -76,3 +76,31 @@ export function PageSkeleton({ cards = 6 }: { cards?: number }) {
     </div>
   );
 }
+
+/** Placeholder for a homepage section while its code-split chunk loads (reserves the same ~400px). */
+export function SectionSkeleton({ cards = 3 }: { cards?: number }) {
+  return (
+    <section className="min-h-[400px] py-16 px-4 md:px-8" role="status" aria-busy="true">
+      <span className="sr-only">Loading section…</span>
+      <div className="max-w-7xl mx-auto">
+        <div className="mx-auto mb-10 flex flex-col items-center gap-3" aria-hidden="true">
+          <Skeleton className="h-8 w-64" />
+          <Skeleton className="h-4 w-80 max-w-full" />
+        </div>
+        <SkeletonGrid count={cards} />
+      </div>
+    </section>
+  );
+}
+
+/** Staggered-height tiles that mirror the gallery's masonry columns. */
+export function SkeletonMasonry({ count = 8 }: { count?: number }) {
+  const heights = ['h-56', 'h-72', 'h-64', 'h-80', 'h-60', 'h-72', 'h-56', 'h-64'];
+  return (
+    <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 md:gap-7" aria-hidden="true">
+      {Array.from({ length: count }).map((_, i) => (
+        <Skeleton key={i} className={cx('mb-5 md:mb-7 break-inside-avoid w-full rounded-xl', heights[i % heights.length])} />
+      ))}
+    </div>
+  );
+}

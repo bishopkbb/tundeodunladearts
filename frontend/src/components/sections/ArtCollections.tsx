@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Skeleton, SkeletonMasonry } from '@/components/ui/Skeleton';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -121,14 +122,13 @@ export default function ArtCollections() {
 
   if (isLoading) {
     return (
-      <section className="py-16 md:py-24 px-4 md:px-8 bg-gradient-to-b from-[#F5EFE7] to-white">
+      <section className="py-16 md:py-24 px-4 md:px-8 bg-gradient-to-b from-[#F5EFE7] to-white" role="status" aria-busy="true">
+        <span className="sr-only">Loading artworks…</span>
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="animate-pulse">
-              <div className="h-8 bg-[#D4A574] rounded w-64 mx-auto mb-4"></div>
-              <div className="h-4 bg-[#D4A574]/50 rounded w-96 mx-auto"></div>
-            </div>
+          <div className="mb-8 flex justify-center" aria-hidden="true">
+            <Skeleton className="h-12 w-80 max-w-full rounded-full" />
           </div>
+          <SkeletonMasonry />
         </div>
       </section>
     );

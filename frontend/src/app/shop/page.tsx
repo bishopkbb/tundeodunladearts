@@ -393,6 +393,8 @@ export default function ShopPage() {
                           className="relative h-64 overflow-hidden cursor-pointer"
                           onClick={() => setSelectedArtwork(artwork)}
                         >
+                          {/* Placeholder shown behind the image until it has loaded */}
+                          <div className="absolute inset-0 bg-[#E8DCC8]/70 motion-safe:animate-pulse" aria-hidden="true" />
                           <Image
                             src={artwork.image}
                             alt={artwork.title}
@@ -407,7 +409,7 @@ export default function ShopPage() {
                               // Fallback to a placeholder or handle error
                               const target = e.target as HTMLImageElement;
                               if (target && target.parentElement) {
-                                target.src = '/Assets/logo.png'; // Fallback image
+                                target.src = '/Assets/logo-256.png'; // Lightweight fallback image
                               }
                             }}
                           />
