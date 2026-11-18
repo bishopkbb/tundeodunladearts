@@ -145,11 +145,11 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 className="space-y-6 xs:space-y-8"
               >
-                <div>
+                <div className="rounded-xl border border-[#D4AF37]/50 bg-[#FAF8F5]/90 p-5 shadow-lg backdrop-blur-sm xs:p-6">
                   <h2 className="text-2xl xs:text-3xl md:text-4xl font-bold text-[#3D2817] mb-4 xs:mb-6 font-serif">
                     Plan Your Visit
                   </h2>
-                  <p className="text-sm xs:text-base text-[#6B4423] leading-relaxed mb-6 xs:mb-8">
+                  <p className="text-sm xs:text-base text-[#6B4423] leading-relaxed">
                     Located in the vibrant city of Ibadan, our gallery welcomes you to explore the rich tapestry of Nigerian creativity. Experience live art, exhibitions, and cultural performances.
                   </p>
                 </div>

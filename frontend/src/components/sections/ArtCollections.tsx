@@ -165,7 +165,7 @@ export default function ArtCollections() {
               )}
             </div>
           ) : (
-            <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 md:gap-7">
+            <div className="columns-2 lg:columns-3 xl:columns-4 gap-3 sm:gap-5 md:gap-7">
               {images.map((image, index) => (
               <motion.div
                 key={image.id}
@@ -173,7 +173,7 @@ export default function ArtCollections() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.4, delay: index * 0.02 }}
-                className="mb-5 md:mb-7 break-inside-avoid group"
+                className="mb-3 sm:mb-5 md:mb-7 break-inside-avoid group"
               >
                 {/* African Pattern Frame Container */}
                 <div 

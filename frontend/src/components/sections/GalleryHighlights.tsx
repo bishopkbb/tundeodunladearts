@@ -225,18 +225,22 @@ export default function GalleryHighlights() {
           </button>
 
           {/* Pagination Dots */}
-          <div className="flex justify-center gap-2 mt-6">
+          <div className="flex justify-center mt-4">
             {galleryImages.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setPage([index, index > imageIndex ? 1 : -1])}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === imageIndex
-                    ? 'w-8 bg-[#D4AF37]'
-                    : 'w-2 bg-[#D4AF37]/30 hover:bg-[#D4AF37]/60'
-                }`}
+                className="group flex items-center justify-center"
                 aria-label={`Go to slide ${index + 1}`}
-              />
+                aria-current={index === imageIndex}
+              >
+                {/* The button keeps the full-size tap area; the visible dot is drawn inside it */}
+                <span
+                  className={`block h-2 rounded-full transition-all duration-300 ${
+                    index === imageIndex ? 'w-8 bg-[#D4AF37]' : 'w-2 bg-[#D4AF37]/40 group-hover:bg-[#D4AF37]/70'
+                  }`}
+                />
+              </button>
             ))}
           </div>
 

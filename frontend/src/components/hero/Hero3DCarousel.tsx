@@ -444,7 +444,7 @@ export default function Hero3DCarousel() {
   // Responsive scaling for mobile - even smaller for very small screens
   const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 768;
   const isVerySmall = screenWidth < 400;
-  const mobileScale = isMobile ? (isVerySmall ? 0.45 : 0.55) : 1;
+  const mobileScale = isMobile ? (isVerySmall ? 0.62 : 0.75) : 1;
   const cameraDistance = isMobile ? (isVerySmall ? 10 : 11) : 14;
   const cameraFOV = isMobile ? (isVerySmall ? 60 : 58) : 45;
 
@@ -481,7 +481,7 @@ export default function Hero3DCarousel() {
 
       {/* Canvas with 3D Carousel - Wrapped to allow mobile scrolling */}
       <div 
-        className={`absolute inset-x-0 bottom-[76px] sm:bottom-[88px] top-[84px] sm:top-[92px] z-10 ${selectedImage !== null ? 'pointer-events-none' : ''}`}
+        className={`absolute inset-x-0 bottom-[112px] sm:bottom-[136px] top-[84px] sm:top-[92px] z-10 ${selectedImage !== null ? 'pointer-events-none' : ''}`}
         onPointerEnter={() => {
           hoverRef.current = true;
         }}
