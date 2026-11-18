@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Skeleton, SkeletonMasonry } from '@/components/ui/Skeleton';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -12,38 +12,13 @@ interface CollectionImage {
   uniqueId?: string; // Human-readable unique identifier like "TOACC-001"
 }
 
-// Generate image paths for all picturedoscope images - fallback if API fails
-const generateCollectionImages = (): CollectionImage[] => {
-  const images: CollectionImage[] = [];
-  
-  // Generate all possible image paths based on file naming patterns
-  // Date range: 20251026 (WA0053-WA0059), 20251121 (WA0042+), 20251125 (WA0271-WA0376)
-  
-  // 20251125 images (WA0271 to WA0376)
-  for (let i = 376; i >= 271; i--) {
-    images.push({
-      id: `collection-20251125-${i}`,
-      src: `/Assets/picturedoscope/IMG-20251125-WA${String(i).padStart(4, '0')}.jpg`,
-    });
-  }
-  
-  // 20251121 images (WA0042 onwards - estimate range based on file count, excluding WA0050)
-  for (let i = 100; i >= 42; i--) {
-    if (i !== 50) { // Exclude IMG-20251121-WA0050.jpg
-      images.push({
-        id: `collection-20251121-${i}`,
-        src: `/Assets/picturedoscope/IMG-20251121-WA${String(i).padStart(4, '0')}.jpg`,
-      });
-    }
-  }
-  
-  // 20251026 images excluded (WA0053 to WA0059 are removed)
-  
-  return images;
-};
-
 export default function ArtCollections() {
-  const [images, setImages] = useState<CollectionImage[]>([]);
+  const [allImages, setAllImages] = useState<CollectionImage[]>([]);
+  // Pictures that fail to load are dropped from the grid instead of leaving a broken tile.
+  const [failedIds, setFailedIds] = useState<Set<string>>(new Set());
+  const [loadError, setLoadError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
+  const images = useMemo(() => allImages.filter((img) => !failedIds.has(img.id)), [allImages, failedIds]);
   const [selectedImage, setSelectedImage] = useState<CollectionImage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -87,51 +62,39 @@ export default function ArtCollections() {
   }, [selectedImage, currentIndex, showAt]);
 
   useEffect(() => {
-    // Load collection images from API
+    // The API lists the files that really exist in public/Assets/picturedoscope. If the call fails
+    // (for example while the dev server is still compiling) it is retried instead of guessing file names.
+    let cancelled = false;
     async function loadImages() {
-      try {
-        const response = await fetch('/api/collections/images');
-        if (!response.ok) {
-          throw new Error(`Failed to fetch images: ${response.status}`);
+      setIsLoading(true);
+      setLoadError(false);
+      for (let attempt = 0; attempt < 3 && !cancelled; attempt++) {
+        try {
+          const response = await fetch('/api/collections/images');
+          if (!response.ok) throw new Error(`Failed to fetch images: ${response.status}`);
+          const data = await response.json();
+          if (Array.isArray(data.images) && data.images.length > 0) {
+            if (cancelled) return;
+            // Stable human-readable references (TOACC-001, TOACC-002, ...) assigned before any filtering
+            setAllImages(data.images.map((img: CollectionImage, index: number) => ({ ...img, uniqueId: generateUniqueId(index) })));
+            setIsLoading(false);
+            return;
+          }
+        } catch {
+          // fall through and retry
         }
-        const data = await response.json();
-        if (data.images && data.images.length > 0) {
-          console.log(`✅ Loaded ${data.images.length} collection images from API`);
-          // Add unique identifiers to each image
-          const imagesWithIds = data.images.map((img: CollectionImage, index: number) => ({
-            ...img,
-            uniqueId: generateUniqueId(index),
-          }));
-          setImages(imagesWithIds);
-        } else {
-          // Fallback to generated images if API returns empty
-          console.warn('⚠️ API returned empty images array, using fallback');
-          const collectionImages = generateCollectionImages();
-          console.log(`📸 Fallback: Generated ${collectionImages.length} images`);
-          // Add unique identifiers to fallback images
-          const imagesWithIds = collectionImages.map((img, index) => ({
-            ...img,
-            uniqueId: generateUniqueId(index),
-          }));
-          setImages(imagesWithIds);
-        }
-      } catch (error) {
-        console.error('❌ Error loading collection images from API, using fallback:', error);
-        // Fallback to generated images on error
-        const collectionImages = generateCollectionImages();
-        console.log(`📸 Fallback: Generated ${collectionImages.length} images`);
-        // Add unique identifiers to fallback images
-        const imagesWithIds = collectionImages.map((img, index) => ({
-          ...img,
-          uniqueId: generateUniqueId(index),
-        }));
-        setImages(imagesWithIds);
-      } finally {
+        await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
+      }
+      if (!cancelled) {
+        setLoadError(true);
         setIsLoading(false);
       }
     }
     loadImages();
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadKey]);
 
   const handleInquiry = (image: CollectionImage) => {
     const uniqueId = image.uniqueId || image.id;
@@ -187,7 +150,19 @@ export default function ArtCollections() {
           {/* Masonry Grid Layout - Beautiful African-Themed Design */}
           {images.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-[#6B4423] font-semibold">Loading images...</p>
+              {loadError ? (
+                <>
+                  <p className="text-[#6B4423] font-semibold mb-4">We could not load the gallery just now.</p>
+                  <button
+                    onClick={() => setReloadKey((k) => k + 1)}
+                    className="px-6 py-3 bg-[#A8651F] hover:bg-[#8B4513] text-white font-semibold rounded-lg transition-colors"
+                  >
+                    Try again
+                  </button>
+                </>
+              ) : (
+                <p className="text-[#6B4423] font-semibold">No artworks to show yet.</p>
+              )}
             </div>
           ) : (
             <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-5 md:gap-7">
@@ -257,24 +232,9 @@ export default function ArtCollections() {
                           style={{ zIndex: 30 }}
                           loading={index < 12 ? "eager" : "lazy"}
                           priority={index < 6}
-                          onError={(e) => {
-                            console.error(`❌ Failed to load image: ${image.src}`);
-                            console.error(`Image ID: ${image.id}`);
-                            const target = e.target as HTMLImageElement;
-                            if (target) {
-                              console.error('Error details:', {
-                                naturalWidth: target.naturalWidth,
-                                naturalHeight: target.naturalHeight,
-                                complete: target.complete,
-                                src: target.src,
-                                currentSrc: target.currentSrc || 'N/A'
-                              });
-                            }
-                          }}
-                          onLoad={() => {
-                            if (index < 3) { // Only log first 3 to avoid spam
-                              console.log(`✅ Successfully loaded: ${image.src}`);
-                            }
+                          onError={() => {
+                            console.warn(`Skipping artwork that failed to load: ${image.src}`);
+                            setFailedIds((prev) => new Set(prev).add(image.id));
                           }}
                         />
                         
@@ -460,7 +420,7 @@ export default function ArtCollections() {
                   className="object-contain"
                   unoptimized={true}
                   onError={() => {
-                    console.error(`❌ Failed to load modal image: ${selectedImage.src}`);
+                    console.warn(`Could not load full-size artwork: ${selectedImage.src}`);
                   }}
                 />
               </div>
@@ -540,7 +500,7 @@ export default function ArtCollections() {
                     </motion.button>
                     
                     <motion.a
-                      href={`tel:+234123456789`}
+                      href="tel:+2348160082118"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       className="flex-1 px-6 xs:px-8 py-3 xs:py-4 bg-white hover:bg-[#F5EFE7] text-[#3D2817] text-sm xs:text-base font-bold rounded-lg transition-colors duration-300 shadow-md hover:shadow-lg border-2 border-[#D4AF37] flex items-center justify-center gap-2 touch-manipulation min-h-[48px]"

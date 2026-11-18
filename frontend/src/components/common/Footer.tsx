@@ -5,13 +5,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
-import AdireDivider from '@/components/ui/AdireDivider';
 
 const footerLinks = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Exhibitions', href: '/exhibitions' },
   { label: 'Gallery', href: '/gallery' },
+  { label: 'Highlights', href: '/gallery-highlights' },
   { label: 'Shop', href: '/shop' },
   { label: 'Press', href: '/press' },
   { label: 'Contact', href: '/contact' },
@@ -103,7 +103,6 @@ export default function Footer() {
 
   return (
     <footer className="relative text-[#3D2817] overflow-hidden border-t-4 border-[#D4AF37]">
-      <AdireDivider className="relative z-10" />
       {/* Simplified Background */}
       <div className="absolute inset-0 z-0">
         <div 

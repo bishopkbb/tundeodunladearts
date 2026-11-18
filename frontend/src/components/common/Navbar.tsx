@@ -13,6 +13,7 @@ const navLinks = [
   { label: 'About', href: '/about' },
   { label: 'Exhibitions', href: '/exhibitions' },
   { label: 'Gallery', href: '/gallery' },
+  { label: 'Highlights', href: '/gallery-highlights' },
   { label: 'Shop', href: '/shop' },
   { label: 'Press', href: '/press' },
   { label: 'Contact', href: '/contact' },
@@ -26,7 +27,8 @@ function Navbar() {
   const menuBtnRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href));
+  // Match the exact page or its sub-pages, so /gallery-highlights does not also light up "Gallery"
+  const isActive = (href: string) => (href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`));
 
   // Optimized scroll handler with throttling for better performance
   useEffect(() => {
