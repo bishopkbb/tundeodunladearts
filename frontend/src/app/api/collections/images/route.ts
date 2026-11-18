@@ -13,13 +13,6 @@ export async function GET() {
     // Filter only .jpg files, exclude specific images, and create image paths
     const excludedImages = [
       'IMG-20251121-WA0050.jpg',
-      'IMG-20251026-WA0053.jpg',
-      'IMG-20251026-WA0054.jpg',
-      'IMG-20251026-WA0055.jpg',
-      'IMG-20251026-WA0056.jpg',
-      'IMG-20251026-WA0057.jpg',
-      'IMG-20251026-WA0058.jpg',
-      'IMG-20251026-WA0059.jpg',
     ];
     
     const imageFiles = files

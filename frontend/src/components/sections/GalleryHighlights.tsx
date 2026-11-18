@@ -2,71 +2,31 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { eventImages } from '@/lib/eventImages.generated';
+import { highlightItems } from '@/lib/highlightsData';
 
-const photo = (
-  key:
-    | 'reception-01'
-    | 'reception-02'
-    | 'gallery-melody-maker'
-    | 'gallery-native-doctor'
-    | 'gallery-leadership'
-    | 'gallery-natures-own-making'
-) => ({
-  src: eventImages[key].src,
-  width: eventImages[key].width,
-  height: eventImages[key].height,
-  blurDataURL: eventImages[key].blurDataURL,
-});
+// The slider shows the landscape photos from the Gallery Highlights page (people and moments, not artworks),
+// so it always matches that page. `fallback` is shown if a photo fails to load.
+// TODO: replace the neutral captions with the real event name once Prince confirms it.
+const captions: Record<string, { title: string; description: string }> = {
+  'reception-01': { title: 'Exhibition Reception', description: 'Guests gather around a large textile artwork' },
+  'event-01': { title: 'Guests at the Gallery', description: 'Friends and supporters gather together' },
+  'reception-02': { title: 'Art in Conversation', description: 'Collectors and visitors discuss the work' },
+  'event-04': { title: 'An Evening at TOACC', description: 'Guests settle in and talk inside the gallery' },
+};
 
-// Only natively landscape, high-resolution pictures (2400px wide), alternating between reception photos
-// supplied by Prince Tunde Odunlade (Nov 2026) and works from the gallery. `fallback` is shown if a photo fails to load.
-// TODO: replace the neutral reception captions with the real event name once Prince confirms it.
-const galleryImages = [
-  {
-    id: 1,
-    ...photo('reception-01'),
-    title: 'Exhibition Reception',
-    description: 'Guests gather around a large textile artwork',
+const galleryImages = highlightItems
+  .filter((item) => item.kind === 'photo' && item.id in captions && (item.width ?? 0) > (item.height ?? 0))
+  .map((item, index) => ({
+    id: index + 1,
+    src: item.src,
+    width: item.width ?? 1080,
+    height: item.height ?? 720,
+    blurDataURL: item.blurDataURL,
+    ...captions[item.id],
     fallback: '/Assets/gallery1.jpg',
-  },
-  {
-    id: 2,
-    ...photo('gallery-native-doctor'),
-    title: 'The Native Doctor',
-    description: 'Yinka Adeyemi, beads on board',
-    fallback: '/Assets/gallery2.jpg',
-  },
-  {
-    id: 3,
-    ...photo('reception-02'),
-    title: 'Art in Conversation',
-    description: 'Collectors and visitors discuss the work',
-    fallback: '/Assets/gallery3.jpg',
-  },
-  {
-    id: 4,
-    ...photo('gallery-melody-maker'),
-    title: 'Melody Maker',
-    description: 'Adeniyi Dagunro, mixed media',
-    fallback: '/Assets/gallery4.jpg',
-  },
-  {
-    id: 5,
-    ...photo('gallery-leadership'),
-    title: 'Leadership',
-    description: 'Rufus Ogundele, oil on board',
-    fallback: '/Assets/gallery5.jpg',
-  },
-  {
-    id: 6,
-    ...photo('gallery-natures-own-making'),
-    title: "Nature's Own Making",
-    description: 'Tunde Odunlade, batik',
-    fallback: '/Assets/gallery1.jpg',
-  },
-];
+  }));
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -288,20 +248,27 @@ export default function GalleryHighlights() {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <a
-                href="/gallery"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-              >
-                Explore Full Gallery
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </a>
-            </motion.div>
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/gallery-highlights"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#A8651F] hover:bg-[#8B4513] text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  View All Highlights
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                <Link
+                  href="/gallery"
+                  className="inline-flex items-center gap-2 px-8 py-4 border-2 border-[#A8651F] text-[#6B3410] hover:bg-[#A8651F] hover:text-white font-bold text-lg rounded-lg transition-all duration-300"
+                >
+                  Explore Full Gallery
+                </Link>
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>

@@ -28,6 +28,7 @@ const images = [
   { slug: 'yoruba-cultural-exchange-chicago-2026', file: 'WhatsApp Image 2026-11-14 at 1.51.06 PM (1).jpeg', kind: 'flyer' },
   { slug: 'bcos-tv-bo-se-n-lo-2026', file: 'WhatsApp Image 2026-11-14 at 1.59.47 PM (1).jpeg', kind: 'flyer' },
   { slug: 'birmingham-five-decades-2026', file: 'WhatsApp Image 2026-11-14 at 1.59.47 PM.jpeg', kind: 'flyer' },
+  { slug: 'woven-legacy-houston', file: 'WhatsApp Image 2026-11-14 at 2.03.18 PM.jpeg', kind: 'flyer' },
   // Gallery Highlights slider: only natively landscape, high-resolution photos (never upscaled or re-cropped)
   { slug: 'reception-01', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM.jpeg'), kind: 'highlight' },
   { slug: 'reception-02', file: path.join('extracted-reception', 'WhatsApp Image 2026-11-14 at 2.05.35 PM (1).jpeg'), kind: 'highlight' },

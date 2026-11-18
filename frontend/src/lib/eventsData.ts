@@ -152,6 +152,29 @@ export const events: SiteEvent[] = [
     imageAlt: 'Flyer for Tunde Baba Odunlade: Five Decades of Textile, Printmaking and Yoruba Cultural Storytelling, presented by The BHM Art Club',
   },
 
+  {
+    id: 12,
+    title: 'Woven Legacy: Artists Talk + Exhibition',
+    cardTitle: 'Woven Legacy',
+    subtitle: 'The Art Place: art you can touch, hear and own',
+    artist: 'Prince Tunde Odunlade',
+    category: 'Artists Talk & Exhibition',
+    type: 'exhibition',
+    // TODO(confirm with Prince): the flyer shows "Friday 06.17" but no year. 17 June is a Friday in 2022, so 2022 is assumed.
+    startDate: '2022-06-17',
+    openingTime: '06:30 PM',
+    venue: 'Society for Africans in the Diaspora',
+    address: '12126 Westheimer Rd, Houston, TX 77077',
+    location: 'Society for Africans in the Diaspora, 12126 Westheimer Rd, Houston, TX 77077',
+    description:
+      'An artists talk and exhibition with Prince Tunde Odunlade, renowned Nigerian artist and cultural ambassador, in conversation with Yemi Sholotan, at The Art Place in Houston.',
+    longDescription:
+      'Woven Legacy was an artists talk and exhibition at The Art Place ("art you can touch, hear, and own") in Houston, Texas.\n\nPrince Tunde Odunlade, renowned Nigerian artist and cultural ambassador, was in conversation with Yemi Sholotan on Friday 17 June at 6:30 pm at the Society for Africans in the Diaspora, 12126 Westheimer Rd, Houston, TX 77077.\n\nPresented with Art+Africa and SAiD, with Diamond in the Dust, and funded in part by the City of Houston through the Houston Arts Alliance.',
+    artworks: 0,
+    ...flyer('woven-legacy-houston'),
+    imageAlt: 'Flyer for Woven Legacy, an artists talk and exhibition with Prince Tunde Odunlade in conversation with Yemi Sholotan, Houston, Friday 17 June at 6:30 pm',
+  },
+
   // ---------------------------------------------------------------- 2025 and earlier
   {
     id: 1,
