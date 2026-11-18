@@ -6,7 +6,6 @@ import Footer from '@/components/common/Footer';
 import CartSidebar from '@/components/cart/CartSidebar';
 import { SectionSkeleton } from '@/components/ui/Skeleton';
 import BatikBackground from '@/components/ui/BatikBackground';
-import AdireDivider from '@/components/ui/AdireDivider';
 
 // Dynamic imports for heavy components - load after initial render
 const FeaturedExhibitions = dynamic(() => import('@/components/sections/FeaturedExhibitions'), {
@@ -58,9 +57,6 @@ export default function Home() {
 
         {/* Hero Section */}
         <HeroSection />
-
-        {/* Indigo adire divider */}
-        <AdireDivider />
 
         {/* Featured Exhibitions */}
         <FeaturedExhibitions />

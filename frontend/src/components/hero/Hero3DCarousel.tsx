@@ -18,6 +18,8 @@ const heroImages = [
 ];
 
 const ORBIT_RADIUS = 5.5;
+// On wide screens the orbit is stretched sideways so the gallery uses the empty width beside it.
+const ORBIT_STRETCH_DESKTOP = 2;
 const ROTATION_SPEED = 0.15;
 // Each artwork is fitted inside this slot while keeping its own proportions (no stretching).
 const SLOT_MAX_WIDTH = 4.2;
@@ -285,6 +287,8 @@ function CarouselGroup({ isPaused, hoverRef, onFrameClick, mobileScale = 1 }: Ca
   
   // Scale values for mobile
   const scaledOrbitRadius = ORBIT_RADIUS * mobileScale;
+  const stretch = mobileScale < 1 ? 1 : ORBIT_STRETCH_DESKTOP;
+  const orbitX = scaledOrbitRadius * stretch;
   const scaledStandHeight = STAND_HEIGHT * mobileScale;
   const gold = goldMaterial(mobileScale < 1);
   const glowTexture = useMemo(() => makeRadialTexture('rgba(212,165,116,0.22)', 'rgba(212,165,116,0)'), []);
@@ -297,10 +301,27 @@ function CarouselGroup({ isPaused, hoverRef, onFrameClick, mobileScale = 1 }: Ca
     return () => document.removeEventListener('visibilitychange', handleVisibility);
   }, []);
 
+  // The rings stay fixed; the frames travel around the (wide) ellipse, so the gallery keeps its width at every moment.
+  const phase = useRef(0);
+  const frameRefs = useRef<(THREE.Group | null)[]>([]);
+
   useFrame((state, delta) => {
-    if (groupRef.current && !hoverRef.current && isTabActive.current && !isPaused) {
+    if (!hoverRef.current && isTabActive.current && !isPaused) {
       // Use delta time for consistent rotation speed regardless of frame rate
-      groupRef.current.rotation.y += ROTATION_SPEED * Math.min(delta, 0.02); // Cap delta to prevent jumps
+      phase.current += ROTATION_SPEED * Math.min(delta, 0.02); // Cap delta to prevent jumps
+    }
+    heroImages.forEach((_, i) => {
+      const frame = frameRefs.current[i];
+      if (!frame) return;
+      // Travelling by -phase matches the direction the old rotating group moved the frames
+      const angle = (i / heroImages.length) * Math.PI * 2 - phase.current;
+      frame.position.set(Math.cos(angle) * orbitX, 0, Math.sin(angle) * scaledOrbitRadius);
+      // Face along the ellipse's outward normal (reduces to the old -angle + PI/2 when the orbit is a circle)
+      frame.rotation.y = Math.atan2(Math.cos(angle) / orbitX, Math.sin(angle) / scaledOrbitRadius);
+    });
+    // Gentle float so the gallery feels suspended rather than bolted down (small enough to never reach the view edges)
+    if (groupRef.current && isTabActive.current) {
+      groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.08 * mobileScale;
     }
   });
 
@@ -309,39 +330,33 @@ function CarouselGroup({ isPaused, hoverRef, onFrameClick, mobileScale = 1 }: Ca
       ref={groupRef}
     >
       {/* Top Gold Ring */}
-      <mesh position={[0, scaledStandHeight / 2 + 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh position={[0, scaledStandHeight / 2 + 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[stretch, 1, 1]}>
         <torusGeometry args={[scaledOrbitRadius, 0.08 * mobileScale, 16, mobileScale < 1 ? 32 : 64]} />
         <meshStandardMaterial {...gold} />
       </mesh>
 
       {/* Bottom Gold Ring */}
-      <mesh position={[0, -scaledStandHeight / 2 - 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh position={[0, -scaledStandHeight / 2 - 0.3 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[stretch, 1, 1]}>
         <torusGeometry args={[scaledOrbitRadius, 0.08 * mobileScale, 16, mobileScale < 1 ? 32 : 64]} />
         <meshStandardMaterial {...gold} />
       </mesh>
 
-      {/* Artwork Frames */}
-      {heroImages.map((img, i) => {
-        const angle = (i / heroImages.length) * Math.PI * 2;
-        const x = Math.cos(angle) * scaledOrbitRadius;
-        const z = Math.sin(angle) * scaledOrbitRadius;
-        const rotationY = -angle + Math.PI / 2;
-
-        return (
+      {/* Artwork Frames (positioned every frame by useFrame above) */}
+      {heroImages.map((img, i) => (
+        <group key={i} ref={(el) => { frameRefs.current[i] = el; }}>
           <ElegantFrame
-            key={i}
-            position={[x, 0, z]}
-            rotation={[0, rotationY, 0]}
+            position={[0, 0, 0]}
+            rotation={[0, 0, 0]}
             imagePath={img.texture}
             onClick={() => onFrameClick(i)}
             isPaused={isPaused}
             mobileScale={mobileScale}
           />
-        );
-      })}
+        </group>
+      ))}
 
       {/* Warm pool of light on the floor (replaces the flat white disc) */}
-      <mesh position={[0, -scaledStandHeight / 2 - 0.5 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh position={[0, -scaledStandHeight / 2 - 0.5 * mobileScale, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={[stretch, 1, 1]}>
         <circleGeometry args={[scaledOrbitRadius * 1.9, 48]} />
         <meshBasicMaterial map={glowTexture} transparent depthWrite={false} opacity={0.5} toneMapped={false} />
       </mesh>
@@ -515,7 +530,7 @@ export default function Hero3DCarousel() {
         />
         <OrbitControls
           enabled={selectedImage === null && !isMobile} // Disable orbit controls on mobile
-          enableZoom={!isMobile}
+          enableZoom={false} // the wheel must scroll the page, not zoom the camera
           enablePan={false}
           minDistance={isMobile ? 8 : 10}
           maxDistance={isMobile ? 20 : 25}
