@@ -67,6 +67,7 @@ Through his art, Olalekan strives to celebrate his cultural heritage and inspire
   },
   {
     id: 3,
+    draft: true, // placeholder profile: hidden until real details are supplied
     name: 'Artist Name 3',
     role: 'Sculptor',
     specialty: 'Wood Carving, Bronze Casting',
@@ -80,6 +81,7 @@ Through his art, Olalekan strives to celebrate his cultural heritage and inspire
   },
   {
     id: 4,
+    draft: true, // placeholder profile: hidden until real details are supplied
     name: 'Artist Name 4',
     role: 'Digital Artist',
     specialty: 'Digital Art, Photography',
@@ -93,6 +95,7 @@ Through his art, Olalekan strives to celebrate his cultural heritage and inspire
   },
   {
     id: 5,
+    draft: true, // placeholder profile: hidden until real details are supplied
     name: 'Artist Name 5',
     role: 'Textile Designer',
     specialty: 'Adire, Fashion Design',
@@ -192,7 +195,7 @@ export default function AboutPage() {
 
             {/* Artist Cards Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {artists.map((artist, index) => (
+              {artists.filter((artist) => !('draft' in artist)).map((artist, index) => (
                 <motion.div
                   key={artist.id}
                   initial={{ opacity: 0, y: 30 }}
@@ -210,7 +213,7 @@ export default function AboutPage() {
                       quality={90}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/10" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                       <h3 className="text-xl font-bold mb-1">{artist.name}</h3>
                       <p className="text-sm text-[#FFD700] mb-2">{artist.role}</p>
@@ -223,9 +226,11 @@ export default function AboutPage() {
                       </svg>
                     </div>
                   </div>
-                  <p className="text-center mt-3 text-sm text-[#8B4513] font-semibold">
-                    Click to view full profile →
-                  </p>
+                  <div className="mt-3 flex justify-center">
+                    <span className="rounded-full bg-[#FFF8E7] px-4 py-1.5 text-sm font-semibold text-[#6B3410] shadow-sm">
+                      Click to view full profile →
+                    </span>
+                  </div>
                 </motion.div>
               ))}
             </div>
